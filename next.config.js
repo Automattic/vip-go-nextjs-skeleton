@@ -1,4 +1,8 @@
 module.exports = {
+	// If you are using a subdirectory-based multisite instance, you must set the
+	// basePath to match the subdirectory of the subsite, e.g., '/path'.
+	// Otherwise, leave it set to '' (empty string).
+	basePath: '',
 	async headers() {
 		return [
 			// The default Cache-Control response headers provided by Next.js out of
@@ -21,24 +25,53 @@ module.exports = {
 			},
 		]
 	},
-	async rewrites() {
-		return [
-			// Cache healthcheck endpoint is required on VIP.
+	async redirects() {
+    return [
+			// Redirect preview requests back to WordPress for token generation.
 			{
-				source: '/cache-healthcheck',
-				destination: '/api/cache-healthcheck',
+				source: '/:path*{/}?', // matches all paths, including root
+				destination: `${process.env.WORDPRESS_ENDPOINT}/?preview=true&p=:id`,
+				has: [
+					{
+						key: 'preview',
+						type: 'query',
+						value: 'true',
+					},
+					{
+						key: 'preview_id',
+						type: 'query',
+						value: '(?<id>.*)',
+					},
+				],
+				permanent: false,
 			},
-			// Proxy feed requests to WordPress.
+			{
+				source: '/:path*{/}?', // matches all paths, including root
+				destination: `${process.env.WORDPRESS_ENDPOINT}/?preview=true&p=:id`,
+				has: [
+					{
+						key: 'preview',
+						type: 'query',
+						value: 'true',
+					},
+					{
+						key: 'p',
+						type: 'query',
+						value: '(?<id>.*)',
+					},
+				],
+				permanent: false,
+			},
+			// Redirect feed requests to WordPress.
 			{
 				source: '/:path*/feed',
 				destination: `${process.env.WORDPRESS_ENDPOINT}/:path*/feed/`,
+				permanent: false,
 			},
-		]
+		];
 	},
 	// By default, WordPress to append trailing slashes to permalinks. Next.js has
 	// support for trailing slashes, but its implementation is buggy, causes
-	// problems, and is not recommend at this time. Most notably, it will not
-	// easily allow the `/cache-healthcheck` endpoint to be served without a
-	// trailing slash. Please leave this settting to its default, `false`. :)
+	// problems, and is not recommend at this time.
 	trailingSlash: false,
 };

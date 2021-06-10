@@ -1,5 +1,8 @@
 import { GetServerSideProps, GetStaticProps } from 'next';
+import { FetchPolicy } from '@apollo/client';
 import {
+	ContentNodePreviewDocument,
+	ContentNodePreviewQuery,
 	ContentNodesDocument,
 	ContentNodesQuery,
 	ContentNodeViewFragment,
@@ -60,7 +63,6 @@ export const getServerSideContentNodeProps: GetServerSideProps<ContentNodeProps>
 	}
 
 	// SEO: Resource not found pages must send a 404 response code.
-
 	if ( ! loading && ! post ) {
 		return {
 			notFound: true,
@@ -76,6 +78,43 @@ export const getServerSideContentNodeProps: GetServerSideProps<ContentNodeProps>
 				destination: internalLinkPathname || post.link,
 				permanent: false,
 			},
+		};
+	}
+
+	return {
+		props: {
+			loading,
+			post,
+		},
+	};
+}
+
+export const getServerSideContentNodePreviewProps: GetServerSideProps<ContentNodeProps> = async ( { query } ) => {
+	const queryOptions = {
+		context: {
+			headers: {
+				'X-Preview-Token': query.token,
+			},
+		},
+		fetchPolicy: 'no-cache' as FetchPolicy,
+		query: ContentNodePreviewDocument,
+		variables: {
+			id: query.id,
+		},
+	};
+	console.log( queryOptions );
+	const { data, error, loading } = await getApolloClient().query<ContentNodePreviewQuery>( queryOptions );
+
+	const post = data.contentNode;
+
+	if ( error ) {
+		handleError( error );
+	}
+
+	// SEO: Resource not found pages must send a 404 response code.
+	if ( ! loading && ! post ) {
+		return {
+			notFound: true,
 		};
 	}
 

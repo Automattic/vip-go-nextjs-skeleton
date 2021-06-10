@@ -19,14 +19,14 @@ const link = concat(
 		operation.setContext( ( { headers = {} } ) => ( {
 			headers: {
 				...headers,
-				// Here is where we would set custom request headers. Must be allowed by CORS policy
+				// Here is where we would set custom request headers. If client-side,
+				// must be allowed by CORS policy
 			}
 		} ) );
 
 		return forward( operation );
 	} ),
 	new HttpLink( {
-		credentials: 'include', // Remove this if you are not using VIP's decoupled bundle
 		fetch: function ( input, init ) {
 			return fetch( input, init );
 		},

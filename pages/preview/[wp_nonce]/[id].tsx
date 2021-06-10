@@ -14,6 +14,11 @@ export default function ContentNodePreview( props: Props ) {
 		return <p>You do not have permission to preview this post. Are you logged in to WordPress?</p>;
 	}
 
+	// SSR
+	if ( ! post ) {
+		return null;
+	}
+
 	return (
 		<ContentNode
 			loading={loading}

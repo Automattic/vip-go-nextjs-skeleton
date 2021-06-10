@@ -1,5 +1,6 @@
 import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, concat } from '@apollo/client';
 import fragmentMatcher from '@/graphql/generated/fragmentMatcher';
+import fetch from 'isomorphic-fetch';
 
 let clientSideApolloClient: ApolloClient<any>;
 
@@ -25,6 +26,10 @@ const link = concat(
 		return forward( operation );
 	} ),
 	new HttpLink( {
+		credentials: 'include', // Remove this if you are not using VIP's decoupled bundle
+		fetch: function ( input, init ) {
+			return fetch( input, init );
+		},
 		uri,
 	} ),
 );
@@ -59,7 +64,6 @@ export default function getApolloClient () {
 	if ( 'undefined' === typeof clientSideApolloClient ) {
 		clientSideApolloClient =  new ApolloClient( {
 			cache: new InMemoryCache( { possibleTypes } ),
-			credentials: 'include', // Remove this if you are not using VIP's decoupled bundle
 			link,
 		} );
 	}

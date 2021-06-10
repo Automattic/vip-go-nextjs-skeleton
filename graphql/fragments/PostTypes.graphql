@@ -1,0 +1,8 @@
+fragment ContentNodePostTypes on ContentNode {
+	... on Page {
+		...PageView
+	}
+	... on Post {
+		...PostView
+	}
+}

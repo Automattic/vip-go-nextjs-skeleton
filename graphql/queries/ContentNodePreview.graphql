@@ -1,0 +1,13 @@
+#import "../fragments/ContentNode.graphql"
+
+query ContentNodePreview(
+	$id: ID!
+) {
+	contentNode(
+		asPreview: true
+		id: $id
+		idType: DATABASE_ID
+	) {
+		...ContentNodeView
+	}
+}

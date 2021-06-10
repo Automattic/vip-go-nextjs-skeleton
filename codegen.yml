@@ -1,0 +1,13 @@
+overwrite: true
+schema: "${NEXT_PUBLIC_GRAPHQL_ENDPOINT}"
+documents: "graphql/**/*.graphql"
+generates:
+  graphql/generated/index.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      # https://www.graphql-code-generator.com/docs/plugins/typescript-react-apollo
+      - "typescript-react-apollo"
+  graphql/generated/fragmentMatcher.ts:
+    plugins:
+      - "fragment-matcher"

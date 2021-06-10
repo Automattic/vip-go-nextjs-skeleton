@@ -1,0 +1,18 @@
+#import "./Taxonomy.graphql"
+
+fragment ContentTypeList on ContentType {
+	id
+	connectedTaxonomies {
+		nodes {
+			...TaxonomyList
+		}
+	}
+	description
+	isRestricted
+	label
+	graphqlPluralName
+	graphqlSingleName
+	name
+	public
+	showInGraphql
+}

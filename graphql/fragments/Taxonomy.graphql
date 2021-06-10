@@ -1,0 +1,11 @@
+fragment TaxonomyList on Taxonomy {
+	id
+	description
+	isRestricted
+	label
+	graphqlPluralName
+	graphqlSingleName
+	name
+	public
+	showInGraphql
+}

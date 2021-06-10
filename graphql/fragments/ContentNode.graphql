@@ -1,0 +1,22 @@
+#import "./PostTypes.graphql"
+
+fragment ContentNodeList on ContentNode {
+	id
+	contentType {
+		node {
+			id
+			label
+			name
+		}
+	}
+	databaseId
+	dateGmt
+	isPreview
+	link
+	modifiedGmt
+}
+
+fragment ContentNodeView on ContentNode {
+	...ContentNodeList
+	...ContentNodePostTypes
+}

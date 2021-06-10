@@ -1,0 +1,9 @@
+#import "../fragments/ContentType.graphql"
+
+query ContentTypes {
+	contentTypes {
+		nodes {
+			...ContentTypeList
+		}
+	}
+}

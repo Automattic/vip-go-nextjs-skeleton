@@ -1,0 +1,17 @@
+#import "../fragments/DisplayNode.graphql"
+
+query DisplayNodes(
+	$contentTypes: [DisplayContentTypeEnum]
+	$slug: String
+) {
+	displayNodes(
+		where: {
+			contentTypes: $contentTypes
+			name: $slug
+		}
+	) {
+		nodes {
+			...DisplayNodeFields
+		}
+	}
+}

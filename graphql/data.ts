@@ -1,11 +1,11 @@
 import { GetServerSideProps, GetStaticProps } from 'next';
 import { FetchPolicy } from '@apollo/client';
 import {
-	ContentNodePreviewDocument,
-	ContentNodePreviewQuery,
-	ContentNodesDocument,
-	ContentNodesQuery,
-	ContentNodeViewFragment,
+	DisplayNodePreviewDocument,
+	DisplayNodePreviewQuery,
+	DisplayNodesDocument,
+	DisplayNodesQuery,
+	DisplayNodeFieldsFragment,
 	ContentTypeListFragment,
 	ContentTypesDocument,
 	ContentTypesQuery,
@@ -40,23 +40,23 @@ function handleError( err: Error ): void {
 	console.error( err );
 }
 
-export type ContentNodeProps = {
+export type DisplayNodeProps = {
 	loading: boolean,
-	post: ContentNodeViewFragment,
+	post: DisplayNodeFieldsFragment,
 };
 
-export const getServerSideContentNodeProps: GetServerSideProps<ContentNodeProps> = async ( { query, resolvedUrl } ) => {
+export const getServerSideDisplayNodeProps: GetServerSideProps<DisplayNodeProps> = async ( { query, resolvedUrl } ) => {
 	const queryOptions = {
-		query: ContentNodesDocument,
+		query: DisplayNodesDocument,
 		variables: {
 			slug: extractLastTokenFromRoute( query.slug ),
 		},
 	};
 
-	const { data, error, loading } = await getApolloClient().query<ContentNodesQuery>( queryOptions );
+	const { data, error, loading } = await getApolloClient().query<DisplayNodesQuery>( queryOptions );
 
 	// @TODO Disambiguate multiple slug matches.
-	const post = data.contentNodes?.nodes?.[0];
+	const post = data.displayNodes?.nodes?.[0];
 
 	if ( error ) {
 		handleError( error );
@@ -89,7 +89,7 @@ export const getServerSideContentNodeProps: GetServerSideProps<ContentNodeProps>
 	};
 }
 
-export const getServerSideContentNodePreviewProps: GetServerSideProps<ContentNodeProps> = async ( { query } ) => {
+export const getServerSideDisplayNodePreviewProps: GetServerSideProps<DisplayNodeProps> = async ( { query } ) => {
 	const queryOptions = {
 		context: {
 			headers: {
@@ -97,15 +97,15 @@ export const getServerSideContentNodePreviewProps: GetServerSideProps<ContentNod
 			},
 		},
 		fetchPolicy: 'no-cache' as FetchPolicy,
-		query: ContentNodePreviewDocument,
+		query: DisplayNodePreviewDocument,
 		variables: {
 			id: query.id,
 		},
 	};
-	console.log( queryOptions );
-	const { data, error, loading } = await getApolloClient().query<ContentNodePreviewQuery>( queryOptions );
 
-	const post = data.contentNode;
+	const { data, error, loading } = await getApolloClient().query<DisplayNodePreviewQuery>( queryOptions );
+
+	const post = data.displayNode;
 
 	if ( error ) {
 		handleError( error );
@@ -126,13 +126,13 @@ export const getServerSideContentNodePreviewProps: GetServerSideProps<ContentNod
 	};
 }
 
-export type ContentNodesProps = {
+export type DisplayNodesProps = {
 	label: string,
 	loading: boolean,
-	posts: ContentNodeViewFragment[],
+	posts: DisplayNodeFieldsFragment[],
 };
 
-export const getServerSideContentNodesProps: GetServerSideProps<ContentNodesProps> = async ( { query } ) => {
+export const getServerSideDisplayNodesProps: GetServerSideProps<DisplayNodesProps> = async ( { query } ) => {
 	const slug = extractLastTokenFromRoute( query.content_type );
 	const { enum: typeEnum, label } = contentTypeDefinitions[ slug ] || {};
 
@@ -144,15 +144,15 @@ export const getServerSideContentNodesProps: GetServerSideProps<ContentNodesProp
 
 	// Apollo query options.
 	const queryOptions = {
-		query: ContentNodesDocument,
+		query: DisplayNodesDocument,
 		variables: {
 			contentTypes: typeEnum,
 		},
 	};
 
-	const { data, error, loading } = await getApolloClient().query<ContentNodesQuery>( queryOptions );
+	const { data, error, loading } = await getApolloClient().query<DisplayNodesQuery>( queryOptions );
 
-	const posts = data.contentNodes?.nodes || [];
+	const posts = data.displayNodes?.nodes || [];
 
 	if ( error ) {
 		handleError( error );

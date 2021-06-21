@@ -1,6 +1,7 @@
 import ClassicEditorBlock from '@/components/ClassicEditorBlock/ClassicEditorBlock';
 import Heading from '@/components/Heading/Heading';
 import Paragraph from '@/components/Paragraph/Paragraph';
+import List from '@/components/List/List';
 import UnsupportedBlock from '@/components/UnsupportedBlock/UnsupportedBlock';
 import { ContentBlock } from '@/graphql/generated';
 
@@ -33,6 +34,15 @@ export default function PostContent( props: {
 						case 'core/paragraph':
 							return (
 								<Paragraph
+									innerHTML={block.innerHTML}
+									key={key}
+								/>
+							);
+
+						case 'core/list':
+							return (
+								<List
+									attributes={block.attributes}
 									innerHTML={block.innerHTML}
 									key={key}
 								/>

@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import Page from '@/components/Page/Page';
-import { getServerSideContentNodesProps, ContentNodesProps } from '@/graphql/data';
+import { getServerSideDisplayNodesProps, DisplayNodesProps } from '@/graphql/data';
 
-export default function ContentNodes( props: ContentNodesProps ) {
+export default function DisplayNodes( props: DisplayNodesProps ) {
 	return (
 		<Page
 			loading={props.loading}
@@ -10,22 +10,15 @@ export default function ContentNodes( props: ContentNodesProps ) {
 		>
 			<ul>
 				{
-					props.posts.map( post => {
-						// Type guard. See comment in `[...slug].tsx`.
-						if ( 'contentBlocks' in post ) {
-							return (
-								<li key={post.databaseId}>
-									<Link href={post.link}>{post.title}</Link>
-								</li>
-							);
-						}
-
-						return null;
-					} )
+					props.posts.map( post => (
+						<li key={post.databaseId}>
+							<Link href={post.link}>{post.title}</Link>
+						</li>
+					) )
 				}
 			</ul>
 		</Page>
 	);
 }
 
-export const getServerSideProps = getServerSideContentNodesProps;
+export const getServerSideProps = getServerSideDisplayNodesProps;

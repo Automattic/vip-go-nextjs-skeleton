@@ -1,8 +1,8 @@
-import { getServerSideContentNodePreviewProps, ContentNodeProps } from '@/graphql/data';
-import ContentNode from '@/pages/[...slug]';
+import { getServerSideDisplayNodePreviewProps, DisplayNodeProps } from '@/graphql/data';
+import DisplayNode from '@/pages/[...slug]';
 
-export default function ContentNodePreview( props: ContentNodeProps ) {
-	return <ContentNode {...props} />;
+export default function PostPreview( props: DisplayNodeProps ) {
+	return <DisplayNode {...props} />;
 }
 
-export const getServerSideProps = getServerSideContentNodePreviewProps;
+export const getServerSideProps = getServerSideDisplayNodePreviewProps;

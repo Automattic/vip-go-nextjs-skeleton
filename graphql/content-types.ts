@@ -44,13 +44,7 @@ type ContentTypeDefinition = {
 	},
 };
 
-const excludedTypeNames = [
-	'FmTermMeta',
-	'MediaItem',
-];
-
-const contentTypes = possibleTypes.ContentNode
-	.filter( ( typeName: string ) => ! excludedTypeNames.includes( typeName ) )
+const contentTypes = possibleTypes.DisplayNode
 	.map( ( typeName: string ) => `${typeName}s` )
 	.reduce( ( acc: ContentTypeDefinition, typeName: string ): ContentTypeDefinition => ( {
 		...acc,

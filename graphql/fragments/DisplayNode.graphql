@@ -1,0 +1,27 @@
+fragment DisplayNodeFields on DisplayNode {
+	id
+	contentBlocks {
+		isGutenberg
+		blocks {
+			attributes {
+				name
+				value
+			}
+			innerHTML
+			name
+		}
+	}
+	contentType {
+		node {
+			id
+			label
+			name
+		}
+	}
+	databaseId
+	dateGmt
+	isPreview
+	link
+	modifiedGmt
+	title
+}

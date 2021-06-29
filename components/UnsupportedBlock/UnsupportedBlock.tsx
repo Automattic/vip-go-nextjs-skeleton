@@ -16,8 +16,8 @@ export default function UnsupportedBlock ( props: Props ) {
 				props.block.attributes.length > 0 && (
 					<ul>
 						{
-							props.block.attributes.map( attr => (
-								<li><strong>{attr.name}</strong>: {attr.value}</li>
+							props.block.attributes.map( ( attr, i ) => (
+								<li key={i}><strong>{attr.name}</strong>: {attr.value}</li>
 							) )
 						}
 					</ul>

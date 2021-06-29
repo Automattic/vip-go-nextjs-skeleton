@@ -33,5 +33,5 @@ export default function useLinkRouter() {
 		document.body.addEventListener( 'click', captureLinks );
 
 		return () => document.body.removeEventListener( 'click' , captureLinks );
-	}, [] );
+	}, [ router ] );
 }

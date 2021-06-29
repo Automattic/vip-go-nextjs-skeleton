@@ -15,8 +15,8 @@ export default function ContentTypes( props: ContentTypesProps ) {
 								contentType.connectedTaxonomies?.nodes?.length > 0 &&
 									<ul>
 										{
-											contentType.connectedTaxonomies.nodes.map( taxonomy => (
-												<li>{taxonomy.graphqlSingleName}</li>
+											contentType.connectedTaxonomies.nodes.map( ( taxonomy, i ) => (
+												<li key={i}>{taxonomy.graphqlSingleName}</li>
 											) )
 										}
 									</ul>

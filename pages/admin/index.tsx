@@ -20,7 +20,7 @@ export default function ContentTypes( props: ContentTypesProps ) {
 											) )
 										}
 									</ul>
-								}
+							}
 						</li>
 					) )
 				}

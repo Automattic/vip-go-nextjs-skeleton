@@ -39,8 +39,8 @@ export default function PostContent( props: {
 							);
 
 						default:
-							// In development, highlight unsupported blocks so that they get
-							// visibility with developers.
+						// In development, highlight unsupported blocks so that they get
+						// visibility with developers.
 							if ( 'development' === process.env.NODE_ENV ) {
 								return (
 									<UnsupportedBlock

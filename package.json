@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run codegen && npm run start:server",
     "codegen": "graphql-codegen --config codegen.yml -r dotenv/config",
     "codegen:watch": "npm run codegen -- --watch",
+    "dev": "npm run codegen && npm run start:server",
     "build": "next build",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "prebuild": "npm run codegen",
     "start": "NODE_ENV=production npm run start:server",
     "start:server": "node server/index.js"
@@ -26,5 +28,8 @@
     "react-dom": "17.0.2",
     "typescript": "^4.3.4"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^7.29.0",
+    "eslint-config-next": "^11.0.1"
+  }
 }

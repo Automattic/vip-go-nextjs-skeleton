@@ -5,9 +5,9 @@ export default function ClientOnly( props: {
 } ) {
 	const [ hasMounted, setHasMounted ] = useState<Boolean>( false );
 
-  useEffect( () => {
-    setHasMounted( true );
-  }, [] );
+	useEffect( () => {
+		setHasMounted( true );
+	}, [] );
 
 	if ( ! hasMounted ) {
 		return null;

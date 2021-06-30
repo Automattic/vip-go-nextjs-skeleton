@@ -1,17 +1,18 @@
-# VIP Next.js boilerplate
+# VIP Go Next.js boilerplate for decoupled / headless WordPress applications
 
-A Next.js boilerplate to use with a WordPress backend hosted on VIP.
+This is a [Next.js][nextjs] boilerplate intended for use with a WordPress backend hosted on VIP. In order to operate correctly, VIP's [decoupled bundle plugin][bundle] must be installed and activated.
 
 Features:
-+ Default React components to showcase your content. Mix and match with your own design-system.
++ Next.js 11
++ Default React components to showcase your content. Mix and match with your own design system.
 + Preview your content out of the box.
-+ TODO More.
++ Code generation to provide easy querying and strong typings.
 
 ## Getting started
 
-In order to start with this boilerplate, you need to change the environment variables in the `.env` file:
-+ `NEXT_PUBLIC_GRAPHQL_ENDPOINT`: This is your GraphQL API endpoint. It is used to query for data to display in your decoupled app. Example: `https://wp-app.go-vip.net/graphql`
-+ `WORDPRESS_ENDPOINT`: This is your WordPress main url. It is used when previewing your content. Example: `https://wp-app.go-vip.net/`
+Change the environment variables in the `.env` file:
++ `NEXT_PUBLIC_GRAPHQL_ENDPOINT`: This is your GraphQL endpoint. You can find it at Settings > VIP Decoupled.
++ `WORDPRESS_ENDPOINT`: This is your WordPress URL. It is used to aid in previewing your content and to provide feeds.
 
 After these changes, you can start the development server using:
 
@@ -19,13 +20,13 @@ After these changes, you can start the development server using:
 npm run dev
 ```
 
-Your app will be accessible in [http://localhost:3000](http://localhost:3000).
+Your app will be accessible at [http://localhost:3000][local].
 
-## How does this boilerplate works?
+## How does this boilerplate work?
 
 ### WordPress GraphQL API responses
 
-Whenever you request data from the your WordPress GraphQL API backend (either a Post, a Page, or your custom content type), you'll get a list of content blocks. These blocks depend on how your content was built (either using the classic editor, or the new blocks editor -Gutenberg-).
+Whenever you request data from the your WordPress GraphQL API backend (either a `Post`, a `Page`, or your custom content type), you'll get a list of content blocks. These blocks depend on how your content was built (either using the classic editor, or the new blocks editor -Gutenberg-).
 
 If you used the classic editor, the list will have one element with the whole content inside it. If your content was built with the new Gutenberg editor, you'll get a list where each element is a Gutenberg block like paragraph, heading, list, etc.
 
@@ -65,8 +66,13 @@ TODO
 
 ## FAQ
 
-+ **Why are you using a separate server in production that the one provided by Next.js?**
+### Why are you using a [custom server][custom-server] instead of the one provided by Next.js?
 
-One of the requirements of VIP is to respond with `200 OK` to the `/cache-healthcheck?` route as we use this route for monitoring and checking the health of the apps.
+WordPress VIP's platform requires a [healthcheck endpoint][healthcheck] to assist in monitoring. Providing this endpoint correctly requires a custom server. We have also found that it is easy to outgrow Next.js's builtin server, so having a custom server (based on [Express 4][express]) available out-of-the-box is useful.
 
-That's why we use the `server/index.js` file to initiate an express server and respond to that route accordingly.
+[bundle]: https://github.com/Automattic/vip-decoupled-bundle
+[custom-server]: https://nextjs.org/docs/advanced-features/custom-server
+[express]: https://expressjs.com
+[healthcheck]: https://docs.wpvip.com/technical-references/vip-platform/node-js/#h-requirement-1-exposing-a-health-route
+[local]: http://localhost:3000
+[nextjs]: https://nextjs.org

@@ -1,3 +1,5 @@
+import { getAttribute } from '@/components/helpers';
+
 type Props = {
 	innerHTML: string,
 	attributes: [ {
@@ -7,13 +9,9 @@ type Props = {
 };
 
 export default function List ( props: Props ) {
-	function getAttribute( name ) {
-		return props.attributes.find( a => a.name === name );
-	}
-
-	const isOrdered = getAttribute( "ordered" )?.value === "1";
-	const isReversed = getAttribute( "reversed" )?.value === "1";
-	const startFrom = getAttribute( "start" )?.value;
+	const isOrdered = getAttribute( props.attributes, "ordered" )?.value === "1";
+	const isReversed = getAttribute( props.attributes, "reversed" )?.value === "1";
+	const startFrom = getAttribute( props.attributes, "start" )?.value;
 
 	const Component = isOrdered ? 'ol' : 'ul';
 

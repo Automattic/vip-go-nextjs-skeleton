@@ -7,11 +7,17 @@ type Props = {
 };
 
 export default function List ( props: Props ) {
-	const isOrdered = getAttribute( props.attributes, "ordered" )?.value === "1";
-	const isReversed = getAttribute( props.attributes, "reversed" )?.value === "1";
-	const startFrom = getAttribute( props.attributes, "start" )?.value;
+	const isOrdered = getAttribute( props.attributes, 'ordered' ) === '1';
+	const isReversed = getAttribute( props.attributes, 'reversed' ) === '1';
+	const startFrom = getAttribute( props.attributes, 'start' );
 
 	const Component = isOrdered ? 'ol' : 'ul';
 
-	return <Component dangerouslySetInnerHTML={ { __html: props.innerHTML } } start={ startFrom } reversed={ isReversed }/>;
+	return (
+		<Component
+			dangerouslySetInnerHTML={ { __html: props.innerHTML } }
+			reversed={ isReversed }
+			start={ startFrom ? parseInt( startFrom, 10 ) : undefined }
+		/>
+	);
 }

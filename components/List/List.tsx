@@ -1,11 +1,9 @@
 import { getAttribute } from '@/components/helpers';
+import { ContentBlockAttribute } from '@/graphql/generated';
 
 type Props = {
 	innerHTML: string,
-	attributes: [ {
-		name: string,
-		value: string,
-	} ],
+	attributes: ContentBlockAttribute[],
 };
 
 export default function List ( props: Props ) {

@@ -7,11 +7,12 @@
     "codegen:watch": "npm run codegen -- --watch",
     "dev": "npm run codegen && npm run start:server",
     "build": "next build",
-    "lint": "next lint",
+    "lint": "npm run typecheck && next lint",
     "lint:fix": "next lint --fix",
     "prebuild": "npm run codegen",
     "start": "NODE_ENV=production npm run start:server",
-    "start:server": "node server/index.js"
+    "start:server": "node server/index.js",
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@apollo/client": "^3.3.20",

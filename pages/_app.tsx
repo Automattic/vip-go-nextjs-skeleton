@@ -4,5 +4,5 @@ import '@/styles/new.css';
 export default function App( { Component, pageProps } ) {
 	useInternalLinkRouting();
 
-	return <Component {...pageProps} />
+	return <Component {...pageProps} />;
 }

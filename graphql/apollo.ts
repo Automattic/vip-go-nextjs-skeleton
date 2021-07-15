@@ -1,38 +1,13 @@
-import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, concat } from '@apollo/client';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { GetServerSidePropsContext } from 'next';
 import fragmentMatcher from '@/graphql/generated/fragmentMatcher';
-import fetch from 'isomorphic-fetch';
+import getApolloLink from './apollo-link';
 
 let clientSideApolloClient: ApolloClient<any>;
 
 const isServerSide = 'undefined' === typeof window;
-const uri = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT;
 
 const { possibleTypes } = fragmentMatcher;
-
-const link = concat(
-	new ApolloLink( ( operation, forward ) => {
-		// Some logging to help debug.
-		if ( isServerSide ) {
-			console.log( operation );
-		}
-
-		operation.setContext( ( { headers = {} } ) => ( {
-			headers: {
-				...headers,
-				// Here is where we would set custom request headers. If client-side,
-				// must be allowed by CORS policy
-			}
-		} ) );
-
-		return forward( operation );
-	} ),
-	new HttpLink( {
-		fetch: function ( input, init ) {
-			return fetch( input, init );
-		},
-		uri,
-	} ),
-);
 
 /**
  * Server-side / static, Apollo client should be recreated for each request so
@@ -44,18 +19,20 @@ const link = concat(
  * environment and returns a new instance or a shared instance saved in-memory.
  *
  * tl;dr: Just call this function whenever you need an Apollo client. :)
+ *
+ * If you are using this function inside `getServerSideProps`, pass the provided
+ * context as the first parameter for additional detail in your logging. (Since
+ * `getStaticProps` is run at build time, its context is not useful.)
  */
-export default function getApolloClient () {
-	// If endpoint is undefined, throw for visibility.
-	if ( 'undefined' === typeof uri ) {
-		throw new Error( 'GraphQL endpoint is undefined' );
-	}
-
+export default function getApolloClient ( serverSideContext?: GetServerSidePropsContext ) {
 	// Server-side / static: Return a new instance every time.
 	if ( isServerSide ) {
+		// @ts-ignore: Express locals are not defined on Next.js request.
+		const { requestContext } = serverSideContext?.res?.locals || {};
+
 		return new ApolloClient( {
 			cache: new InMemoryCache( { possibleTypes } ),
-			link,
+			link: getApolloLink( requestContext ),
 			ssrMode: true,
 		} );
 	}
@@ -64,7 +41,7 @@ export default function getApolloClient () {
 	if ( 'undefined' === typeof clientSideApolloClient ) {
 		clientSideApolloClient =  new ApolloClient( {
 			cache: new InMemoryCache( { possibleTypes } ),
-			link,
+			link: getApolloLink(),
 		} );
 	}
 

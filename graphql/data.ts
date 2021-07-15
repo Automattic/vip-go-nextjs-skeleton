@@ -33,34 +33,23 @@ function extractLastTokenFromRoute( routeQuery: string | string[] ): string {
 	return routeQuery.slice().pop();
 }
 
-/**
- * @TODO Ship it
- */
-function handleError( err: Error ): void {
-	console.error( err );
-}
-
 export type DisplayNodeProps = {
 	loading: boolean,
 	post: DisplayNodeFieldsFragment,
 };
 
-export const getServerSideDisplayNodeProps: GetServerSideProps<DisplayNodeProps> = async ( { query, resolvedUrl } ) => {
+export const getServerSideDisplayNodeProps: GetServerSideProps<DisplayNodeProps> = async ( context ) => {
 	const queryOptions = {
 		query: DisplayNodesDocument,
 		variables: {
-			slug: extractLastTokenFromRoute( query.slug ),
+			slug: extractLastTokenFromRoute( context.query.slug ),
 		},
 	};
 
-	const { data, error, loading } = await getApolloClient().query<DisplayNodesQuery>( queryOptions );
+	const { data, loading } = await getApolloClient( context ).query<DisplayNodesQuery>( queryOptions );
 
 	// @TODO Disambiguate multiple slug matches.
 	const post = data.displayNodes?.nodes?.[0];
-
-	if ( error ) {
-		handleError( error );
-	}
 
 	// SEO: Resource not found pages must send a 404 response code.
 	if ( ! loading && ! post ) {
@@ -71,7 +60,7 @@ export const getServerSideDisplayNodeProps: GetServerSideProps<DisplayNodeProps>
 
 	// SEO: Redirect to canonical URL.
 	const internalLinkPathname = getInternalLinkPathname( post.link );
-	const resolvedUrlWithoutQueryString = resolvedUrl.split( '?' )[0];
+	const resolvedUrlWithoutQueryString = context.resolvedUrl.split( '?' )[0];
 	if ( ! loading && internalLinkPathname !== resolvedUrlWithoutQueryString ) {
 		return {
 			redirect: {
@@ -89,27 +78,23 @@ export const getServerSideDisplayNodeProps: GetServerSideProps<DisplayNodeProps>
 	};
 }
 
-export const getServerSideDisplayNodePreviewProps: GetServerSideProps<DisplayNodeProps> = async ( { query } ) => {
+export const getServerSideDisplayNodePreviewProps: GetServerSideProps<DisplayNodeProps> = async ( context ) => {
 	const queryOptions = {
 		context: {
 			headers: {
-				'X-Preview-Token': query.token,
+				'X-Preview-Token': context.query.token,
 			},
 		},
 		fetchPolicy: 'no-cache' as FetchPolicy,
 		query: DisplayNodePreviewDocument,
 		variables: {
-			id: query.id,
+			id: context.query.id,
 		},
 	};
 
-	const { data, error, loading } = await getApolloClient().query<DisplayNodePreviewQuery>( queryOptions );
+	const { data, loading } = await getApolloClient( context ).query<DisplayNodePreviewQuery>( queryOptions );
 
 	const post = data.displayNode;
-
-	if ( error ) {
-		handleError( error );
-	}
 
 	// SEO: Resource not found pages must send a 404 response code.
 	if ( ! loading && ! post ) {
@@ -132,8 +117,8 @@ export type DisplayNodesProps = {
 	posts: DisplayNodeFieldsFragment[],
 };
 
-export const getServerSideDisplayNodesProps: GetServerSideProps<DisplayNodesProps> = async ( { query } ) => {
-	const slug = extractLastTokenFromRoute( query.content_type );
+export const getServerSideDisplayNodesProps: GetServerSideProps<DisplayNodesProps> = async ( context ) => {
+	const slug = extractLastTokenFromRoute( context.query.content_type );
 	const { enum: typeEnum, label } = contentTypeDefinitions[ slug ] || {};
 
 	if ( ! typeEnum ) {
@@ -150,13 +135,9 @@ export const getServerSideDisplayNodesProps: GetServerSideProps<DisplayNodesProp
 		},
 	};
 
-	const { data, error, loading } = await getApolloClient().query<DisplayNodesQuery>( queryOptions );
+	const { data, loading } = await getApolloClient( context ).query<DisplayNodesQuery>( queryOptions );
 
 	const posts = data.displayNodes?.nodes || [];
-
-	if ( error ) {
-		handleError( error );
-	}
 
 	// SEO: Resource not found pages must send a 404 response code.
 	if ( ! loading && ! posts.length ) {
@@ -180,13 +161,9 @@ export type ContentTypesProps = {
 };
 
 export const getStaticContentTypeProps: GetStaticProps<ContentTypesProps> = async () => {
-	const { loading, error, data } = await getApolloClient().query<ContentTypesQuery>( {
+	const { loading, data } = await getApolloClient().query<ContentTypesQuery>( {
 		query: ContentTypesDocument,
 	} );
-
-	if ( error ) {
-		handleError( error );
-	}
 
 	return {
 		props: {

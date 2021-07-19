@@ -11,6 +11,21 @@ function removeBasePath( pathname: string ): string {
 	return pathname;
 }
 
+/**
+ * With dynamic routes, Next.js can pass a string or an array of strings. We
+ * want either the singular string or the last item in the array of strings:
+ *
+ * [ '2021', '06', '10', 'my-chickens-let-me-show-you-them' ]
+ *                        ^ we want this
+ */
+export function extractLastTokenFromRoute( routeQuery: string | string[] ): string {
+	if ( ! Array.isArray( routeQuery ) ) {
+		return routeQuery;
+	}
+
+	return routeQuery.slice().pop();
+}
+
 export function getInternalLinkPathname ( url: string ): string | false {
 	try {
 		const { hostname, pathname } = new URL( url );

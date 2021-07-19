@@ -1,5 +1,5 @@
 import { internalLinkHostnames } from '@/lib/config';
-import config from '../../next.config';
+import config from '../next.config';
 
 const basePathRemover = new RegExp( `^${config.basePath}/*` );
 
@@ -28,10 +28,10 @@ export function extractLastTokenFromRoute( routeQuery: string | string[] ): stri
 
 export function getInternalLinkPathname ( url: string ): string | false {
 	try {
-		const { hostname, pathname } = new URL( url );
+		const { hostname, pathname, protocol } = new URL( url );
 
 		// Determine if the link destination should be considered internal.
-		if ( internalLinkHostnames.includes( hostname ) ) {
+		if ( [ 'http:', 'https:' ].includes( protocol ) && internalLinkHostnames.includes( hostname ) ) {
 			// Respect config for `trailingSlash` to avoid infinite redirect loops.
 			// Account for `basePath` to avoid broken links.
 			const pathnameRespectingConfig = removeBasePath( pathname.replace( /\/+$/, '' ) )

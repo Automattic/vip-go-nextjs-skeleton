@@ -12,26 +12,11 @@ import {
 } from './generated';
 import getApolloClient from './apollo';
 import contentTypeDefinitions from './content-types';
-import { getInternalLinkPathname } from '@/lib/links';
+import { getInternalLinkPathname, extractLastTokenFromRoute } from '@/lib/links';
 
 /**
  * Drop-in `getServerSideProps` and `getStaticProps` functions to fetch content.
  */
-
-/**
- * With dynamic routes, Next.js can pass a string or an array of strings. We
- * want either the singular string or the last item in the array of strings:
- *
- * [ '2021', '06', '10', 'my-chickens-let-me-show-you-them' ]
- *                        ^ we want this
- */
-function extractLastTokenFromRoute( routeQuery: string | string[] ): string {
-	if ( ! Array.isArray( routeQuery ) ) {
-		return routeQuery;
-	}
-
-	return routeQuery.slice().pop();
-}
 
 export type DisplayNodeProps = {
 	loading: boolean,

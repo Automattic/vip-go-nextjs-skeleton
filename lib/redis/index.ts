@@ -1,29 +1,17 @@
-import RedisClient, { Redis } from 'ioredis'
-
-let redisClient: Redis;
-
-function getRedisClient (): Redis {
-	if ( process.env.VIP_REDIS_PRIMARY && ! redisClient ) {
-		const [ host, port ] = process.env.VIP_REDIS_PRIMARY.split( ':' );
-		const password = process.env.VIP_REDIS_PASSWORD;
-
-		redisClient = new RedisClient( {
-			host,
-			password,
-			port: parseInt( port, 10 ),
-		} );
-	}
-
-	return redisClient;
-}
+import getRedisClient from './client';
+import { log } from '@/lib/log';
 
 export async function getCacheObjectByKey( key: string, ttl: number, fallback: () => Promise<any> ) {
 	const redisClient = getRedisClient();
 
 	if ( redisClient ) {
+		log( `Redis: Request key "${key}"`, { key, ttl } );
+
 		const cachedObject = await redisClient.get( key );
 
 		if ( cachedObject ) {
+			log( `Redis: Found key "${key}"`, { key, ttl } );
+
 			return {
 				source: 'cache',
 				data: JSON.parse( cachedObject )
@@ -34,6 +22,8 @@ export async function getCacheObjectByKey( key: string, ttl: number, fallback: (
 	const fallbackObject = await fallback();
 
 	if ( redisClient ) {
+		log( `Redis: Set key "${key}"`, { key, ttl } );
+
 		await redisClient.set(
 			key,
 			JSON.stringify( fallbackObject ),

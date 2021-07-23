@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
-import { GetServerSidePropsContext } from 'next';
+import { GetServerSidePropsContext, GetStaticPropsContext } from 'next';
 import fragmentMatcher from '@/graphql/generated/fragmentMatcher';
 import getApolloLink from './apollo-link';
 
@@ -24,7 +24,7 @@ const { possibleTypes } = fragmentMatcher;
  * context as the first parameter for additional detail in your logging. (Since
  * `getStaticProps` is run at build time, its context is not useful.)
  */
-export default function getApolloClient ( serverSideContext?: GetServerSidePropsContext ) {
+export default function getApolloClient ( serverSideContext?: GetServerSidePropsContext | GetStaticPropsContext ) {
 	// Server-side / static: Return a new instance every time.
 	if ( isServerSide ) {
 		// @ts-ignore: Express locals are not defined on Next.js request.

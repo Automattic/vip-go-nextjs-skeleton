@@ -1,0 +1,15 @@
+#import "../fragments/ContentNode.graphql"
+
+query ContentNodeBySlug(
+	$slug: String
+) {
+	contentNodes(
+		where: {
+			name: $slug
+		}
+	) {
+		nodes {
+			...ContentNodeFields
+		}
+	}
+}

@@ -1,8 +1,19 @@
+import { GetStaticProps } from 'next';
 import Link from 'next/link';
 import Page from '@/components/Page/Page';
-import contentTypes from '@/graphql/content-types';
+import getApolloClient from '@/graphql/apollo';
+import {
+	AllContentTypesDocument,
+	AllContentTypesQuery,
+	ContentTypeFieldsFragment,
+} from '@/graphql/generated';
 
-export default function Home() {
+type Props = {
+	contentTypes: ContentTypeFieldsFragment[],
+};
+
+export default function Home( props: Props ) {
+	console.log( props.contentTypes );
 	return (
 		<Page
 			title="Home"
@@ -11,9 +22,13 @@ export default function Home() {
 			<h3>Latest content</h3>
 			<ul>
 				{
-					Object.keys( contentTypes ).map( slug => (
-						<li key={slug}>
-							<Link href={`/latest/${slug}`}>{contentTypes[ slug ].typeName}</Link>
+					props.contentTypes.map( contentType => (
+						<li key={contentType.id}>
+							<Link
+								href={`/latest/${contentType.name}`}
+							>
+								{contentType.description}
+							</Link>
 						</li>
 					) )
 				}
@@ -21,3 +36,19 @@ export default function Home() {
 		</Page>
 	);
 }
+
+export const getStaticProps: GetStaticProps<Props> = async ( context ) => {
+	const queryOptions = {
+		query: AllContentTypesDocument,
+	};
+
+	const { data } = await getApolloClient( context ).query<AllContentTypesQuery>( queryOptions );
+
+	const contentTypes = data.contentTypes.nodes || [];
+
+	return {
+		props: {
+			contentTypes,
+		},
+	};
+};

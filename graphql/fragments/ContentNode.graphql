@@ -1,0 +1,31 @@
+#import "./ContentType.graphql"
+
+fragment ContentNodeFields on ContentNode {
+	id
+	... on NodeWithContentEditor {
+		contentBlocks {
+			isGutenberg
+			blocks {
+				attributes {
+					name
+					value
+				}
+				innerHTML
+				name
+			}
+		}
+	}
+	contentType {
+		node {
+			...ContentTypeFields
+		}
+	}
+	databaseId
+	dateGmt
+	isPreview
+	link
+	modifiedGmt
+	... on NodeWithTitle {
+		title
+	}
+}

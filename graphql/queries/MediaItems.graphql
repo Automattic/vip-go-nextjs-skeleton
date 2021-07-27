@@ -1,0 +1,11 @@
+#import "../fragments/MediaItem.graphql"
+
+query AllMediaItems {
+	mediaItems(
+		first: 100
+	) {
+		nodes {
+			...MediaItemFields
+		}
+	}
+}

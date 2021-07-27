@@ -1,0 +1,14 @@
+fragment MediaItemFields on MediaItem {
+	id
+	altText
+	caption
+	databaseId
+	date
+	mediaDetails {
+		height
+		width
+	}
+	sourceUrl
+	title
+	uri
+}

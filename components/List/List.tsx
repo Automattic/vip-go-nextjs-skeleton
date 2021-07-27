@@ -1,23 +1,22 @@
-import { getAttribute } from '@/components/helpers';
-import { ContentBlockAttribute } from '@/graphql/generated';
-
 type Props = {
 	innerHTML: string,
-	attributes: ContentBlockAttribute[],
+	ordered?: boolean,
+	reversed?: boolean,
+	start?: number,
 };
 
 export default function List ( props: Props ) {
-	const isOrdered = getAttribute( props.attributes, 'ordered' ) === '1';
-	const isReversed = getAttribute( props.attributes, 'reversed' ) === '1';
-	const startFrom = getAttribute( props.attributes, 'start' );
-
-	const Component = isOrdered ? 'ol' : 'ul';
+	if ( props.ordered ) {
+		return (
+			<ol
+				dangerouslySetInnerHTML={{ __html: props.innerHTML }}
+				reversed={props.reversed}
+				start={props.start}
+			/>
+		);
+	}
 
 	return (
-		<Component
-			dangerouslySetInnerHTML={ { __html: props.innerHTML } }
-			reversed={ isReversed }
-			start={ startFrom ? parseInt( startFrom, 10 ) : undefined }
-		/>
+		<ul dangerouslySetInnerHTML={{ __html: props.innerHTML }} />
 	);
 }

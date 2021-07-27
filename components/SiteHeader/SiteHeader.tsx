@@ -1,18 +1,8 @@
-import Link from 'next/link';
-
 /**
- * Data loading must take place in pages (or be client-side only). If you need
- * data to load this header, you must pass it down as props.
+ * Server-side data loading must take place in pages. If you need to load data
+ * to render this component, you must pass it down as props (or load it client-
+ * side.)
  */
 export default function SiteHeader() {
-	return (
-		<header>
-			<h1>VIP Decoupled Starter</h1>
-			<nav>
-				<Link href="/">Home</Link>
-				{` / `}
-				<Link href="/admin">Admin</Link>
-			</nav>
-		</header>
-	);
+	return null;
 }

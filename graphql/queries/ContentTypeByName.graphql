@@ -1,0 +1,18 @@
+#import "../fragments/ContentNode.graphql"
+#import "../fragments/ContentType.graphql"
+
+query ContentTypeByName(
+	$name: ID!
+) {
+	contentType(
+		id: $name
+		idType: NAME
+	) {
+		...ContentTypeFields
+		contentNodes {
+			nodes {
+				...ContentNodeFields
+			}
+		}
+	}
+}

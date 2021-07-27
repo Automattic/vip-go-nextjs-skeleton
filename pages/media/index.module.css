@@ -1,0 +1,14 @@
+.container {
+	column-gap: 1em;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	row-gap: 1em;
+}
+
+.image {
+	background-color: #ccc;
+	border: solid 1px #000;
+	display: block;
+	height: 100px;
+	position: relative;
+}

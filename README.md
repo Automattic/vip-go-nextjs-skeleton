@@ -10,6 +10,7 @@ This is WordPress VIP's [Next.js][nextjs] boilerplate for decoupled WordPress. I
 + Easily map Gutenberg blocks to React components and incorporate your design system
 + Automatic [code generation][code-generation] from GraphQL queries
 + Optional TypeScript support
++ Sitemap and RSS feeds
 
 ## Getting started
 
@@ -121,6 +122,10 @@ As `POST` requests, GraphQL queries are not cached. However, when using static o
 
 WordPress VIP's platform requires a [healthcheck endpoint][healthcheck] to assist in monitoring. Providing this endpoint correctly requires a [custom server][custom-server]. We have also found that it is easy to outgrow Next.js's builtin server, so having a custom server (based on [Express 4][express]) available out-of-the-box can be useful.
 
+## Sitemap and syndication (RSS) feeds
+
+`/sitemap.xml` is proxied to your WordPress backend, where it is fulfilled by the default sitemap provided by WordPress (or whatever is served there, if it is overridden by a plugin). Any path that ends in `/feed` is *redirected* to your WordPress backend. This matches the rewrite rule that exists in WordPress.
+
 ## TypeScript
 
 This boilerplate is written in [TypeScript][typescript]. Next.js has [built-in support for TypeScript][nextjs-ts] and processes it automatically in both development and production. If you're already proficient in TypeScript, see [`tsConfig.json`][ts-config] for details.
@@ -145,7 +150,7 @@ You don’t need to use TypeScript to use this boilerplate: our `tsConfig.json` 
 [nextjs]: https://nextjs.org
 [page-cache]: https://docs.wpvip.com/technical-references/caching/page-cache/
 [post]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/main/pages/%5B...slug%5D.tsx
-[post-content]: https://github.com/Automattic/vip-go-nextjs-skeleton/tree/main/components/PostContent
+[post-content]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/main/components/PostContent/PostContent.tsx
 [ts-config]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/main/tsconfig.json
 [typescript]: https://www.typescriptlang.org
 [wpgraphql]: https://www.wpgraphql.com

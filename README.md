@@ -1,4 +1,4 @@
-# VIP Go Next.js boilerplate for decoupled / headless WordPress applications
+# Next.js boilerplate for decoupled / headless WordPress applications
 
 This is WordPress VIP's [Next.js][nextjs] boilerplate for decoupled WordPress. In order to operate correctly, VIP's [decoupled plugin bundle][bundle] must be installed and activated on the WordPress backend. The notes below describe its behavior when run on [WordPress VIP's platform][wpvip].
 

@@ -1,78 +1,152 @@
 # VIP Go Next.js boilerplate for decoupled / headless WordPress applications
 
-This is a [Next.js][nextjs] boilerplate intended for use with a WordPress backend hosted on VIP. In order to operate correctly, VIP's [decoupled bundle plugin][bundle] must be installed and activated.
+This is WordPress VIP's [Next.js][nextjs] boilerplate for decoupled WordPress. In order to operate correctly, VIP's [decoupled plugin bundle][bundle] must be installed and activated on the WordPress backend. The notes below describe its behavior when run on [WordPress VIP's platform][wpvip].
 
-Features:
-+ Next.js 11
-+ Default React components to showcase your content. Mix and match with your own design system.
-+ Preview your content out of the box.
-+ Code generation to provide easy querying and strong typings.
+## Features
+
++ [Next.js][nextjs] 11
++ Fetch data with [Apollo][apollo] and [WPGraphQL][wpgraphql]
++ Seamless previewing
++ Easily map Gutenberg blocks to React components and incorporate your design system
++ Automatic [code generation][code-generation] from GraphQL queries
++ Optional TypeScript support
 
 ## Getting started
 
-Change the environment variables in the `.env` file:
-+ `NEXT_PUBLIC_GRAPHQL_ENDPOINT`: This is your GraphQL endpoint. You can find it at Settings > VIP Decoupled.
-+ `WORDPRESS_ENDPOINT`: This is your WordPress URL. It is used to aid in previewing your content and to provide feeds.
+### Install dependencies
 
-After these changes, you can start the development server using:
+```sh
+npm install
+```
 
-```bash
+### Environment variables
+
+Update the environment variables defined in the `.env` file:
+
++ `NEXT_PUBLIC_GRAPHQL_ENDPOINT`: Your WordPress GraphQL endpoint. You can find it in the WordPress Admin Dashboard > Settings > VIP Decoupled.
++ `WORDPRESS_ENDPOINT`: Your WordPress root URL, needed for previewing, syndication feeds, and sitemaps.
+
+If you have additional environment variables, you can add them here.
+
+### Development server
+
+Start a development server, with hot-reloading, at [http://localhost:3000][local].
+
+```sh
 npm run dev
 ```
 
-Your app will be accessible at [http://localhost:3000][local].
+### Production build
 
-## How does this boilerplate work?
+```sh
+npm run build
+npm start
+```
 
-### WordPress GraphQL API responses
+These are the exact same commands that will be executed when your application runs on WordPress VIP. Testing your production build locally is a good step to take when troubleshooting issues in your production site.
 
-Whenever you request data from the your WordPress GraphQL API backend (either a `Post`, a `Page`, or your custom content type), you'll get a list of content blocks. These blocks depend on how your content was built (either using the classic editor, or the new blocks editor -Gutenberg-).
+## Previewing
 
-If you used the classic editor, the list will have one element with the whole content inside it. If your content was built with the new Gutenberg editor, you'll get a list where each element is a Gutenberg block like paragraph, heading, list, etc.
+Previewing unpublished posts or updates to published posts works out of the box. Simply click the “Preview” button in WordPress and you’ll be redirected to a one-time-use preview link on the Next.js site. You can share your preview link with others; as long as they are logged in to WordPress in the same browser and have permissions to access that content, they will be able to preview it as well.
 
-### Using your own React components
+## Gutenberg / block support
 
-The way this boilerplate works is it matches each content block with a React component. Each Gutenberg block has a unique name, and based on that name we decide which component to map. For example, we match the Gutenberg block `core/heading` with our `Heading` component. The file `/components/PostContent/PostContent.tsx` shows this in action. If your content was built using the classic editor, your block will have a name of `core/classic-editor`.
+When you query for content (posts, pages, and custom post types), you'll receive the post content as blocks. If the content was written with WordPress's [block editor][gutenberg] (Gutenberg), these blocks will correspond directly with the blocks you see in the editor.
 
-In addition to this, each block can have some attributes. For example, our `core/heading` can have the `level` attribute (`h2`, `h3`...). Those attributes are also exposed via the API and can be passed to your component to change its behaviour. An example can be found on `/components/List/List.tsx`.
+Receiving the content as blocks allows you to easily map each block type to a React component, and the [block attributes][block-attributes] to component props. This boilerplate provides a few mappings for basic components like headings, paragraphs, and lists. Here is a simple example of this mapping:
 
-To use your own components, just change the default ones in `/components/PostContent/PostContent.tsx` or map your own blocks with your components.
+```js
+function PostContent ( props ) {
+	return (
+		<>
+			{
+				props.blocks.map( block => {
+					switch ( block.type ) {
+						case 'core/heading':
+							return (
+								<Heading
+									innerHTML={block.innerHTML}
+								/>
+							);
 
-Note: In `development`, if your WordPress GraphQL API returns a blocks that isn't matched with a component, an "Unsupported Block" error will be shown in your content. This will help you see which blocks aren't supported in your Next.js application.
+						case 'core/paragraph':
+							return (
+								<Paragraph
+									innerHTML={block.innerHTML}
+								/>
+							);
 
-### GraphQL queries
+						return null;
+					}
+				} )
+			}
+		</>
+	);
+}
+```
 
-All GraphQL queries used in this boilerplate can be found in the `graphql` folder.
+See the [`PostContent`][post-content] component for a full working example. You will probably need to write additional components and modify the `switch` statement in `PostContent` in order to support all of the block types and custom blocks that you use in your WordPress instance.
 
-By default, your WordPress GraphQL API will expose your post types as separate entities. This means that you'll have a `Post` query, a `Page` query... with the same fields (title, content...). We think that's a lot of duplication.
+If you used WordPress's [classic editor][classic-editor], you will receive a single block representing the HTML content of the entire post. A `ClassicEditorBlock` component is provided to render these blocks.
 
-To help with this, we introduced a new interface called `DisplayNodes` which covers the majority of cases we've seen in the wild. Post types implementing this interface can all be queried with the same GraphQL query. This means that instead of having different queries for Post and Page for example, we will only have one where we can filter by post type.
+### Unsupported blocks
 
-If you want to implement the `DisplayNodes` interface, this needs to be done on your WordPress application. Here is [how to do it](`TODO WE_DONT_HAVE_A_LINK_YET`) from our documentation.
+When running the development server, in order to help you identify blocks that have not yet been mapped to a React component, this boilerplate will display an "Unsupported block" notice. This notice is suppressed in production and the block is simply ignored.
 
-If you have some post types that don't fit the `DisplayNodes` interface, you may need to use a specific query for those instead. An example can be found in `TODO THERE_IS_NO_EXAMPLE_YET`.
+## Data fetching
 
-### Previewing
+Next.js is optimized to create performant pages that are statically generated at build time ([`getStaticProps`][get-static-props]) or server-side-rendered at request time ([`getServerSideProps`][get-server-side-props]). This results in HTML that is cacheable at the edge and immediately crawlable by search engines—both critically important factors in the performance and success of your site.
 
-Previewing is one of those problems stopping a lot from adapting a decoupled architecture. We've made the work to support it out of the box for you.
+This boilerplate uses [Apollo][apollo] to query for data using GraphQL, and it is configured and ready to use. Note that Apollo hooks (e.g., `useQuery`) are not compatible with `getStaticProps` or `getServerSideProps`.
 
-The previewing is based on a token approach. This means that whenever you click the "Preview" button on WordPress, a new token will be created that gives access to that content for a short amount of time (10min). You'll be then redirected to the frontend app with the token appended to the url.
+### Client-side data fetching
 
-On the frontend app (this one), we'll intercept the token and use it to authenticate our request in order to get the content that's still in draft. This means that anyone with the url can access the content for a short amount of time. You can share your url with others in order to have a second eye on your content.
+Many Apollo implementations, including Next.js’s official examples, implement a complex, isomorphic approach that bootstraps and hydrates the data from the server-side render into an in-memory cache, where it can be used for client-side requests. We have intentionally avoided this approach because it introduces a large performance penalty and increases the risk that performance degrades even more over time.
 
-### Caching and default configuration
+Before adding client-side data fetching, examine your typical user flows in detail and consider whether it truly benefits your application and its users. Skipping this complicated step simplifies your configuration, decreases page weight, and usually increases overall performance. If you absolutely need to perform client-side data fetching, an `ApolloProvider` is exported and ready to use in [`graphql-provider`][apollo-provider]. Note that data from the server-side render will not be hydrated into the store.
 
-TODO
+### Code generation
 
-## FAQ
+Our boilerplate has a code generation step that examines the GraphQL queries in `./graphql/queries/`, introspects your GraphQL schema, and generates TypeScript code that can be used to load data via Apollo. See [`LatestContent`][latest-content] for an example of using generated code with `getStaticProps` and [`Post`][post] for an example with `getServerSideProps`.
 
-### Why are you using a [custom server][custom-server] instead of the one provided by Next.js?
+Having declared types across the entire scope of data fetching chain—queries, responses, and React component props—is incredibly powerful and provides confidence as you build your site. Code generation runs automatically on all GraphQL queries in `./graphql/queries/`. In development, if you make changes or additions to your queries, you will need to restart the development server to see those changes reflected.
 
-WordPress VIP's platform requires a [healthcheck endpoint][healthcheck] to assist in monitoring. Providing this endpoint correctly requires a custom server. We have also found that it is easy to outgrow Next.js's builtin server, so having a custom server (based on [Express 4][express]) available out-of-the-box is useful.
+## Caching
 
+Responses from Next.js are cached by [VIP's page cache][page-cache] for five minutes by default.
+
+As `POST` requests, GraphQL queries are not cached. However, when using static or server-side data loading—which is strongly recommended—these queries are effectively cached by the page cache.
+
+## Custom server
+
+WordPress VIP's platform requires a [healthcheck endpoint][healthcheck] to assist in monitoring. Providing this endpoint correctly requires a [custom server][custom-server]. We have also found that it is easy to outgrow Next.js's builtin server, so having a custom server (based on [Express 4][express]) available out-of-the-box can be useful.
+
+## TypeScript
+
+This boilerplate is written in [TypeScript][typescript]. Next.js has [built-in support for TypeScript][nextjs-ts] and processes it automatically in both development and production. If you're already proficient in TypeScript, see [`tsConfig.json`][ts-config] for details.
+
+You don’t need to use TypeScript to use this boilerplate: our `tsConfig.json` is lenient and allows you to write code in either TypeScript or JavaScript.
+
+[apollo]: https://www.apollographql.com
+[apollo-provider]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/main/graphql/apollo-provider.tsx
+[block-attributes]: https://developer.wordpress.org/block-editor/reference-guides/block-api/block-attributes/
 [bundle]: https://github.com/Automattic/vip-decoupled-bundle
+[classic-editor]: https://wordpress.com/support/classic-editor-guide/
+[code-generation]: https://www.graphql-code-generator.com
 [custom-server]: https://nextjs.org/docs/advanced-features/custom-server
 [express]: https://expressjs.com
+[get-server-side-props]: https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
+[get-static-props]: https://nextjs.org/docs/basic-features/data-fetching#getstaticprops-static-generation
+[gutenberg]: https://developer.wordpress.org/block-editor/
 [healthcheck]: https://docs.wpvip.com/technical-references/vip-platform/node-js/#h-requirement-1-exposing-a-health-route
+[latest-content]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/main/pages/latest/%5Bcontent_type%5D.tsx
 [local]: http://localhost:3000
+[nextjs-ts]: https://nextjs.org/docs/basic-features/typescript
 [nextjs]: https://nextjs.org
+[page-cache]: https://docs.wpvip.com/technical-references/caching/page-cache/
+[post]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/main/pages/%5B...slug%5D.tsx
+[post-content]: https://github.com/Automattic/vip-go-nextjs-skeleton/tree/main/components/PostContent
+[ts-config]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/main/tsconfig.json
+[typescript]: https://www.typescriptlang.org
+[wpgraphql]: https://www.wpgraphql.com
+[wpvip]: https://wpvip.com

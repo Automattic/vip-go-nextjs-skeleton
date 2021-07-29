@@ -26,6 +26,23 @@ module.exports = {
 	// Otherwise, leave it set to '' (empty string).
 	basePath: '',
 
+	// ESLint
+	// ======
+	// https://nextjs.org/docs/basic-features/eslint
+	eslint: {
+		dirs: [
+			'components',
+			'graphql',
+			'lib',
+			'pages',
+			'server',
+		],
+		// Warning: Dangerously allow production builds to successfully complete even
+		// if your project has ESLint errors. This allows us to keep ESLint as a
+		// dev dependency.
+		ignoreDuringBuilds: true,
+	},
+
 	// Response headers
 	// ================
 	// https://nextjs.org/docs/api-reference/next.config.js/headers
@@ -51,6 +68,13 @@ module.exports = {
 			},
 		]
 	},
+
+	// React strict mode
+	// =================
+	// https://nextjs.org/docs/api-reference/next.config.js/react-strict-mode
+	//
+	// Be prepared for future breaking changes in React.
+	reactStrictMode: true,
 
 	// Redirects
 	// =========

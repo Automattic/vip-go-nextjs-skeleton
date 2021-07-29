@@ -1,7 +1,8 @@
 {
-  "name": "wpnext",
+  "name": "vip-go-nextjs-boilerplate",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "codegen": "graphql-codegen --config codegen.yml -r dotenv/config",
     "dev": "npm run prebuild && npm run start:server",

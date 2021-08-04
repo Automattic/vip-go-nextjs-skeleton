@@ -6,6 +6,7 @@ import {
 	ContentNodeFieldsFragment,
 	ContentTypeByNameDocument,
 	ContentTypeByNameQuery,
+	ContentTypeByNameQueryVariables,
 } from '@/graphql/generated';
 import { getInternalLinkPathname } from '@/lib/links';
 
@@ -50,21 +51,20 @@ export default function ContentNodes( props: Props ) {
 }
 
 type ContextParams = {
-	after?: string,
 	content_type: string,
 }
 
 export const getServerSideProps: GetServerSideProps<Props, ContextParams> = async ( context ) => {
-	const variables = {
+	const variables: ContentTypeByNameQueryVariables = {
 		name: context.params.content_type,
 	};
 
 	// Process pagination requests
 	if ( context.query.before ) {
-		variables.before = context.query.before;
+		variables.before = `${context.query.before}`;
 		variables.last = 10;
 	} else {
-		variables.after = context.query.after;
+		variables.after = `${context.query.after}`;
 		variables.first = 10;
 	}
 

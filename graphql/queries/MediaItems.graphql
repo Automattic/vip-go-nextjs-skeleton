@@ -1,11 +1,19 @@
 #import "../fragments/MediaItem.graphql"
+#import "../fragments/PageInfo.graphql"
 
-query AllMediaItems {
+query AllMediaItems(
+	$after: String
+	$first: Int = 10
+) {
 	mediaItems(
-		first: 100
+		after: $after
+		first: $first
 	) {
 		nodes {
 			...MediaItemFields
+		}
+		pageInfo {
+			...PageInfo
 		}
 	}
 }

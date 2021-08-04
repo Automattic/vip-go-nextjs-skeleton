@@ -1,7 +1,10 @@
 #import "../fragments/ContentNode.graphql"
-#import "../fragments/ContentType.graphql"
 
 query ContentTypeByName(
+	$after: String
+	$before: String
+	$first: Int
+	$last: Int
 	$name: ID!
 ) {
 	contentType(
@@ -9,10 +12,5 @@ query ContentTypeByName(
 		idType: NAME
 	) {
 		...ContentTypeFields
-		contentNodes {
-			nodes {
-				...ContentNodeFields
-			}
-		}
 	}
 }

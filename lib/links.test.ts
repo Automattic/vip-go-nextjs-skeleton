@@ -38,7 +38,18 @@ test( 'getInternalLinkPathname: returns the path from various local URLs', funct
 	} );
 } );
 
-test( 'getInternalLinkPathname: returns false for non-local URLs', function () {
+test( 'getInternalLinkPathname: preserves the query string', function () {
+	const internalLinksWithQuery = [
+		'http://localhost/howdy.html?wave=true',
+		'http://localhost/howdy.html?wave=true',
+	];
+
+	internalLinksWithQuery.forEach( function ( link ) {
+		expect( getInternalLinkPathname( link ) ).toBe( '/howdy.html?wave=true' );
+	} );
+} );
+
+test( 'getInternalLinkPathname: returns the full URL for non-local URLs', function () {
 	const notInternalLinks = [
 		'http://localhost.internal/howdy.html',
 		'http://local.host/howdy.html',
@@ -48,11 +59,11 @@ test( 'getInternalLinkPathname: returns false for non-local URLs', function () {
 	];
 
 	notInternalLinks.forEach( function ( link ) {
-		expect( getInternalLinkPathname( link ) ).toBe( false );
+		expect( getInternalLinkPathname( link ) ).toBe( link );
 	} );
 } );
 
-test( 'getInternalLinkPathname: returns false for malformed or non-HTTP URLs', function () {
+test( 'getInternalLinkPathname: returns the input for malformed or non-HTTP URLs', function () {
 	const malformedLinks = [
 		'localhost',
 		'localhost/howdy.html',
@@ -63,6 +74,6 @@ test( 'getInternalLinkPathname: returns false for malformed or non-HTTP URLs', f
 	];
 
 	malformedLinks.forEach( function ( link ) {
-		expect( getInternalLinkPathname( link ) ).toBe( false );
+		expect( getInternalLinkPathname( link ) ).toBe( link );
 	} );
 } );

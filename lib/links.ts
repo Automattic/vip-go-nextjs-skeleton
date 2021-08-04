@@ -26,22 +26,29 @@ export function extractLastTokenFromRoute( routeQuery: string | string[] ): stri
 	return routeQuery.slice().pop();
 }
 
-export function getInternalLinkPathname ( url: string ): string | false {
+/**
+ * Get the pathname of a URL, respecting Next.js config.
+ */
+function getPathname ( pathname: string ): string {
+	// Respect config for `trailingSlash` to avoid infinite redirect loops.
+	// Account for `basePath` to avoid broken links.
+	const pathnameRespectingConfig = removeBasePath( pathname.replace( /\/+$/, '' ) )
+	if ( config.trailingSlash ) {
+		return `${pathnameRespectingConfig}/`;
+	}
+
+	return pathnameRespectingConfig;
+}
+
+export function getInternalLinkPathname ( url: string ): string {
 	try {
-		const { hostname, pathname, protocol } = new URL( url );
+		const { hostname, pathname, protocol, search } = new URL( url );
 
 		// Determine if the link destination should be considered internal.
 		if ( [ 'http:', 'https:' ].includes( protocol ) && internalLinkHostnames.includes( hostname ) ) {
-			// Respect config for `trailingSlash` to avoid infinite redirect loops.
-			// Account for `basePath` to avoid broken links.
-			const pathnameRespectingConfig = removeBasePath( pathname.replace( /\/+$/, '' ) )
-			if ( config.trailingSlash ) {
-				return `${pathnameRespectingConfig}/`;
-			}
-
-			return pathnameRespectingConfig;
+			return `${getPathname( pathname )}${search}`;
 		}
 	} catch ( err ) {}
 
-	return false;
+	return url;
 }

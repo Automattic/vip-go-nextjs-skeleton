@@ -20,9 +20,12 @@ export const getServerSideProps: GetServerSideProps<PreviewProps> = async ( cont
 	const queryOptions = {
 		context: {
 			headers: {
+				// Echo the token provided in the URL as a request header, which will be
+				// validated by the WPGraphQL Preview plugin.
 				'X-Preview-Token': context.query.token,
 			},
 		},
+		// Do not cache preview query responses.
 		fetchPolicy: 'no-cache' as FetchPolicy,
 		query: ContentNodePreviewByIdDocument,
 		variables: {

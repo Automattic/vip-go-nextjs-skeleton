@@ -1,7 +1,23 @@
+#import "../fragments/ContentType.graphql"
+#import "../fragments/PageInfo.graphql"
+
 fragment ContentTypeFields on ContentType {
 	id
+	contentNodes(
+		after: $after
+		before: $before
+		first: $first
+		last: $last
+	) {
+		nodes {
+			...ContentNodeFields
+		}
+		pageInfo {
+			...PageInfo
+		}
+	}
 	description
-	label
+	# Currently restricted by WPGraphQL to `edit_post` cap.
+	# label
 	name
-	public
 }

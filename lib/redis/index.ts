@@ -4,13 +4,21 @@ import { log } from '@/lib/log';
 export async function getCacheObjectByKey( key: string, ttl: number, fallback: () => Promise<any> ) {
 	const redisClient = getRedisClient();
 
+	function logRedisEvent ( message: string ) {
+		log( `Redis: ${message}`, { key, ttl } );
+	}
+
+	if ( ! redisClient ) {
+		logRedisEvent( 'Not available!' );
+	}
+
 	if ( redisClient ) {
-		log( `Redis: Request key "${key}"`, { key, ttl } );
+		logRedisEvent( `Request key "${key}"` );
 
 		const cachedObject = await redisClient.get( key );
 
 		if ( cachedObject ) {
-			log( `Redis: Found key "${key}"`, { key, ttl } );
+			logRedisEvent( `Found key "${key}"` );
 
 			return {
 				source: 'cache',
@@ -22,7 +30,7 @@ export async function getCacheObjectByKey( key: string, ttl: number, fallback: (
 	const fallbackObject = await fallback();
 
 	if ( redisClient ) {
-		log( `Redis: Set key "${key}"`, { key, ttl } );
+		logRedisEvent( `Set key "${key}"` );
 
 		await redisClient.set(
 			key,

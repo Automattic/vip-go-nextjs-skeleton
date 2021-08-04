@@ -1,6 +1,11 @@
 #import "../fragments/ContentType.graphql"
 
-query AllContentTypes {
+query AllContentTypes(
+	$after: String
+	$before: String
+	$first: Int = 1
+	$last: Int
+) {
 	contentTypes {
 		nodes {
 			...ContentTypeFields

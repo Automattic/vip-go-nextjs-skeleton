@@ -1,18 +1,19 @@
-import { GetStaticProps, GetStaticPaths } from 'next';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import Page from '@/components/Page/Page';
 import getApolloClient from '@/graphql/apollo';
 import {
-	AllContentTypesDocument,
-	AllContentTypesQuery,
 	ContentNodeFieldsFragment,
 	ContentTypeByNameDocument,
 	ContentTypeByNameQuery,
 } from '@/graphql/generated';
+import { getInternalLinkPathname } from '@/lib/links';
 
 type Props = {
 	loading: boolean,
+	nextPageLink?: string,
 	posts: ContentNodeFieldsFragment[],
+	previousPageLink?: string,
 	title: string,
 };
 
@@ -26,31 +27,73 @@ export default function ContentNodes( props: Props ) {
 				{
 					props.posts.map( post => (
 						<li key={post.databaseId}>
-							<Link href={post.link}>{post.title}</Link>
+							<Link href={getInternalLinkPathname( post.link )}>{post.title}</Link>
 						</li>
 					) )
 				}
 			</ul>
+			<p>
+				{
+					props.previousPageLink &&
+						<>
+							<Link href={props.previousPageLink}>&lt; Previous</Link>
+							&nbsp;
+						</>
+				}
+				{
+					props.nextPageLink &&
+						<Link href={props.nextPageLink}>Next &gt;</Link>
+				}
+			</p>
 		</Page>
 	);
 }
 
 type ContextParams = {
+	after?: string,
 	content_type: string,
 }
 
-export const getStaticProps: GetStaticProps<Props, ContextParams> = async ( context ) => {
+export const getServerSideProps: GetServerSideProps<Props, ContextParams> = async ( context ) => {
+	const variables = {
+		name: context.params.content_type,
+	};
+
+	// Process pagination requests
+	if ( context.query.before ) {
+		variables.before = context.query.before;
+		variables.last = 10;
+	} else {
+		variables.after = context.query.after;
+		variables.first = 10;
+	}
+
 	const queryOptions = {
 		query: ContentTypeByNameDocument,
-		variables: {
-			name: context.params.content_type,
-		},
+		variables,
 	};
 
 	const { data, error, loading } = await getApolloClient( context ).query<ContentTypeByNameQuery>( queryOptions );
 
 	const posts = data.contentType?.contentNodes?.nodes || [];
 	const title = data.contentType?.description;
+
+	// Extract pagination information and build pagination links.
+	const {
+		endCursor,
+		hasNextPage,
+		hasPreviousPage,
+		startCursor,
+	} = data.contentType?.contentNodes?.pageInfo || {};
+
+	let nextPageLink = null;
+	let previousPageLink = null;
+	if ( hasNextPage ) {
+		nextPageLink = `/latest/${context.params.content_type}?after=${endCursor}`;
+	}
+	if ( hasPreviousPage ) {
+		previousPageLink = `/latest/${context.params.content_type}?before=${startCursor}`;
+	}
 
 	// SEO: Resource not found pages must send a 404 response code.
 	if ( error || ! loading && ! posts.length ) {
@@ -62,28 +105,10 @@ export const getStaticProps: GetStaticProps<Props, ContextParams> = async ( cont
 	return {
 		props: {
 			loading,
+			nextPageLink,
 			posts,
+			previousPageLink,
 			title,
 		},
-	};
-}
-
-export const getStaticPaths: GetStaticPaths = async ( context ) => {
-	const queryOptions = {
-		query: AllContentTypesDocument,
-	};
-
-	const { data } = await getApolloClient( context ).query<AllContentTypesQuery>( queryOptions );
-
-	const paths = data.contentTypes.nodes
-		.map( ( { name } ) => ( {
-			params: {
-				content_type: name,
-			},
-		} ) );
-
-	return {
-		fallback: 'blocking',
-		paths,
 	};
 }

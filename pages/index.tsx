@@ -35,13 +35,14 @@ export default function Home( props: Props ) {
 				<ul>
 					{
 						props.contentTypes
+							.filter( contentType => contentType.contentNodes.nodes.length )
 							.map( contentType => (
 								<li key={contentType.name}>
 									<Link href={`/latest/${contentType.name}`}>{contentType.name}</Link>
 								</li>
 							) )
 					}
-					<li><Link href="/media">Media library</Link></li>
+					<li><Link href="/media">media library</Link></li>
 				</ul>
 			</Card>
 			<h3 id="previewing">Previewing</h3>

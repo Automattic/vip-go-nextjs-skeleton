@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import Head from 'next/head';
 import Loading from '@/components/Loading/Loading';
 import SiteFooter from '@/components/SiteFooter/SiteFooter';
 import SiteHeader from '@/components/SiteHeader/SiteHeader';
@@ -13,7 +14,10 @@ import SiteHeader from '@/components/SiteHeader/SiteHeader';
 
 type Props = {
 	children: ReactNode,
+	canonicalLink?: string,
+	feedLink?: string,
 	loading?: boolean,
+	ogTitle?: string,
 	title: string,
 };
 
@@ -28,6 +32,29 @@ export default function Page( props: Props ) {
 
 	return (
 		<>
+			<Head>
+				<title>{props.title}</title>
+				{
+					props.ogTitle &&
+						<meta
+							content={props.ogTitle}
+							property="og:title"
+						/>
+				}
+				{
+					props.canonicalLink &&
+						<link href={props.canonicalLink} rel="canonical" />
+				}
+				{
+					props.feedLink &&
+						<link
+							href={props.feedLink}
+							rel="alternate"
+							title={props.title}
+							type="application/rss+xml"
+						/>
+				}
+			</Head>
 			<SiteHeader />
 			<main>
 				<h1>{props.title}</h1>

@@ -16,6 +16,7 @@ type Props = {
 	children: ReactNode,
 	canonicalLink?: string,
 	feedLink?: string,
+	headerLink?: ReactNode,
 	loading?: boolean,
 	ogTitle?: string,
 	title: string,
@@ -55,7 +56,7 @@ export default function Page( props: Props ) {
 						/>
 				}
 			</Head>
-			<SiteHeader />
+			<SiteHeader headerLink={props.headerLink} />
 			<main>
 				<h1>{props.title}</h1>
 				{props.children}

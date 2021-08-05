@@ -29,4 +29,11 @@ fragment ContentNodeFields on ContentNode {
 	... on NodeWithTitle {
 		title
 	}
+	terms {
+		nodes {
+			id
+			name
+			slug
+		}
+	}
 }

@@ -35,7 +35,6 @@ export default function Home( props: Props ) {
 				<ul>
 					{
 						props.contentTypes
-							.filter( contentType => contentType.contentNodes.nodes.length )
 							.map( contentType => (
 								<li key={contentType.name}>
 									<Link href={`/latest/${contentType.name}`}>{contentType.name}</Link>
@@ -62,7 +61,7 @@ export const getStaticProps: GetStaticProps<Props> = async ( context ) => {
 
 	return {
 		props: {
-			contentTypes,
+			contentTypes: contentTypes.filter( contentType => contentType.contentNodes.nodes.length ),
 		},
 	};
 };

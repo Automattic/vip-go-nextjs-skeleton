@@ -1,5 +1,5 @@
 .container {
-	background-color: #fdd;
+	background-color: var(--nc-ac-1);
 	margin: 1em 0;
 	padding: 1em;
 }

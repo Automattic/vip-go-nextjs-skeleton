@@ -6,7 +6,9 @@ query AllContentTypes(
 	$first: Int = 1
 	$last: Int
 ) {
-	contentTypes {
+	contentTypes(
+		first: 50
+	) {
 		nodes {
 			...ContentTypeFields
 		}

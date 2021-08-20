@@ -15,7 +15,8 @@
     "start": "NODE_ENV=production npm run start:server",
     "start:server": "node server/index.js",
     "start:server:debug": "NODE_OPTIONS='--inspect' node server/index.js",
-    "test": "jest"
+    "test": "jest",
+    "vip:preflight": "npx @automattic/vip-go-preflight-checks"
   },
   "dependencies": {
     "@apollo/client": "^3.4.8",

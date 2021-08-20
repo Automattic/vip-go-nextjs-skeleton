@@ -22,10 +22,11 @@ npm install
 
 ### Environment variables
 
-Update the environment variables defined in the `.env` file:
+Update the `NEXT_PUBLIC_GRAPHQL_ENDPOINT` environment variable defined in the `.env` file:
 
-+ `NEXT_PUBLIC_GRAPHQL_ENDPOINT`: Your WordPress GraphQL endpoint. You can find it in the WordPress Admin Dashboard > Settings > VIP Decoupled.
-+ `WORDPRESS_ENDPOINT`: Your WordPress root URL, needed for previewing, syndication feeds, and sitemaps.
++ `NEXT_PUBLIC_GRAPHQL_ENDPOINT`: Your WPGraphQL endpoint. You can find it in the WordPress Admin Dashboard > Settings > VIP Decoupled.
+
+If your WPGraphQL endpoint is at a non-default location, you will need to provide the `WORDPRESS_ENDPOINT` environment variable. This should be the root URL of your WordPress installation.
 
 If you have additional environment variables, you can add them here.
 

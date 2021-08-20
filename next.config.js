@@ -12,10 +12,6 @@
 // root, so we need to use a special regex path.
 const allPathsIncludingRoot = '/:path*{/}?';
 
-// This is the WordPress preview URL, used to generate a one-time use token and
-// redirect back to the Next.js site.
-const wordPressPreviewUrl = `${process.env.WORDPRESS_ENDPOINT}/?preview=true&p=:id`;
-
 module.exports = {
 	// Base path
 	// =========
@@ -80,8 +76,18 @@ module.exports = {
 	// =========
 	// https://nextjs.org/docs/api-reference/next.config.js/redirects
 	async redirects() {
+		// This is the WordPress preview URL, used to generate a one-time use token
+		// and redirect back to the Next.js site. If the environment variable
+		// WORDPRESS_ENDPOINT is not defined, assume WPGraphQL is using its default
+		// endpoint and just peel off /graphql.
+		const defaultWordPressEndpoint = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT.replace( /\/graphql(\?.*)?$/, '/' );
+		const wordPressEndpoint = process.env.WORDPRESS_ENDPOINT || defaultWordPressEndpoint;
+		const wordPressPreviewUrl = `${wordPressEndpoint}?preview=true&p=:id`;
+
 		return [
-			// Redirect preview requests back to WordPress for token generation.
+			// Redirect preview requests back to WordPress for token generation. We
+			// need this redirect because in some WordPress contexts (Gutenberg) the
+			// preview URL is not filterable and is sent to HOME by default
 			{
 				source: allPathsIncludingRoot,
 				destination: wordPressPreviewUrl,
@@ -99,6 +105,7 @@ module.exports = {
 				],
 				permanent: false,
 			},
+			// An alternate preview request structure used by WordPress.
 			{
 				source: allPathsIncludingRoot,
 				destination: wordPressPreviewUrl,

@@ -27,9 +27,9 @@ export function extractLastTokenFromRoute( routeQuery: string | string[] ): stri
 }
 
 /**
- * Get the pathname of a URL, respecting Next.js config.
+ * Get the correct pathname that respects Next.js config.
  */
-function getPathname ( pathname: string ): string {
+function getCorrectPathname ( pathname: string ): string {
 	// Respect config for `trailingSlash` to avoid infinite redirect loops.
 	// Account for `basePath` to avoid broken links.
 	const pathnameRespectingConfig = removeBasePath( pathname.replace( /\/+$/, '' ) )
@@ -40,15 +40,55 @@ function getPathname ( pathname: string ): string {
 	return pathnameRespectingConfig;
 }
 
+/**
+ * Get the hostname of a URL.
+ */
+export function getHostname ( url: string ): string {
+	try {
+		const { hostname } = new URL( url );
+
+		return hostname;
+	} catch ( err ) {}
+
+	return url;
+}
+
 export function getInternalLinkPathname ( url: string ): string {
 	try {
 		const { hostname, pathname, protocol, search } = new URL( url );
 
 		// Determine if the link destination should be considered internal.
 		if ( [ 'http:', 'https:' ].includes( protocol ) && internalLinkHostnames.includes( hostname ) ) {
-			return `${getPathname( pathname )}${search}`;
+			return `${getCorrectPathname( pathname )}${search}`;
 		}
 	} catch ( err ) {}
 
 	return url;
+}
+
+/**
+ * If the environment variable NEXT_PUBLIC_WORDPRESS_ENDPOINT is not defined,
+ * assume WPGraphQL is using its default endpoint and just peel off /graphql.
+ */
+export function getWordPressEndpoint() {
+	if ( process.env.NEXT_PUBLIC_WORDPRESS_ENDPOINT ) {
+		return process.env.NEXT_PUBLIC_WORDPRESS_ENDPOINT;
+	}
+
+	return process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT.replace( /\/graphql(\?.*)?$/, '/' );
+}
+
+/**
+ * If the environment variable NEXT_PUBLIC_WORDPRESS_ENDPOINT is not defined,
+ * assume WPGraphQL is using its default endpoint and just peel off /graphql.
+ */
+export function getPublicEndpoint() {
+	const uri = process.env.NEXT_PUBLIC_SERVER_URL;
+
+	// If endpoint is undefined, throw for visibility.
+	if ( 'undefined' === typeof uri ) {
+		throw new Error( 'Public server endpoint is undefined' );
+	}
+
+	return uri;
 }

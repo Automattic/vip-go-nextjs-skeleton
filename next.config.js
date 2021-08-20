@@ -17,8 +17,10 @@ module.exports = {
 	// =========
 	// https://nextjs.org/docs/api-reference/next.config.js/basepath
 	//
-	// If you are using a subdirectory-based multisite instance, you must set the
-	// basePath to match the subdirectory of the subsite, e.g., '/path'.
+	// In rare cases, you may want to set the base path. For example, when using a
+	// subdirectory-based multisite WordPress, you may want to set `basePath` to
+	// match the subdirectory of the subsite, e.g., '/path'.
+	//
 	// Otherwise, leave it set to '' (empty string).
 	basePath: '',
 
@@ -76,60 +78,28 @@ module.exports = {
 	// =========
 	// https://nextjs.org/docs/api-reference/next.config.js/redirects
 	async redirects() {
-		// This is the WordPress preview URL, used to generate a one-time use token
-		// and redirect back to the Next.js site. If the environment variable
-		// WORDPRESS_ENDPOINT is not defined, assume WPGraphQL is using its default
-		// endpoint and just peel off /graphql.
-		const defaultWordPressEndpoint = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT.replace( /\/graphql(\?.*)?$/, '/' );
-		const wordPressEndpoint = process.env.WORDPRESS_ENDPOINT || defaultWordPressEndpoint;
-		const wordPressPreviewUrl = `${wordPressEndpoint}?preview=true&p=:id`;
+		return [];
+	},
 
-		return [
-			// Redirect preview requests back to WordPress for token generation. We
-			// need this redirect because in some WordPress contexts (Gutenberg) the
-			// preview URL is not filterable and is sent to HOME by default
+	// Rewrites
+	// ========
+	// https://nextjs.org/docs/api-reference/next.config.js/rewrites
+	async rewrites() {
+		// Dynamically serve robots.txt.
+		const robotRewrites = [
 			{
-				source: allPathsIncludingRoot,
-				destination: wordPressPreviewUrl,
-				has: [
-					{
-						key: 'preview',
-						type: 'query',
-						value: 'true',
-					},
-					{
-						key: 'preview_id',
-						type: 'query',
-						value: '(?<id>.*)',
-					},
-				],
-				permanent: false,
-			},
-			// An alternate preview request structure used by WordPress.
-			{
-				source: allPathsIncludingRoot,
-				destination: wordPressPreviewUrl,
-				has: [
-					{
-						key: 'preview',
-						type: 'query',
-						value: 'true',
-					},
-					{
-						key: 'p',
-						type: 'query',
-						value: '(?<id>.*)',
-					},
-				],
-				permanent: false,
-			},
-			// Redirect feed requests to WordPress.
-			{
-				source: '/:path*/feed',
-				destination: `${process.env.WORDPRESS_ENDPOINT}/:path*/feed/`,
-				permanent: false,
+				source: '/robots.txt',
+				destination: '/api/robots',
 			},
 		];
+
+		return {
+			// Since we have a fallback route defined at the root (`[[...slug]].tsx`),
+			// we must apply rewrites before any Next.js routing.
+			beforeFiles: [
+				...robotRewrites,
+			],
+		};
 	},
 
 	// Trailing slash

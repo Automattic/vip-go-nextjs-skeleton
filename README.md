@@ -134,6 +134,10 @@ Responses from Next.js are cached by [VIP's page cache][page-cache] for five min
 
 As `POST` requests, GraphQL queries are not cached. However, when using static or server-side data loading—which is strongly recommended—these queries are effectively cached by the page cache.
 
+### Redis
+
+If you have Redis deployed alongside your application hosted on VIP Go, you can cache API responses and other data there. An example preconfigured to work on VIP is provided at `./pages/api/books.ts`.
+
 ## Custom server
 
 WordPress VIP's platform requires a [healthcheck endpoint][healthcheck] to assist in monitoring. Providing this endpoint correctly requires a [custom server][nextjs-custom-server], which we provide in [`server/index.js`][server-entrypoint]. It is easy to outgrow Next.js's builtin server, so having a custom server (based on [Express 4][express]) available out-of-the-box can be useful.

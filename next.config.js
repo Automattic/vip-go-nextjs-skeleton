@@ -41,6 +41,16 @@ module.exports = {
 		ignoreDuringBuilds: true,
 	},
 
+	// Experimental options
+	// ====================
+	// https://github.com/vercel/next.js/blob/canary/packages/next/server/config-shared.ts
+	experimental: {
+		// Disable writing to disk in ISR mode. VIP file system is read only, so this
+		// avoids generating lots of noisy errors in the logs. ISR artifacts are
+		// still cached in-memory.
+		isrFlushToDisk: false,
+	},
+
 	// Response headers
 	// ================
 	// https://nextjs.org/docs/api-reference/next.config.js/headers

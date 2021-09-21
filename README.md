@@ -2,6 +2,8 @@
 
 This is WordPress VIP's [Next.js][nextjs] boilerplate for decoupled WordPress. In order to operate correctly, VIP's [decoupled plugin bundle][bundle] must be installed and activated on the WordPress backend. The notes below describe its behavior when run on [WordPress VIP's platform][wpvip].
 
+> ⚠️ This project is under active development. If you are a VIP customer, please let us know if you'd like to use this boilerplate and we can provide additional guidance. Issues and PRs are welcome. 💖
+
 ## Features
 
 + [Next.js][nextjs] 11

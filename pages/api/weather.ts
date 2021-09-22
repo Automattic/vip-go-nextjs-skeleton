@@ -17,7 +17,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 	// @ts-ignore: Express locals are not defined on Next.js request.
 	const { requestContext } = res.locals;
 
-	const appId = '79565f7203b09794f3f049346c2cb9d4';
+	const appId = 'YOUR_OPENWEATHERMAP_APP_ID';
 	const city = `${ req.query.city || 'London' }`;
 	const cacheKey = `weather_api_response_${ city.toLowerCase() }`;
 	const ttl = 30;

@@ -2,6 +2,7 @@ import ClassicEditorBlock from '@/components/ClassicEditorBlock/ClassicEditorBlo
 import Heading from '@/components/Heading/Heading';
 import Paragraph from '@/components/Paragraph/Paragraph';
 import List from '@/components/List/List';
+import Image from '@/components/Image/Image';
 import UnsupportedBlock from '@/components/UnsupportedBlock/UnsupportedBlock';
 import { ContentBlock } from '@/graphql/generated';
 import { mapAttributesToProps } from '@/lib/blocks';
@@ -17,6 +18,18 @@ export default function PostContent( props: {
 					const key = `block-${i}`;
 
 					switch ( block.name ) {
+						case 'core/image':
+							return (
+								<Image
+									src={blockProps.src}
+									srcSet={blockProps.srcset}
+									width={blockProps.width || blockProps.originalWidth}
+									height={blockProps.height || blockProps.originalHeight}
+									alt={blockProps.alt}
+									key={key}
+								/>
+							);
+
 						case 'core/classic-editor':
 							return (
 								<ClassicEditorBlock

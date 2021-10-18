@@ -24,6 +24,7 @@ export default function Image ( props: Props ) {
 		<NextImage
 			{...props}
 			loader={loader}
+			layout="responsive"
 		/>
 	);
 }

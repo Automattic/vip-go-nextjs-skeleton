@@ -39,7 +39,7 @@ app.prepare().then( () => {
 	const server = express();
 
 	// Cache healthcheck endpoint
-	server.get( '/cache-healthcheck?', ( _req, res ) => {
+	server.get( '/cache-healthcheck', ( _req, res ) => {
 		res.status( 200 ).send( 'Ok' );
 	} );
 

@@ -44,9 +44,19 @@ app.prepare().then( () => {
 	} );
 
 	// Proxy sitemap requests to WordPress. The middleware below proxies any XML
-	// sitemap or XSL stylesheet at the root of the site. It will not proxy
-	// sitemaps in subdirectories.
-	server.use( /^\/[^\/]+\.x[ms]l$/, wpProxy );
+	// or XSL file that contains the word "sitemap". Wrapping wpProxy in a function
+	// allows us to inspect the request and exclude those that don't match this
+	// condition.
+	server.use( '*.x[ms]l', function( req, res, nextMiddleware ) {
+		// Note the use of "req.baseUrl" to get the URL of the request before it was
+		// matched by "server.use"; req.url and req.path will always be "/".
+		if ( /\bsitemap\b/.test( req.baseUrl ) ) {
+			return wpProxy( req, res, next );
+		}
+
+		// Pass the request to the next middleware for evaluation.
+		nextMiddleware();
+	} );
 
 	// Proxy feed requests to WordPress.
 	server.use( /.*\/feed\/?$/, wpProxy );
@@ -62,6 +72,7 @@ app.prepare().then( () => {
 			return res.redirect( 302, `${wordPressEndpoint}${query}` );
 		}
 
+		// Pass the request to the next middleware for evaluation.
 		nextMiddleware();
 	} );
 

@@ -180,12 +180,16 @@ npm test
 
 ### Important notes
 
-- The minimum [Node.js](https://nodejs.org/en/) version has been bumped from 12.0.0 to 12.22.0 which is the first version of Node.js with native ES Modules support.
-- Webpack 4 support has been removed. See the [webpack 5 upgrading documentation](https://nextjs.org/docs/messages/webpack5) for more info.
 - Next.js now uses Rust-based compiler [SWC to compile](https://nextjs.org/docs/upgrading#swc-replacing-babel) JavaScript/TypeScript. This new compiler is up to 17x faster than Babel when compiling individual files and up to 5x faster Fast Refresh. Next.js provides full backward compatibility with applications that have custom Babel configuration.
-- Next/image changed wrapping element. See the [documentation](https://nextjs.org/docs/basic-features/image-optimization#styling) for more info.
 - Next.js 12 HMR connection now uses a [WebSocket](https://nextjs.org/docs/upgrading#nextjs-hmr-connection-now-uses-a-websocket).
+
+### Breaking Changes
+
+- Webpack 4 support has been removed. See the [webpack 5 upgrading documentation](https://nextjs.org/docs/messages/webpack5) for more info.
 - Next target option has been deprecated. If you are currently using the target option set to serverless please read the [documentation on how to leverage the new output](https://nextjs.org/docs/advanced-features/output-file-tracing).
+- Next/image changed wrapping element. See the [documentation](https://nextjs.org/docs/basic-features/image-optimization#styling) for more info.
+- The minimum [Node.js](https://nodejs.org/en/) version has been bumped from 12.0.0 to 12.22.0 which is the first version of Node.js with native ES Modules support.
+
 
 
 [apollo]: https://www.apollographql.com

@@ -23,7 +23,6 @@ export default function PostContent( props: {
 								...defaultProps,
 								src: blockProps.src,
 								srcSet: blockProps.srcset,
-								key: blockProps.key,
 								width: blockProps.width || blockProps.originalWidth,
 								height: blockProps.height || blockProps.originalHeight,
 							};

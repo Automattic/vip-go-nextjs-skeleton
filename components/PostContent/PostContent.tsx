@@ -15,26 +15,27 @@ export default function PostContent( props: {
 			{
 				props.blocks.map( ( block, i ) => {
 					const blockProps = mapAttributesToProps( block.attributes || [] );
-					const key = `block-${i}`;
+					const defaultProps = { key: `block-${i}` };
 
 					switch ( block.name ) {
 						case 'core/image':
+							const imageProps = {
+								...defaultProps,
+								src: blockProps.src,
+								srcSet: blockProps.srcset,
+								key: blockProps.key,
+								width: blockProps.width || blockProps.originalWidth,
+								height: blockProps.height || blockProps.originalHeight,
+							};
 							return (
-								<Image
-									src={blockProps.src}
-									srcSet={blockProps.srcset}
-									width={blockProps.width || blockProps.originalWidth}
-									height={blockProps.height || blockProps.originalHeight}
-									alt={blockProps.alt}
-									key={key}
-								/>
+								<Image alt={blockProps.alt} {...imageProps} />
 							);
 
 						case 'core/classic-editor':
 							return (
 								<ClassicEditorBlock
 									innerHTML={block.innerHTML}
-									key={key}
+									{...defaultProps}
 								/>
 							);
 
@@ -42,7 +43,7 @@ export default function PostContent( props: {
 							return (
 								<Heading
 									innerHTML={block.innerHTML}
-									key={key}
+									{...defaultProps}
 								/>
 							);
 
@@ -50,7 +51,7 @@ export default function PostContent( props: {
 							return (
 								<Paragraph
 									innerHTML={block.innerHTML}
-									key={key}
+									{...defaultProps}
 								/>
 							);
 
@@ -58,10 +59,10 @@ export default function PostContent( props: {
 							return (
 								<List
 									innerHTML={block.innerHTML}
-									key={key}
 									ordered={'1' === blockProps.ordered}
 									reversed={'1' === blockProps.reversed}
 									start={blockProps.start ? parseInt( blockProps.start, 10 ) : undefined}
+									{...defaultProps}
 								/>
 							);
 
@@ -72,7 +73,7 @@ export default function PostContent( props: {
 								return (
 									<UnsupportedBlock
 										block={block}
-										key={key}
+										{...defaultProps}
 									/>
 								);
 							}

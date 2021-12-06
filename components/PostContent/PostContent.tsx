@@ -19,10 +19,12 @@ export default function PostContent( props: {
 
 					switch ( block.name ) {
 						case 'core/image':
+							// next/image don't have support to srcSet prop. Instead of send it,
+							// you need update imageSizes/deviceSizes on next.config.js file,
+							// or use <img />
 							const imageProps = {
 								...defaultProps,
 								src: blockProps.src,
-								srcSet: blockProps.srcset,
 								width: blockProps.width || blockProps.originalWidth,
 								height: blockProps.height || blockProps.originalHeight,
 							};

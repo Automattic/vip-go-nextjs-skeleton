@@ -120,4 +120,23 @@ module.exports = {
 	// support for trailing slashes, but its implementation is buggy, causes
 	// problems, and is not recommend at this time.
 	trailingSlash: false,
+
+	// Image Optimization
+	// ==================
+	// The next/image, is an extension of the HTML <img> element, evolved for
+	// the modern web. It includes a variety of built-in performance
+	// optimizations to help you achieve good Core Web Vitals.
+	images: {
+		// If you know the expected device widths of your users, you can specify a
+		// list of device width breakpoints using the deviceSizes property here.
+		// These widths are used when the next/image component uses layout="responsive"
+		// or layout="fill" to ensure the correct image is served for user's device.
+		deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+		//
+		// The reason there are two separate lists is that imageSizes is only used
+		// for images which provide a sizes prop, which indicates that the image
+		// is less than the full width of the screen. Therefore, the sizes in
+		// imageSizes should all be smaller than the smallest size in deviceSizes.
+		imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+	},
 };

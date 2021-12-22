@@ -6,7 +6,7 @@ This is WordPress VIP's [Next.js][nextjs] boilerplate for decoupled WordPress. I
 
 ## Features
 
-+ [Next.js][nextjs] 11
++ [Next.js][nextjs] 12
 + Fetch data with [Apollo][apollo] and [WPGraphQL][wpgraphql]
 + Seamless previewing
 + Easily map Gutenberg blocks to React components and incorporate your design system
@@ -175,6 +175,21 @@ There is support for tests using [Jest][jest]. Some basic unit tests are provide
 ```sh
 npm test
 ```
+
+## Upgrading from Next.js version 11 to 12
+
+### Important notes
+
+- Next.js now uses Rust-based compiler [SWC to compile](https://nextjs.org/docs/upgrading#swc-replacing-babel) JavaScript/TypeScript. This new compiler is up to 17x faster than Babel when compiling individual files and up to 5x faster Fast Refresh. Next.js provides full backward compatibility with applications that have custom Babel configuration.
+- Next.js 12 HMR connection now uses a [WebSocket](https://nextjs.org/docs/upgrading#nextjs-hmr-connection-now-uses-a-websocket).
+
+### Breaking Changes
+
+- Webpack 4 support has been removed. See the [webpack 5 upgrading documentation](https://nextjs.org/docs/messages/webpack5) for more info.
+- Next target option has been deprecated. If you are currently using the target option set to serverless please read the [documentation on how to leverage the new output](https://nextjs.org/docs/advanced-features/output-file-tracing).
+- Next/image changed wrapping element. See the [documentation](https://nextjs.org/docs/basic-features/image-optimization#styling) for more info.
+- The minimum [Node.js](https://nodejs.org/en/) version has been bumped from 12.0.0 to 12.22.0 which is the first version of Node.js with native ES Modules support.
+
 
 
 [apollo]: https://www.apollographql.com

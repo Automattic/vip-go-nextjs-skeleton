@@ -23,8 +23,8 @@ export default function Image ( props: Props ) {
 	return (
 		<NextImage
 			layout="responsive"
-			{...props}
 			loader={loader}
+			{...props}
 		/>
 	);
 }

@@ -185,17 +185,17 @@ npm test
 
 #### Middleware
 
-This feature permit you run code before a request is completed. Based on the user's incoming request, you can modify the response by rewriting, redirecting, adding headers, or even streaming HTML.
+This feature lets you alter the response before sending it. You can use it to rewrite, redirect, add headers, or even stream HTML.
 
-It works out of the box on Edge platforms like Vercel, which uses Edge Functions. However, this feature will work differently on Vercel and VIP because it will hit a different cache between the edges. Since it’s still an experimental feature, we're not recommending the usage until the feature will be more useful.
+While this feature works out of the box on platforms using edge functions to serve content (like Vercel), it will not work in the same way on VIP due to our usage of a caching layer at the edges. For the time being, we do not recommend using this feature.
 
 #### URL Imports
 
-You can now import tooling directly from the CDN without different builds or installs. In addition, we will be able to import those from the wire rather than build them locally.
+URL Imports is a feature that allows you to import packages directly from the Internet instead of the local disk.
 
 It’s good to import things like static Images, but it is preferable if the organization has a proper CDN or control over the content of the files.
 
-If you want to proceed with the feature, don't forget to add the URL prefix in the `next.config.js` file:
+If you want to use this feature, don't forget to add the URL prefix in the `next.config.js` file:
 
 ```js
 module.exports = {
@@ -205,7 +205,7 @@ module.exports = {
 }
 ```
 
-To prevent errors from TypeScript, you also need to create a `types/skypack.d.ts` file in the root of the project to permit import from external URLs, as the example below:
+To prevent TypeScript errors, you also need to create a `types/skypack.d.ts` file at the root of the project. The following is an example of that:
 
 ```js
 // First, let TypeScript allow all module names starting with "https://". This will suppress TS errors.
@@ -219,9 +219,9 @@ declare module 'https://www.wpvip.com/' {
 
 #### Image Optimization
 
-The Next.js Image component, [next/image][nextjs-image], is an extension of the HTML `<img />` element, evolved for the modern web. It includes a variety of built-in performance optimizations. Next.js will automatically determine the width and height of your image based on the imported file.
+The Next.js Image component, [next/image][nextjs-image], is an extension of the HTML `<img />` element, evolved for the modern web and includes a variety of built-in performance optimizations. Next.js will automatically determine the width and height of your image based on the imported file.
 
-With the images cames from the API, the `srcSet` property is automatically defined by the `deviceSizes` and `imageSizes` properties added on `next.config.js` file. If you need to set manually the `srcSet`, you should use the `<img />` HTML tag instead of the next/image component.
+For the API images, the `srcSet` property is automatically defined by the `deviceSizes` and `imageSizes` properties added to the `next.config.js` file. If you need to manually set the `srcSet` for a particular image, you should use the `<img />` HTML tag instead.
 
 ### Breaking Changes
 

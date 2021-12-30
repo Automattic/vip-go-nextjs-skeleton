@@ -3,6 +3,7 @@
 fragment ContentNodeFields on ContentNode {
 	id
 	... on NodeWithContentEditor {
+		schemaOrgMeta
 		contentBlocks {
 			isGutenberg
 			blocks {

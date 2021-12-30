@@ -1,3 +1,4 @@
+import config from '../../next.config';
 import ClassicEditorBlock from '@/components/ClassicEditorBlock/ClassicEditorBlock';
 import Heading from '@/components/Heading/Heading';
 import Paragraph from '@/components/Paragraph/Paragraph';
@@ -26,7 +27,7 @@ export default function PostContent( props: {
 								height: blockProps.height || blockProps.originalHeight,
 								srcSet: blockProps.srcSet || undefined,
 							};
-							if ( imageProps.srcSet ) {
+							if ( config.images.useHtmlTag && imageProps.srcSet ) {
 								return (
 									<img alt={blockProps.alt} {...defaultProps} />
 								);

@@ -132,11 +132,13 @@ module.exports = {
 		// These widths are used when the next/image component uses layout="responsive"
 		// or layout="fill" to ensure the correct image is served for user's device.
 		deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-		//
 		// The reason there are two separate lists is that imageSizes is only used
 		// for images which provide a sizes prop, which indicates that the image
 		// is less than the full width of the screen. Therefore, the sizes in
 		// imageSizes should all be smaller than the smallest size in deviceSizes.
 		imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+		// If you want to force usage of the <img /> tag instead of the next/image
+		// element, you should set useHtmlTag option to true.
+		useHtmlTag: false,
 	},
 };

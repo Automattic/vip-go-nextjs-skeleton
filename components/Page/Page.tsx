@@ -55,6 +55,12 @@ export default function Page( props: Props ) {
 							type="application/rss+xml"
 						/>
 				}
+				{
+					props.schemaOrgMeta && <script
+						dangerouslySetInnerHTML={{ __html: props.schemaOrgMeta }}
+						type="application/ld+json"
+					/>
+				}
 			</Head>
 			<SiteHeader headerLink={props.headerLink} />
 			<main>

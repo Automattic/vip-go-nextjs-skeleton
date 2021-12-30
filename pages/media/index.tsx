@@ -57,6 +57,7 @@ export default function Media( props: Props ) {
 										:
 										<Image
 											alt={altText}
+											layout="intrinsic"
 											height={100}
 											src={sourceUrl}
 											width={width / height * 100}

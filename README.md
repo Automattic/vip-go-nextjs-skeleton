@@ -180,16 +180,55 @@ npm test
 
 ### Important notes
 
-- Next.js now uses Rust-based compiler [SWC to compile](https://nextjs.org/docs/upgrading#swc-replacing-babel) JavaScript/TypeScript. This new compiler is up to 17x faster than Babel when compiling individual files and up to 5x faster Fast Refresh. Next.js provides full backward compatibility with applications that have custom Babel configuration.
-- Next.js 12 HMR connection now uses a [WebSocket](https://nextjs.org/docs/upgrading#nextjs-hmr-connection-now-uses-a-websocket).
+- Next.js now uses Rust-based compiler [SWC to compile][swc-replacing-babel] JavaScript/TypeScript. This new compiler is up to 17x faster than Babel when compiling individual files and up to 5x faster Fast Refresh. Next.js provides full backward compatibility with applications that have custom Babel configuration.
+- Next.js 12 HMR connection now uses a [WebSocket][websocket].
+
+#### Middleware
+
+This feature lets you alter the response before sending it. You can use it to rewrite, redirect, add headers, or even stream HTML.
+
+While this feature works out of the box on platforms using edge functions to serve content (like Vercel), it will not work in the same way on VIP due to our usage of a caching layer at the edges. For the time being, we do not recommend using this feature.
+
+#### URL Imports
+
+URL Imports is a feature that allows you to import packages directly from the Internet instead of the local disk.
+
+It’s good to import things like static Images, but it is preferable if the organization has a proper CDN or control over the content of the files.
+
+If you want to use this feature, don't forget to add the URL prefix in the `next.config.js` file:
+
+```js
+module.exports = {
+  experimental: {
+    urlImports: ['https://www.wpvip.com/']
+  }
+}
+```
+
+To prevent TypeScript errors, you also need to create a `types/skypack.d.ts` file at the root of the project. The following is an example of that:
+
+```js
+// First, let TypeScript allow all module names starting with "https://". This will suppress TS errors.
+declare module 'https://*';
+
+// Second, list out all your dependencies. For every URL, you must map it to its local module.
+declare module 'https://www.wpvip.com/' {
+  export * from 'package-name';
+}
+```
+
+#### Image Optimization
+
+The Next.js Image component, [next/image][nextjs-image], is an extension of the HTML `<img />` element, evolved for the modern web and includes a variety of built-in performance optimizations. Next.js will automatically determine the width and height of your image based on the imported file.
+
+For the API images, the `srcSet` property is automatically defined by the `deviceSizes` and `imageSizes` properties added to the `next.config.js` file. If you need to manually set the `srcSet` for a particular image, you should use the `<img />` HTML tag instead.
 
 ### Breaking Changes
 
-- Webpack 4 support has been removed. See the [webpack 5 upgrading documentation](https://nextjs.org/docs/messages/webpack5) for more info.
-- Next target option has been deprecated. If you are currently using the target option set to serverless please read the [documentation on how to leverage the new output](https://nextjs.org/docs/advanced-features/output-file-tracing).
-- Next/image changed wrapping element. See the [documentation](https://nextjs.org/docs/basic-features/image-optimization#styling) for more info.
-- The minimum [Node.js](https://nodejs.org/en/) version has been bumped from 12.0.0 to 12.22.0 which is the first version of Node.js with native ES Modules support.
-
+- Webpack 4 support has been removed. See the [webpack 5 upgrading documentation][webpack5] for more info.
+- Next target option has been deprecated. If you are currently using the target option set to serverless please read the [documentation on how to leverage the new output][output-file-tracing].
+- Next/image changed wrapping element. See the [documentation][image-optimization] for more info.
+- The minimum [Node.js][nextjs] version has been bumped from 12.0.0 to 12.22.0 which is the first version of Node.js with native ES Modules support.
 
 
 [apollo]: https://www.apollographql.com
@@ -204,6 +243,7 @@ npm test
 [feed-redirect]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/next.config.js#L95-L100
 [gutenberg]: https://developer.wordpress.org/block-editor/
 [healthcheck]: https://docs.wpvip.com/technical-references/vip-platform/node-js/#h-requirement-1-exposing-a-health-route
+[image-optimization]: https://nextjs.org/docs/basic-features/image-optimization#styling
 [jest]: https://jestjs.io
 [latest-content]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/pages/latest/%5Bcontent_type%5D.tsx
 [lib-config]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/lib/config.ts
@@ -212,16 +252,21 @@ npm test
 [nextjs]: https://nextjs.org
 [nextjs-custom-server]: https://nextjs.org/docs/advanced-features/custom-server
 [nextjs-eslint]: https://nextjs.org/docs/basic-features/eslint
+[nextjs-image]: https://nextjs.org/docs/api-reference/next/image
 [nextjs-gssp]: https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
 [nextjs-gsp]: https://nextjs.org/docs/basic-features/data-fetching#getstaticprops-static-generation
 [nextjs-link]: https://nextjs.org/docs/api-reference/next/link
 [nextjs-ts]: https://nextjs.org/docs/basic-features/typescript
+[output-file-tracing]: https://nextjs.org/docs/advanced-features/output-file-tracing
 [page-cache]: https://docs.wpvip.com/technical-references/caching/page-cache/
 [post]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/pages/%5B...slug%5D.tsx
 [post-content]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/components/PostContent/PostContent.tsx
 [server-entrypoint]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/server/index.js
 [sitemap-proxy]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/next.config.js#L95-L100
+[swc-replacing-babel]: https://nextjs.org/docs/upgrading#swc-replacing-babel
 [ts-config]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/tsconfig.json
 [typescript]: https://www.typescriptlang.org
+[webpack5]: https://nextjs.org/docs/messages/webpack5
+[websocket]: https://nextjs.org/docs/upgrading#nextjs-hmr-connection-now-uses-a-websocket
 [wpgraphql]: https://www.wpgraphql.com
 [wpvip]: https://wpvip.com

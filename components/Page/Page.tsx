@@ -66,6 +66,10 @@ export default function Page( props: Props ) {
 			<main>
 				<h1>{props.title}</h1>
 				{props.children}
+				{
+					process.env.NEXT_PUBLIC_PARSELY_TRACKING_KEY &&
+						<script id="parsely-cfg" src={ `//cdn.parsely.com/keys/${ process.env.NEXT_PUBLIC_PARSELY_TRACKING_KEY }/p.js` } />
+				}
 			</main>
 			<SiteFooter />
 		</>

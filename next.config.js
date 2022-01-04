@@ -124,7 +124,6 @@ module.exports = {
 	// Image Optimization
 	// ==================
 	// https://nextjs.org/docs/basic-features/image-optimization
-	// https://nextjs.org/docs/api-reference/next/image
 	//
 	// The next/image, is an extension of the HTML <img> element, evolved for
 	// the modern web. It includes a variety of built-in performance

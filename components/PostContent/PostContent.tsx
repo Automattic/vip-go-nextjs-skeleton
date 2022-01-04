@@ -1,4 +1,4 @@
-import config from '../../next.config';
+import VipConfig from '../../vip.config';
 import ClassicEditorBlock from '@/components/ClassicEditorBlock/ClassicEditorBlock';
 import Heading from '@/components/Heading/Heading';
 import Paragraph from '@/components/Paragraph/Paragraph';
@@ -22,12 +22,12 @@ export default function PostContent( props: {
 						case 'core/image':
 							const imageProps = {
 								...defaultProps,
+								srcSet: blockProps.srcset || undefined,
 								src: blockProps.src,
 								width: blockProps.width || blockProps.originalWidth,
 								height: blockProps.height || blockProps.originalHeight,
-								srcSet: blockProps.srcSet || undefined,
 							};
-							if ( config.images.useHtmlTag && imageProps.srcSet ) {
+							if ( VipConfig.images.useHtmlTag && imageProps.srcSet ) {
 								return (
 									<img alt={blockProps.alt} {...defaultProps} />
 								);

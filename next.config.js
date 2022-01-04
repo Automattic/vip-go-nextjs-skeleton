@@ -123,6 +123,9 @@ module.exports = {
 
 	// Image Optimization
 	// ==================
+	// https://nextjs.org/docs/basic-features/image-optimization
+	// https://nextjs.org/docs/api-reference/next/image
+	//
 	// The next/image, is an extension of the HTML <img> element, evolved for
 	// the modern web. It includes a variety of built-in performance
 	// optimizations to help you achieve good Core Web Vitals.
@@ -137,8 +140,5 @@ module.exports = {
 		// is less than the full width of the screen. Therefore, the sizes in
 		// imageSizes should all be smaller than the smallest size in deviceSizes.
 		imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-		// If you want to force usage of the <img /> tag instead of the next/image
-		// element, you should set useHtmlTag option to true.
-		useHtmlTag: false,
 	},
 };

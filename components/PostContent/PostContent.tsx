@@ -29,7 +29,7 @@ export default function PostContent( props: {
 							};
 							if ( VipConfig.images.useHtmlTag && imageProps.srcSet ) {
 								return (
-									<img alt={blockProps.alt} {...defaultProps} />
+									<img alt={blockProps.alt} {...imageProps} />
 								);
 							}
 							return (

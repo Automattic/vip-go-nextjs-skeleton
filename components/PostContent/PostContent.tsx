@@ -1,3 +1,4 @@
+import VipConfig from '../../vip.config';
 import ClassicEditorBlock from '@/components/ClassicEditorBlock/ClassicEditorBlock';
 import Heading from '@/components/Heading/Heading';
 import Paragraph from '@/components/Paragraph/Paragraph';
@@ -19,15 +20,18 @@ export default function PostContent( props: {
 
 					switch ( block.name ) {
 						case 'core/image':
-							// next/image don't have support to srcSet prop. Instead of send it,
-							// you need update imageSizes/deviceSizes on next.config.js file,
-							// or use <img />
 							const imageProps = {
 								...defaultProps,
+								srcSet: blockProps.srcset || undefined,
 								src: blockProps.src,
 								width: blockProps.width || blockProps.originalWidth,
 								height: blockProps.height || blockProps.originalHeight,
 							};
+							if ( VipConfig.images.useHtmlTag && imageProps.srcSet ) {
+								return (
+									<img alt={blockProps.alt} {...imageProps} />
+								);
+							}
 							return (
 								<Image alt={blockProps.alt} {...imageProps} />
 							);

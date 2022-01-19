@@ -58,7 +58,7 @@ Previewing unpublished posts or updates to published posts works out of the box.
 
 ## Gutenberg / block support
 
-When you query for content (posts, pages, and custom post types), you'll receive the post content as blocks. If the content was written with WordPress's [block editor][gutenberg] (Gutenberg), these blocks will correspond directly with the blocks you see in the editor.
+When you query for content (posts, pages, and custom post types), you'll receive the post content as blocks. If the content was written with WordPress's [block editor][gutenberg] (Gutenberg), these blocks will correspond directly with the blocks you see in the editor. The block data you will receive roughly matches the output of WordPress’s [`parse_blocks` function][parse-blocks], with some enhancements. To learn more, you can follow how block data is parsed and resolved in [our extension of WPGraphQL][content-blocks].
 
 Receiving the content as blocks allows you to easily map each block type to a React component, and the [block attributes][block-attributes] to component props. This boilerplate provides a few mappings for basic components like headings, paragraphs, and lists. Here is a simple example of this mapping:
 
@@ -104,7 +104,7 @@ When running the development server, in order to help you identify blocks that h
 
 When writing code that links to another page in your Next.js application, you should use Next.js's [`Link` component][next-link] so that the request is routed client-side without a full-round trip to the server.
 
-However, when your blocks contain links, the `innerHTML` is handled by React and you don't have an opportunity to use the `Link` component. To address this, our boilerplate [listens for link clicks][link-listener] and will route them client-side if the link destination is determined to be internal. You can configure which hostnames are considered internal in [`lib/config`][lib-config].
+However, when user-authored blocks contain links, the `innerHTML` is handled by React and you don't have an opportunity to use the `Link` component. To address this, our boilerplate [listens for link clicks][link-listener] and will route them client-side if the link destination is determined to be internal. You can configure which hostnames are considered internal in [`lib/config`][lib-config].
 
 ## Data fetching
 
@@ -238,6 +238,7 @@ For the API images, the `srcSet` property is automatically defined by the `devic
 [cache-config]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/next.config.js#L34-L51
 [classic-editor]: https://wordpress.com/support/classic-editor-guide/
 [code-generation]: https://www.graphql-code-generator.com
+[content-blocks]: https://github.com/Automattic/vip-decoupled-bundle/blob/trunk/blocks/blocks.php
 [eslint-config]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/.eslintrc
 [express]: https://expressjs.com
 [feed-redirect]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/next.config.js#L95-L100
@@ -259,6 +260,7 @@ For the API images, the `srcSet` property is automatically defined by the `devic
 [nextjs-ts]: https://nextjs.org/docs/basic-features/typescript
 [output-file-tracing]: https://nextjs.org/docs/advanced-features/output-file-tracing
 [page-cache]: https://docs.wpvip.com/technical-references/caching/page-cache/
+[parse-blocks]: https://github.com/WordPress/wordpress-develop/blob/5.8.1/src/wp-includes/blocks.php#L879-L891
 [post]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/pages/%5B...slug%5D.tsx
 [post-content]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/components/PostContent/PostContent.tsx
 [server-entrypoint]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/server/index.js

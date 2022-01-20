@@ -68,7 +68,7 @@ export default function PostContent( props: {
 								large: blockProps.className || undefined,
 							}
 							return (
-								<Quote 
+								<Quote
 									innerHTML={block.innerHTML}
 									{...quoteProps}
 								/>

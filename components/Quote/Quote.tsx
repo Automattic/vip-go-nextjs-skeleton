@@ -6,8 +6,10 @@ type Props = {
 };
 
 export default function Quote ( props: Props ) {
-	return <p 
-        className={props.large == 'is-style-large' ? styles.largecontainer : styles.container}
-        dangerouslySetInnerHTML={ { __html: props.innerHTML } } 
-    />;
+	return (
+		<blockquote
+			className={props.large == 'is-style-large' ? styles.largecontainer : styles.container}
+			dangerouslySetInnerHTML={ { __html: props.innerHTML } }
+		/>
+	);
 }

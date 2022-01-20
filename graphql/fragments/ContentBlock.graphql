@@ -1,0 +1,9 @@
+fragment ContentBlockFields on ContentBlock {
+	attributes {
+		name
+		value
+	}
+	innerHTML(removeWrappingTag: true)
+	name
+	tagName
+}

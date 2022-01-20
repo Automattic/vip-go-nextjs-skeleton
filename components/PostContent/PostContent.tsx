@@ -2,11 +2,13 @@ import VipConfig from '../../vip.config';
 import ClassicEditorBlock from '@/components/ClassicEditorBlock/ClassicEditorBlock';
 import Heading from '@/components/Heading/Heading';
 import Paragraph from '@/components/Paragraph/Paragraph';
+import Quote from '@/components/Quote/Quote';
 import List from '@/components/List/List';
 import Image from '@/components/Image/Image';
 import UnsupportedBlock from '@/components/UnsupportedBlock/UnsupportedBlock';
 import { ContentBlock } from '@/graphql/generated';
 import { mapAttributesToProps } from '@/lib/blocks';
+import { QueryDocumentKeys } from 'graphql/language/visitor';
 
 export default function PostContent( props: {
 	blocks: ContentBlock[],
@@ -59,6 +61,18 @@ export default function PostContent( props: {
 									{...defaultProps}
 								/>
 							);
+
+						case 'core/quote':
+							const quoteProps = {
+								...defaultProps,
+								large: blockProps.className || undefined,
+							}
+							return (
+								<Quote 
+									innerHTML={block.innerHTML}
+									{...quoteProps}
+								/>
+							)
 
 						case 'core/list':
 							return (

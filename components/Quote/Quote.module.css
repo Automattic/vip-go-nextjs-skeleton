@@ -1,0 +1,19 @@
+.largecontainer,
+.container {
+	margin: 1em 0;
+	padding: 1em;
+    border-left-style: outset;
+    color: gray;
+}
+
+.largecontainer p {
+    font-size: 3rem;
+}
+.container p {
+    color: green;
+}
+.largecontainer cite,
+.container cite {
+    text-align: right;
+    display: block;
+}

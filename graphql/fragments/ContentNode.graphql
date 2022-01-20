@@ -1,4 +1,5 @@
 #import "./ContentType.graphql"
+#import "./ContentBlock.graphql"
 
 fragment ContentNodeFields on ContentNode {
 	id
@@ -6,12 +7,10 @@ fragment ContentNodeFields on ContentNode {
 		contentBlocks {
 			isGutenberg
 			blocks {
-				attributes {
-					name
-					value
+				...ContentBlockFields
+				innerBlocks {
+					...ContentBlockFields
 				}
-				innerHTML
-				name
 			}
 		}
 	}

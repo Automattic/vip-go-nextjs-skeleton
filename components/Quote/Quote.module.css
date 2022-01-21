@@ -9,11 +9,20 @@
 .largecontainer p {
     font-size: 3rem;
 }
+
+.container cite,
 .container p {
-    color: green;
+    display: inline;
 }
-.largecontainer cite,
-.container cite {
-    text-align: right;
+
+.largecontainer cite {
     display: block;
+    text-align: right;
+}
+
+.largecontainer cite:before,
+.container cite:before {
+    padding-right: 0.5em;
+    padding-left: 2em;
+    content: ' \2014 ';
 }

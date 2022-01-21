@@ -8,7 +8,6 @@ import Image from '@/components/Image/Image';
 import UnsupportedBlock from '@/components/UnsupportedBlock/UnsupportedBlock';
 import { ContentBlock } from '@/graphql/generated';
 import { mapAttributesToProps } from '@/lib/blocks';
-import { QueryDocumentKeys } from 'graphql/language/visitor';
 
 export default function PostContent( props: {
 	blocks: ContentBlock[],

@@ -31,7 +31,7 @@ import styles from './Quote.module.css';
 
 type Props = {
 	innerHTML: string,
-	large?: string,
+	className?: string,
 };
 
 export default function Quote ( props: Props ) {

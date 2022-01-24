@@ -13,7 +13,7 @@
 .container cite:before {
     padding-right: 0.5em;
     padding-left: 2em;
-    content: ' \2014 ';
+    content: '—'; /* emdash */
 }
 
 /* Override the default styles: */

@@ -1,7 +1,8 @@
 import styles from './Quote.module.css';
 
 /**
- * This is a styled component, for the [Gutenberg Quote Block](https://gogutenberg.com/blocks/quote/).
+ * This is a styled component, for the Gutenberg Quote Block
+ * (Block documentation: https://gogutenberg.com/blocks/quote/)
  *
  * The WordPress block will have content (passed as innerHTML):
  *      <p>Before software can be reusable, it first has to be usable.</p><cite>Ralph Johnson</cite>

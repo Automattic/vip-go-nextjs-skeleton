@@ -1,4 +1,3 @@
-.largecontainer,
 .container {
 	margin: 1em 0;
 	padding: 1em;
@@ -6,23 +5,24 @@
     color: gray;
 }
 
-.largecontainer p {
-    font-size: 3rem;
-}
-
 .container cite,
 .container p {
     display: inline;
 }
 
-.largecontainer cite {
-    display: block;
-    text-align: right;
-}
-
-.largecontainer cite:before,
 .container cite:before {
     padding-right: 0.5em;
     padding-left: 2em;
     content: ' \2014 ';
+}
+
+/* Override the default styles: */
+
+.large p {
+    font-size: 3rem;
+}
+
+.large cite {
+    display: block;
+    text-align: right;
 }

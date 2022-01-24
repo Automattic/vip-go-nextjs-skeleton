@@ -64,7 +64,7 @@ export default function PostContent( props: {
 						case 'core/quote':
 							const quoteProps = {
 								...defaultProps,
-								large: blockProps.className || undefined,
+								className: blockProps.className || undefined,
 							}
 							return (
 								<Quote

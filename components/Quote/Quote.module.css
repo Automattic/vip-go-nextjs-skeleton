@@ -1,0 +1,28 @@
+.container {
+    margin: 1em 0;
+    padding: 1em;
+    border-left-style: outset;
+    color: gray;
+}
+
+.container cite,
+.container p {
+    display: inline;
+}
+
+.container cite:before {
+    padding-right: 0.5em;
+    padding-left: 2em;
+    content: '—'; /* emdash */
+}
+
+/* Override the default styles: */
+
+.large p {
+    font-size: 3rem;
+}
+
+.large cite {
+    display: block;
+    text-align: right;
+}

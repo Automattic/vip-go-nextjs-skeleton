@@ -146,7 +146,7 @@ WordPress VIP's platform requires a [healthcheck endpoint][healthcheck] to assis
 
 ## Next.js middleware and edge runtime
 
-Next.js offers a way to implement [middleware][middleware], which can be a great way to separate logic from presentation. Additionally, this middleware can target an ["edge runtime"][edge-runtime] on some platforms (for example, Vercel’s "edge functions"). Middleware is supported on VIP, but will not run at the edge. Instead, middleware runs on your origin servers with the rest of your application. 
+Next.js offers a way to implement [middleware][middleware], which can be a great way to separate logic from presentation. Additionally, this middleware can target an ["edge runtime"][edge-runtime] on some platforms (for example, Vercel’s "edge functions"). Middleware is supported on VIP, but will not run at the edge. Instead, middleware runs on your origin servers with the rest of your application.
 
 ## Serverless functions
 
@@ -238,10 +238,8 @@ For the API images, the `srcSet` property is automatically defined by the `devic
 [post-content]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/components/PostContent/PostContent.tsx
 [server-entrypoint]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/server/index.js
 [sitemap-proxy]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/next.config.js#L95-L100
-[swc-replacing-babel]: https://nextjs.org/docs/upgrading#swc-replacing-babel
 [ts-config]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/tsconfig.json
 [typescript]: https://www.typescriptlang.org
 [webpack5]: https://nextjs.org/docs/messages/webpack5
-[websocket]: https://nextjs.org/docs/upgrading#nextjs-hmr-connection-now-uses-a-websocket
 [wpgraphql]: https://www.wpgraphql.com
 [wpvip]: https://wpvip.com

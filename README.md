@@ -1,6 +1,6 @@
 # Next.js boilerplate for decoupled / headless WordPress applications
 
-This is WordPress VIP's [Next.js][nextjs] boilerplate for decoupled WordPress. In order to operate correctly, VIP's [decoupled plugin bundle][bundle] must be installed and activated on the WordPress backend. The notes below describe its behavior when run on [WordPress VIP's platform][wpvip].
+This is WordPress VIP's [Next.js][nextjs] boilerplate for decoupled WordPress. It is not required for Node.js applications on VIP, but it helps solve many common use cases for decoupled / headless WordPress applications. If you choose to use it, VIP's [decoupled plugin bundle][bundle] must be installed and activated on the WordPress backend. The notes below describe its behavior when run on [WordPress VIP's platform][wpvip].
 
 > ⚠️ This project is under active development. If you are a VIP customer, please let us know if you'd like to use this boilerplate and we can provide additional guidance. Issues and PRs are welcome. 💖
 
@@ -100,7 +100,7 @@ If you used WordPress's [classic editor][classic-editor], you will receive a sin
 
 When running the development server, in order to help you identify blocks that have not yet been mapped to a React component, this boilerplate will display an "Unsupported block" notice. This notice is suppressed in production and the block is simply ignored.
 
-### Internal link routing
+## Internal link routing
 
 When writing code that links to another page in your Next.js application, you should use Next.js's [`Link` component][next-link] so that the request is routed client-side without a full-round trip to the server.
 
@@ -144,6 +144,14 @@ If you have Redis deployed alongside your application hosted on VIP Go, you can 
 
 WordPress VIP's platform requires a [healthcheck endpoint][healthcheck] to assist in monitoring. Providing this endpoint correctly requires a [custom server][nextjs-custom-server], which we provide in [`server/index.js`][server-entrypoint]. It is easy to outgrow Next.js's builtin server, so having a custom server (based on [Express 4][express]) available out-of-the-box can be useful.
 
+## Next.js middleware and edge runtime
+
+Next.js offers a way to implement [middleware][middleware], which can be a great way to separate logic from presentation. Additionally, this middleware can target an ["edge runtime"][edge-runtime] on some platforms (for example, Vercel’s "edge functions"). Middleware is supported on VIP, but will not run at the edge. Instead, middleware runs on your origin servers with the rest of your application.
+
+## Serverless functions
+
+"Serverless" functions that live in `/pages/api/` and target Node.js (via JavaScript or TypeScript) are supported on VIP. Just like middleware, they will run on your origin servers.
+
 ## Sitemap and syndication (RSS) feeds
 
 `/sitemap.xml` is [proxied to your WordPress backend][sitemap-proxy], where it is fulfilled by the default sitemap provided by WordPress (or whatever is served there, if it is overridden by a plugin). Any path that ends in `/feed` is [*redirected* to your WordPress backend][feed-redirect]. This matches the rewrite rule that exists in WordPress.
@@ -176,59 +184,22 @@ There is support for tests using [Jest][jest]. Some basic unit tests are provide
 npm test
 ```
 
-## Upgrading from Next.js version 11 to 12
+## URL imports
 
-### Important notes
+URL imports allow you to import packages or images directly from URLs instead of from local disk. At this time, the feature is not stable, introduces security risk, and is not recommended.
 
-- Next.js now uses Rust-based compiler [SWC to compile][swc-replacing-babel] JavaScript/TypeScript. This new compiler is up to 17x faster than Babel when compiling individual files and up to 5x faster Fast Refresh. Next.js provides full backward compatibility with applications that have custom Babel configuration.
-- Next.js 12 HMR connection now uses a [WebSocket][websocket].
+## Image optimization
 
-#### Middleware
-
-This feature lets you alter the response before sending it. You can use it to rewrite, redirect, add headers, or even stream HTML.
-
-While this feature works out of the box on platforms using edge functions to serve content (like Vercel), it will not work in the same way on VIP due to our usage of a caching layer at the edges. For the time being, we do not recommend using this feature.
-
-#### URL Imports
-
-URL Imports is a feature that allows you to import packages directly from the Internet instead of the local disk.
-
-It’s good to import things like static Images, but it is preferable if the organization has a proper CDN or control over the content of the files.
-
-If you want to use this feature, don't forget to add the URL prefix in the `next.config.js` file:
-
-```js
-module.exports = {
-  experimental: {
-    urlImports: ['https://www.wpvip.com/']
-  }
-}
-```
-
-To prevent TypeScript errors, you also need to create a `types/skypack.d.ts` file at the root of the project. The following is an example of that:
-
-```js
-// First, let TypeScript allow all module names starting with "https://". This will suppress TS errors.
-declare module 'https://*';
-
-// Second, list out all your dependencies. For every URL, you must map it to its local module.
-declare module 'https://www.wpvip.com/' {
-  export * from 'package-name';
-}
-```
-
-#### Image Optimization
-
-The Next.js Image component, [next/image][nextjs-image], is an extension of the HTML `<img />` element, evolved for the modern web and includes a variety of built-in performance optimizations. Next.js will automatically determine the width and height of your image based on the imported file.
+The Next.js `Image` component, [next/image][nextjs-image], is an extension of the HTML `<img />` element, evolved for the modern web. It includes a variety of built-in performance optimizations. Next.js will automatically determine the width and height of your image based on the imported file.
 
 For the API images, the `srcSet` property is automatically defined by the `deviceSizes` and `imageSizes` properties added to the `next.config.js` file. If you need to manually set the `srcSet` for a particular image, you should use the `<img />` HTML tag instead.
 
-### Breaking Changes
+## Breaking changes from earlier Next.js versions
 
-- Webpack 4 support has been removed. See the [webpack 5 upgrading documentation][webpack5] for more info.
-- Next target option has been deprecated. If you are currently using the target option set to serverless please read the [documentation on how to leverage the new output][output-file-tracing].
-- Next/image changed wrapping element. See the [documentation][image-optimization] for more info.
-- The minimum [Node.js][nextjs] version has been bumped from 12.0.0 to 12.22.0 which is the first version of Node.js with native ES Modules support.
+- Webpack 4 support has been removed. See the [Webpack 5 upgrade documentation][webpack5] for more information.
+- The `target` option has been deprecated. If you are currently using the `target` option set to `serverless`, please read the [documentation on how to leverage the new output][output-file-tracing].
+- Next.js `Image` component changed its wrapping element. See the [documentation][image-optimization] for more information.
+- The minimum Node.js version has been bumped from `12.0.0` to `12.22.0` which is the first version of Node.js with native ES Modules support.
 
 
 [apollo]: https://www.apollographql.com
@@ -239,6 +210,7 @@ For the API images, the `srcSet` property is automatically defined by the `devic
 [classic-editor]: https://wordpress.com/support/classic-editor-guide/
 [code-generation]: https://www.graphql-code-generator.com
 [content-blocks]: https://github.com/Automattic/vip-decoupled-bundle/blob/trunk/blocks/blocks.php
+[edge-runtime]: https://nextjs.org/docs/api-reference/edge-runtime
 [eslint-config]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/.eslintrc
 [express]: https://expressjs.com
 [feed-redirect]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/next.config.js#L95-L100
@@ -250,6 +222,7 @@ For the API images, the `srcSet` property is automatically defined by the `devic
 [lib-config]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/lib/config.ts
 [link-listener]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/lib/hooks/useInternalLinkRouting.ts
 [local]: http://localhost:3000
+[middleware]: https://nextjs.org/docs/middleware
 [nextjs]: https://nextjs.org
 [nextjs-custom-server]: https://nextjs.org/docs/advanced-features/custom-server
 [nextjs-eslint]: https://nextjs.org/docs/basic-features/eslint
@@ -265,10 +238,8 @@ For the API images, the `srcSet` property is automatically defined by the `devic
 [post-content]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/components/PostContent/PostContent.tsx
 [server-entrypoint]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/server/index.js
 [sitemap-proxy]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/next.config.js#L95-L100
-[swc-replacing-babel]: https://nextjs.org/docs/upgrading#swc-replacing-babel
 [ts-config]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/tsconfig.json
 [typescript]: https://www.typescriptlang.org
 [webpack5]: https://nextjs.org/docs/messages/webpack5
-[websocket]: https://nextjs.org/docs/upgrading#nextjs-hmr-connection-now-uses-a-websocket
 [wpgraphql]: https://www.wpgraphql.com
 [wpvip]: https://wpvip.com

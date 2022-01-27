@@ -16,15 +16,26 @@
     "module": "esnext",
     "moduleResolution": "node",
     "paths": {
-      "@/components/*": ["components/*"],
-      "@/graphql/*": ["graphql/*"],
-      "@/lib/*": ["lib/*"],
-      "@/pages/*": ["pages/*"],
-      "@/styles/*": ["styles/*"]
+      "@/components/*": [
+        "components/*"
+      ],
+      "@/graphql/*": [
+        "graphql/*"
+      ],
+      "@/lib/*": [
+        "lib/*"
+      ],
+      "@/pages/*": [
+        "pages/*"
+      ],
+      "@/styles/*": [
+        "styles/*"
+      ]
     },
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "incremental": true
   },
   "include": [
     "next-env.d.ts",

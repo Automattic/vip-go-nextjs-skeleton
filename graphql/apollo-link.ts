@@ -1,10 +1,10 @@
 import { ApolloLink, HttpLink, from } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import { log, logError } from '@/lib/log';
+import { log, logError, LogContext } from '@/lib/log';
 
 const uri = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT;
 
-export default function getApolloLink ( requestContext: any = {} ) {
+export default function getApolloLink ( requestContext: LogContext = {} ) {
 	// If endpoint is undefined, throw for visibility.
 	if ( 'undefined' === typeof uri ) {
 		throw new Error( 'GraphQL endpoint is undefined' );

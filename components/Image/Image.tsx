@@ -1,5 +1,6 @@
 import { ComponentProps } from 'react';
 import NextImage, { ImageLoader } from 'next/image';
+import VipConfig from '../../vip.config';
 
 /**
  * This component wraps Next's image component to provide an image loader. An
@@ -9,7 +10,12 @@ import NextImage, { ImageLoader } from 'next/image';
  * https://docs.wpvip.com/technical-references/vip-go-files-system/image-transformation/
  */
 
-type Props = ComponentProps<typeof NextImage>;
+type Props = {
+	src: string,
+	srcset?: string,
+	originalWidth?: number,
+	originalHeight?: number,
+} & ComponentProps<typeof NextImage>;
 
 const loader: ImageLoader = ( { quality, src, width } ) => {
 	if ( src.includes( '/wp-content/uploads' ) ) {
@@ -20,11 +26,23 @@ const loader: ImageLoader = ( { quality, src, width } ) => {
 }
 
 export default function Image ( props: Props ) {
+	const imageProps = {
+		...props,
+		srcSet: props.srcset || undefined,
+		src: props.src,
+		width: props.width || props.originalWidth,
+		height: props.height || props.originalHeight,
+		layout: props.width ? 'fixed' as any : 'responsive' as any,
+	};
+
+	if ( VipConfig.images.useHtmlTag && imageProps.srcSet ) {
+		return (
+			// eslint-disable-next-line @next/next/no-img-element
+			<img alt={imageProps.alt} {...imageProps} />
+		);
+	}
+
 	return (
-		<NextImage
-			layout="responsive"
-			loader={loader}
-			{...props}
-		/>
+		<NextImage loader={loader} {...imageProps} />
 	);
 }

@@ -1,3 +1,4 @@
+import React from 'react';
 import { GetServerSideProps } from 'next';
 import { FetchPolicy } from '@apollo/client';
 import getApolloClient from '@/graphql/apollo';

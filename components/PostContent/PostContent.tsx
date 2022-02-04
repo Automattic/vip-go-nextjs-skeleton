@@ -54,14 +54,11 @@ export default function PostContent( props: {
 							);
 
 						case 'core/quote':
-							const quoteProps = {
-								...defaultProps,
-								className: blockProps.className || undefined,
-							}
 							return (
 								<Quote
+									{...defaultProps}
+									className={blockProps.className || undefined}
 									innerHTML={block.innerHTML}
-									{...quoteProps}
 								/>
 							)
 

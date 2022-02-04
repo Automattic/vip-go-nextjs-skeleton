@@ -31,7 +31,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 		const response = await fetch( url );
 
 		return response.json();
-	};
+	}
 
 	try {
 		const book = await getCacheObjectByKey( cacheKey, ttl, fallback );

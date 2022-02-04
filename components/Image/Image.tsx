@@ -10,18 +10,12 @@ import VipConfig from '../../vip.config';
  * https://docs.wpvip.com/technical-references/vip-go-files-system/image-transformation/
  */
 
-type Props = ComponentProps<typeof NextImage>;
-
-type Type = {
-	alt: string,
+type Props = {
 	src: string,
-	key?: string,
 	srcset?: string,
-	width?: number,
 	originalWidth?: number,
-	height?: number,
 	originalHeight?: number,
-} & Props;
+} & ComponentProps<typeof NextImage>;
 
 const loader: ImageLoader = ( { quality, src, width } ) => {
 	if ( src.includes( '/wp-content/uploads' ) ) {
@@ -31,9 +25,9 @@ const loader: ImageLoader = ( { quality, src, width } ) => {
 	return src;
 }
 
-export default function Image ( props: Type ) {
+export default function Image ( props: Props ) {
 	const imageProps = {
-		alt: props.alt || '',
+		...props,
 		srcSet: props.srcset || undefined,
 		src: props.src,
 		width: props.width || props.originalWidth,

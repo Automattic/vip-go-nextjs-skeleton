@@ -6,6 +6,7 @@
 		"eslint:recommended",
 		"plugin:@typescript-eslint/eslint-recommended",
 		"plugin:@typescript-eslint/recommended",
+		"plugin:editorconfig/all",
 		"plugin:jest/recommended",
 		"next",
 		"next/core-web-vitals"
@@ -15,8 +16,14 @@
 		"jest"
 	],
 	"rules": {
+		"editorconfig/indent": [
+			"error",
+			{
+				"SwitchCase": 1
+			}
+		],
 		"@typescript-eslint/ban-ts-comment": [
-			2,
+			"error",
 			{
 				"ts-expect-error": "allow-with-description"
 			}

@@ -32,7 +32,7 @@ export default function Image ( props: Props ) {
 		src: props.src,
 		width: props.width || props.originalWidth,
 		height: props.height || props.originalHeight,
-		layout: props.width ? 'fixed' as any : 'responsive' as any,
+		layout: props.width ? 'fixed' as const : 'responsive' as const,
 	};
 
 	if ( VipConfig.images.useHtmlTag && imageProps.srcSet ) {

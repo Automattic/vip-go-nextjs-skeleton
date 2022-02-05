@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { publicEndpoint } from '@/lib/config';
 
-let robotsTxt = `
+const robotsTxt = `
 User-agent: *
 
 Allow: *

@@ -6,6 +6,7 @@
 // Avoid language features that are not available in your target Node.js version.
 // Do not change the file extenstion to .ts.
 
+/* eslint-disable @typescript-eslint/no-var-requires */
 require( 'dotenv' ).config();
 const express = require( 'express' );
 const { createProxyMiddleware } = require( 'http-proxy-middleware' );

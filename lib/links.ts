@@ -48,7 +48,7 @@ export function getHostname ( url: string ): string {
 		const { hostname } = new URL( url );
 
 		return hostname;
-	} catch ( err ) {}
+	} catch ( err ) { /* continue */ }
 
 	return url;
 }
@@ -61,7 +61,7 @@ export function getInternalLinkPathname ( url: string ): string {
 		if ( [ 'http:', 'https:' ].includes( protocol ) && internalLinkHostnames.includes( hostname ) ) {
 			return `${getCorrectPathname( pathname )}${search}`;
 		}
-	} catch ( err ) {}
+	} catch ( err ) { /* continue */ }
 
 	return url;
 }

@@ -1,7 +1,7 @@
 import getRedisClient from './client';
 import { log } from '@/lib/log';
 
-export async function getCacheObjectByKey( key: string, ttl: number, fallback: () => Promise<any> ) {
+export async function getCacheObjectByKey<T>( key: string, ttl: number, fallback: () => Promise<T> ) {
 	const redisClient = getRedisClient();
 
 	function logRedisEvent ( message: string ) {

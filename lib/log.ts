@@ -5,7 +5,7 @@ enum LogLevel {
 	ERROR = 'ERROR',
 }
 
-type LogContext = {
+export type LogContext = {
 	[ key: string ]: string | number,
 };
 

@@ -7,7 +7,7 @@ import { getCacheObjectByKey } from '@/lib/redis';
  * Find out if the Internet Archive has a book.
  */
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
-	// @ts-ignore: Express locals are not defined on Next.js request.
+	// @ts-expect-error: Express locals are not defined on Next.js request.
 	const { requestContext } = res.locals;
 
 	// Don Quixote (Penguin Classics, English)
@@ -31,7 +31,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 		const response = await fetch( url );
 
 		return response.json();
-	};
+	}
 
 	try {
 		const book = await getCacheObjectByKey( cacheKey, ttl, fallback );

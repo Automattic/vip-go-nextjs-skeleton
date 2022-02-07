@@ -4,10 +4,10 @@ import Paragraph from '@/components/Paragraph/Paragraph';
 import Quote from '@/components/Quote/Quote';
 import List from '@/components/List/List';
 import Image from '@/components/Image/Image';
+import Table from '@/components/Table/Table';
 import UnsupportedBlock from '@/components/UnsupportedBlock/UnsupportedBlock';
 import { ContentBlock } from '@/graphql/generated';
 import { mapAttributesToProps } from '@/lib/blocks';
-import Table from '@/components/Table/Table';
 
 export default function PostContent( props: {
 	blocks: ContentBlock[],

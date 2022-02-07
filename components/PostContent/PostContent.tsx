@@ -7,6 +7,7 @@ import Image from '@/components/Image/Image';
 import UnsupportedBlock from '@/components/UnsupportedBlock/UnsupportedBlock';
 import { ContentBlock } from '@/graphql/generated';
 import { mapAttributesToProps } from '@/lib/blocks';
+import Table from '@/components/Table/Table';
 
 export default function PostContent( props: {
 	blocks: ContentBlock[],
@@ -72,6 +73,14 @@ export default function PostContent( props: {
 									{...defaultProps}
 								/>
 							);
+
+						case 'core/table':
+							return (
+								<Table
+									innerHTML={block.innerHTML || block.outerHTML}
+									{...defaultProps}
+								/>
+							)
 
 						default:
 							// In development, highlight unsupported blocks so that they get

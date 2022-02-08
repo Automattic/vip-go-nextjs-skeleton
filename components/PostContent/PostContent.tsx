@@ -77,7 +77,7 @@ export default function PostContent( props: {
 						case 'core/table':
 							return (
 								<Table
-									innerHTML={block.innerHTML || block.outerHTML}
+									innerHTML={block.innerHTML}
 									{...defaultProps}
 								/>
 							)

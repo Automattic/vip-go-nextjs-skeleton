@@ -1,3 +1,5 @@
+import { ContentBlock } from '@/graphql/generated';
+
 import styles from './Quote.module.css';
 
 /**
@@ -20,27 +22,27 @@ import styles from './Quote.module.css';
  * our default styling and catch-all that should work even if there's no className.
  *
  * Quote.module.css contains two different styling options - base/default (the .container class) and large (the .large class).
- * 
+ *
  * The large option results in a defined separation vertically between quote and citation, while the default
  * is much more compact.
- * 
- * Since the style can be extended/customized within WordPress, the code here assumes there may be 
+ *
+ * Since the style can be extended/customized within WordPress, the code here assumes there may be
  * other classNames -- but only supports the two current options. If additional classNames can be selected
  * from the WP admin UI, then declare the related styles in the CSS file and add a case statement for that style.
  */
 
 type Props = {
-	innerHTML: string,
+	block: ContentBlock,
 	className?: string,
 };
 
-export default function Quote ( props: Props ) {
+export default function Quote ( { block: { innerHTML }, ...props } : Props ) {
 	// assign 'large', 'default', or something else to classVersion (the Quote style)
 	const classVersion = props.className ? props.className.substring(9) : 'default';
 	let style = styles.container;
 
 	switch ( classVersion ) {
-		case 'large': 
+		case 'large':
 			style +=  ' ' + styles.large;
 			break;
 		// Add additional styles here
@@ -52,7 +54,7 @@ export default function Quote ( props: Props ) {
 	return (
 		<blockquote
 			className={ style }
-			dangerouslySetInnerHTML={ { __html: props.innerHTML } }
+			dangerouslySetInnerHTML={ { __html: innerHTML } }
 		/>
 	);
 }

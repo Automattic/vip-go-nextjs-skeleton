@@ -1,4 +1,8 @@
-module.exports = {
+const nextJest = require( 'next/jest' )
+
+module.exports = nextJest( {
+	dir: './',
+} )( {
 	moduleNameMapper: {
 		"^@/(components|graphql|lib|pages|styles)/(.*)$": "<rootDir>/$1/$2",
 	},
@@ -6,7 +10,4 @@ module.exports = {
 		'**/__tests__/**/*.+(ts|tsx|js)',
 		'**/*.(spec|test).+(ts|tsx|js)'
 	],
-	transform: {
-		'^.+\\.(ts|tsx)$': 'ts-jest'
-	},
-}
+} );

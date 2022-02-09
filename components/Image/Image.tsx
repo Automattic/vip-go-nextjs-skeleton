@@ -25,13 +25,18 @@ const loader: ImageLoader = ( { quality, src, width } ) => {
 	return src;
 }
 
-export default function Image ( props: Props ) {
+export default function Image ( {
+		originalWidth,
+		originalHeight,
+		srcset,
+		...props
+	}: Props ) {
 	const imageProps = {
-		...props,
-		srcSet: props.srcset || undefined,
+		srcSet: srcset || undefined,
 		src: props.src,
-		width: props.width || props.originalWidth,
-		height: props.height || props.originalHeight,
+		alt: props.alt,
+		width: props.width || originalWidth,
+		height: props.height || originalHeight,
 		layout: props.width ? 'fixed' as const : 'responsive' as const,
 	};
 

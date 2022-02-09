@@ -2,7 +2,7 @@ type Props = {
 	innerHTML: string,
 };
 
-export default function Table ( { innerHTML, ...props }: Props ) {
+export default function Table ( { innerHTML, ...props } : Props ) {
 	return (
 		<table
 			cellPadding={ 0 }

@@ -4,6 +4,7 @@ import Paragraph from '@/components/Paragraph/Paragraph';
 import Quote from '@/components/Quote/Quote';
 import List from '@/components/List/List';
 import Image from '@/components/Image/Image';
+import Table from '@/components/Table/Table';
 import UnsupportedBlock from '@/components/UnsupportedBlock/UnsupportedBlock';
 import { ContentBlock } from '@/graphql/generated';
 import { mapAttributesToProps } from '@/lib/blocks';
@@ -72,6 +73,14 @@ export default function PostContent( props: {
 									{...defaultProps}
 								/>
 							);
+
+						case 'core/table':
+							return (
+								<Table
+									innerHTML={block.innerHTML}
+									{...defaultProps}
+								/>
+							)
 
 						default:
 							// In development, highlight unsupported blocks so that they get

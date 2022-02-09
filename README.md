@@ -60,32 +60,20 @@ Previewing unpublished posts or updates to published posts works out of the box.
 
 When you query for content (posts, pages, and custom post types), you'll receive the post content as blocks. If the content was written with WordPress's [block editor][gutenberg] (Gutenberg), these blocks will correspond directly with the blocks you see in the editor. The block data you will receive roughly matches the output of WordPress’s [`parse_blocks` function][parse-blocks], with some enhancements. To learn more, you can follow how block data is parsed and resolved in [our extension of WPGraphQL][content-blocks].
 
-Receiving the content as blocks allows you to easily map each block type to a React component, and the [block attributes][block-attributes] to component props. This boilerplate provides a few mappings for basic components like headings, paragraphs, and lists. Here is a simple example of this mapping:
+Receiving the content as blocks allow you to easily create customizations defining the related component for each `block`. This boilerplate provides a few mappings for basic components like headings, paragraphs, lists, and tables. To check the list with the current components, you can check the default object returned importing `mapBlockNamesToComponents` from `'@/lib/blocks'` or looking for the method content on [this file](https://github.com/Automattic/vip-go-nextjs-skeleton/blob/trunk/lib/blocks.ts).
+
+Here is a simple example of how to override existing relations or create new ones:
 
 ```js
-function PostContent ( props ) {
+function PostContent ( { blocks } ) {
+	const components = mapBlockNamesToComponents({
+	    'core/paragraph': CustomParagraphComponent
+	});
+
 	return (
 		<>
 			{
-				props.blocks.map( block => {
-					switch ( block.type ) {
-						case 'core/heading':
-							return (
-								<Heading
-									innerHTML={block.innerHTML}
-								/>
-							);
-
-						case 'core/paragraph':
-							return (
-								<Paragraph
-									innerHTML={block.innerHTML}
-								/>
-							);
-
-						return null;
-					}
-				} )
+				mapBlocksToRenderComponents( { blocks, components } )
 			}
 		</>
 	);

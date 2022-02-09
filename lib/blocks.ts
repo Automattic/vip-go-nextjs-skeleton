@@ -54,37 +54,35 @@ function mapBlockNamesToComponents ( override?: BlocksToComponentsProps ): Recor
 
 type BlocksToRenderComponentsProps = {
 	blocks: ContentBlock[],
-	components?: Record<string, ReactNode>,
+	blockMapOverrides?: Record<string, ReactNode>,
 };
 
-function mapBlocksToRenderComponents ( { blocks, components = mapBlockNamesToComponents() } : BlocksToRenderComponentsProps ) {
+function mapBlocksToRenderComponents ( { blocks, blockMapOverrides = {  } } : BlocksToRenderComponentsProps ) {
 	return (
-		<>
-			{
-				blocks.map( ( block, i ) => {
-					const attributesProps = mapAttributesToProps( block.attributes || [] );
-					const defaultProps = { key: `block-${i}`, block };
+		blocks.map( ( block, i ) => {
+			const attributesProps = mapAttributesToProps( block.attributes || [] );
+			const defaultProps = { key: `block-${i}`, block };
 
-					if ( Object.keys( components ).includes( block.name ) ) {
-						return createElement(
-							components[block.name] as string,
-							{ ...defaultProps, ...attributesProps },
-						);
+			const components = mapBlockNamesToComponents( blockMapOverrides );
 
-					// In development, highlight unsupported blocks so that they get
-					// visibility with developers.
-					} else if ( 'development' === process.env.NODE_ENV ) {
-						return createElement(
-							components['unsupported'] as string,
-							defaultProps,
-						);
-					}
+			if ( Object.keys( components ).includes( block.name ) ) {
+				return createElement(
+					components[block.name] as string,
+					{ ...defaultProps, ...attributesProps },
+				);
 
-					// In production, ignore unsupported blocks.
-					return null;
-				})
+			// In development, highlight unsupported blocks so that they get
+			// visibility with developers.
+			} else if ( 'development' === process.env.NODE_ENV ) {
+				return createElement(
+					components['unsupported'] as string,
+					defaultProps,
+				);
 			}
-		</>
+
+			// In production, ignore unsupported blocks.
+			return null;
+		})
 	)
 }
 

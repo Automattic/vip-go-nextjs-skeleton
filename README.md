@@ -60,27 +60,28 @@ Previewing unpublished posts or updates to published posts works out of the box.
 
 When you query for content (posts, pages, and custom post types), you'll receive the post content as blocks. If the content was written with WordPress's [block editor][gutenberg] (Gutenberg), these blocks will correspond directly with the blocks you see in the editor. The block data you will receive roughly matches the output of WordPress’s [`parse_blocks` function][parse-blocks], with some enhancements. To learn more, you can follow how block data is parsed and resolved in [our extension of WPGraphQL][content-blocks].
 
-Receiving the content as blocks allow you to easily create customizations defining the related component for each `block`. This boilerplate provides a few mappings for basic components like headings, paragraphs, lists, and tables. To check the list with the current components, you can check the default object returned importing `mapBlockNamesToComponents` from `'@/lib/blocks'` or looking for the method content on [this file](https://github.com/Automattic/vip-go-nextjs-skeleton/blob/trunk/lib/blocks.ts).
+Receiving the content as blocks allow you to easily create customizations defining the related component for each block type. This boilerplate provides a mapping for basic components like headings, paragraphs, lists, and tables. To check the list with the current components, you can check the map used on `mapBlockNamesToComponents()` from `'@/lib/blocks'`, or on [this file](https://github.com/Automattic/vip-go-nextjs-skeleton/blob/trunk/lib/blocks.ts).
 
-Here is a simple example of how to override existing relations or create new ones:
+Here is a simple example of how to override the default block mapping or create new references to support all of the block types and custom blocks that you use in your WordPress instance:
 
 ```js
-function PostContent ( { blocks } ) {
-	const components = mapBlockNamesToComponents({
-	    'core/paragraph': CustomParagraphComponent
-	});
+import PostContent from '@/lib/components';
+import MyCustomHeader from 'my-design-system';
 
-	return (
-		<>
-			{
-				mapBlocksToRenderComponents( { blocks, components } )
-			}
-		</>
-	);
+export default function Post( props: Props ) {
+  return (
+    <main>
+      <h1>{props.title}</h1>
+      <PostContent
+        blockMapOverrides={ {
+          'core/heading': MyCustomHeader,
+        } }
+        blocks={props.blocks}
+      />
+    </main>
+  );
 }
 ```
-
-See the [`PostContent`][post-content] component for a full working example. You will probably need to write additional components and modify the `switch` statement in `PostContent` in order to support all of the block types and custom blocks that you use in your WordPress instance.
 
 If you used WordPress's [classic editor][classic-editor], you will receive a single block representing the HTML content of the entire post. A `ClassicEditorBlock` component is provided to render these blocks.
 

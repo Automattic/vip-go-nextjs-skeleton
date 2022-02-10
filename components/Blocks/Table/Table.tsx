@@ -1,8 +1,10 @@
+import { ContentBlock } from '@/graphql/generated';
+
 type Props = {
-	innerHTML: string,
+	block: ContentBlock,
 };
 
-export default function Table ( { innerHTML, ...props }: Props ) {
+export default function Table ( { block: { innerHTML }, ...props } : Props ) {
 	return (
 		<table
 			cellPadding={ 0 }

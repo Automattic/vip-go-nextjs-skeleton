@@ -1,103 +1,52 @@
-import ClassicEditorBlock from '@/components/ClassicEditorBlock/ClassicEditorBlock';
-import Heading from '@/components/Heading/Heading';
-import Paragraph from '@/components/Paragraph/Paragraph';
-import Quote from '@/components/Quote/Quote';
-import List from '@/components/List/List';
-import Image from '@/components/Image/Image';
-import Table from '@/components/Table/Table';
-import UnsupportedBlock from '@/components/UnsupportedBlock/UnsupportedBlock';
+import { createElement } from 'react';
 import { ContentBlock } from '@/graphql/generated';
 import { mapAttributesToProps } from '@/lib/blocks';
+import defaultBlockMap from '@/components/Blocks/index';
 
-export default function PostContent( props: {
+type BlocksToComponentsProps = typeof defaultBlockMap;
+
+type Props = {
 	blocks: ContentBlock[],
-} ) {
+	blockMapOverrides?: BlocksToComponentsProps,
+};
+
+export default function PostContent( { blocks, blockMapOverrides = {  } } : Props ) {
+	// This is a functional component used to render the related component for each block on PostContent
+	//
+	// If you want to customize some component or create new ones, you can provide the blockMapOverrides prop to this component
+	// with a mapping when you're rendering some page on next.js structure.
+	//
+	const blockMap : BlocksToComponentsProps = {
+		...defaultBlockMap,
+		...blockMapOverrides,
+	};
+
 	return (
 		<>
 			{
-				props.blocks.map( ( block, i ) => {
-					const blockProps = mapAttributesToProps( block.attributes || [] );
-					const defaultProps = { key: `block-${i}` };
+				blocks.map( ( block, i ) => {
+					const attributesProps = mapAttributesToProps( block.attributes || [] );
+					const defaultProps = { key: `block-${i}`, block };
+					const Component = blockMap[ block.name ];
 
-					switch ( block.name ) {
-						case 'core/image':
-							return (
-								<Image
-									alt={blockProps.alt}
-									src={blockProps.src}
-									{...blockProps}
-									{...defaultProps}
-								/>
-							);
+					if ( Component ) {
+						return createElement(
+							Component as string,
+							{ ...defaultProps, ...attributesProps },
+						);
 
-						case 'core/classic-editor':
-							return (
-								<ClassicEditorBlock
-									innerHTML={block.innerHTML}
-									{...defaultProps}
-								/>
-							);
-
-						case 'core/heading':
-							return (
-								<Heading
-									innerHTML={block.innerHTML}
-									{...defaultProps}
-								/>
-							);
-
-						case 'core/paragraph':
-							return (
-								<Paragraph
-									innerHTML={block.innerHTML}
-									{...defaultProps}
-								/>
-							);
-
-						case 'core/quote':
-							return (
-								<Quote
-									{...defaultProps}
-									className={blockProps.className || undefined}
-									innerHTML={block.innerHTML}
-								/>
-							)
-
-						case 'core/list':
-							return (
-								<List
-									innerHTML={block.innerHTML}
-									ordered={'1' === blockProps.ordered}
-									reversed={'1' === blockProps.reversed}
-									start={blockProps.start ? parseInt( blockProps.start, 10 ) : undefined}
-									{...defaultProps}
-								/>
-							);
-
-						case 'core/table':
-							return (
-								<Table
-									innerHTML={block.innerHTML}
-									{...defaultProps}
-								/>
-							)
-
-						default:
-							// In development, highlight unsupported blocks so that they get
-							// visibility with developers.
-							if ( 'development' === process.env.NODE_ENV ) {
-								return (
-									<UnsupportedBlock
-										block={block}
-										{...defaultProps}
-									/>
-								);
-							}
-
-							// In production, ignore unsupported blocks.
-							return null;
+					// In development, highlight unsupported blocks so that they get
+					// visibility with developers.
+					} else if ( 'development' === process.env.NODE_ENV ) {
+						return createElement(
+							blockMap[ 'unsupported' ] as string,
+							defaultProps,
+						);
 					}
-				} )
+
+					// In production, ignore unsupported blocks.
+					return null;
+				})
 			}
 		</>
 	);

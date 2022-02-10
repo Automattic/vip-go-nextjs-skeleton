@@ -3,7 +3,7 @@ import { ContentBlockAttribute } from '@/graphql/generated';
 /**
  * Map an array of ContentBlock attributes to an object that can used like props.
  */
-export function mapAttributesToProps ( attributes: ContentBlockAttribute[] ): { [ key: string ]: string; } {
+function mapAttributesToProps ( attributes: ContentBlockAttribute[] ): { [ key: string ]: string; } {
 	return attributes.reduce( ( acc, { name, value } ) => {
 		// Drop attributes without a name or value.
 		if ( ! name || ! value ) {
@@ -20,3 +20,7 @@ export function mapAttributesToProps ( attributes: ContentBlockAttribute[] ): { 
 		return Object.assign( acc, { [ name ]: value } );
 	}, {} );
 }
+
+export {
+	mapAttributesToProps
+};

@@ -5,25 +5,27 @@ type Props = {
 	block: ContentBlock,
 };
 
-export default function UnsupportedBlock ( props: Props ) {
+export default function UnsupportedBlock ( { block: { name, tagName, attributes, innerBlocks, outerHTML } } : Props ) {
+	const html = outerHTML;
+
 	return (
 		<div className={styles.container}>
-			<h4 className={styles.title}><strong>Unsupported block</strong>: <code>{props.block.name}</code></h4>
+			<h4 className={styles.title}><strong>Unsupported block</strong>: <code>{name}</code></h4>
 			{
-				props.block.tagName &&
-					<h5>{props.block.tagName}</h5>
+				tagName &&
+					<h5>{tagName}</h5>
 			}
 			{
-				props.block.innerHTML &&
+				html &&
 					<blockquote>
-						{props.block.innerHTML}
+						{html}
 					</blockquote>
 			}
 			{
-				props.block.attributes.length > 0 && (
+				attributes.length > 0 && (
 					<ul>
 						{
-							props.block.attributes.map( ( attr, i ) => (
+							attributes.map( ( attr, i ) => (
 								<li key={i}><strong>{attr.name}</strong>: {attr.value || 'null'}</li>
 							) )
 						}
@@ -31,10 +33,10 @@ export default function UnsupportedBlock ( props: Props ) {
 				)
 			}
 			{
-				props.block.innerBlocks.length > 0 && (
+				innerBlocks.length > 0 && (
 					<ul>
 						{
-							props.block.innerBlocks.map( ( block, i ) => (
+							innerBlocks.map( ( block, i ) => (
 								<li key={i}><strong>{block.name}</strong></li>
 							) )
 						}

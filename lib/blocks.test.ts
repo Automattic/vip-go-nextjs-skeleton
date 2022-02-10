@@ -39,4 +39,3 @@ test( 'mapAttributesToProps: drops attributes that have falsy names or values', 
 
 	expect( mapAttributesToProps( attributes ) ).toEqual( {} );
 } );
-

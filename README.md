@@ -60,7 +60,7 @@ Previewing unpublished posts or updates to published posts works out of the box.
 
 When you query for content (posts, pages, and custom post types), you'll receive the post content as blocks. If the content was written with WordPress's [block editor][gutenberg] (Gutenberg), these blocks will correspond directly with the blocks you see in the editor. The block data you will receive roughly matches the output of WordPress’s [`parse_blocks` function][parse-blocks], with some enhancements. To learn more, you can follow how block data is parsed and resolved in [our extension of WPGraphQL][content-blocks].
 
-Receiving the content as blocks allow you to easily create customizations defining the related component for each block type. This boilerplate provides a mapping for basic components like headings, paragraphs, lists, and tables. To check the list with the current components, you can check the map used on `mapBlockNamesToComponents()` from `'@/lib/blocks'`, or on [this file](https://github.com/Automattic/vip-go-nextjs-skeleton/blob/trunk/lib/blocks.ts).
+Receiving the content as blocks allow you to easily create customizations defining the related component for each block type. This boilerplate provides a mapping for basic components like headings, paragraphs, lists, and tables (see [`'@/components/Blocks/index.tsx'`](https://github.com/Automattic/vip-go-nextjs-skeleton/blob/trunk/components/Blocks/index.tsx)).
 
 Here is a simple example of how to override the default block mapping or create new references to support all of the block types and custom blocks that you use in your WordPress instance:
 

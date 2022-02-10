@@ -1,14 +1,14 @@
-import { createElement, ReactNode } from 'react';
+import { createElement } from 'react';
 import { ContentBlock } from '@/graphql/generated';
 import { mapAttributesToProps } from '@/lib/blocks';
 import defaultBlockMap from '@/components/Blocks/index';
 
+type BlocksToComponentsProps = typeof defaultBlockMap;
+
 type Props = {
 	blocks: ContentBlock[],
-	blockMapOverrides?: Record<string, ReactNode>,
+	blockMapOverrides?: BlocksToComponentsProps,
 };
-
-type BlocksToComponentsProps = Record<string, ReactNode>;
 
 export default function PostContent( { blocks, blockMapOverrides = {  } } : Props ) {
 	// This is a functional component used to render the related component for each block on PostContent

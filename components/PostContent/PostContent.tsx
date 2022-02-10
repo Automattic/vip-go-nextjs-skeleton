@@ -1,11 +1,14 @@
 import { createElement, ReactNode } from 'react';
 import { ContentBlock } from '@/graphql/generated';
-import { mapAttributesToProps, mapBlockNamesToComponents } from '@/lib/blocks';
+import { mapAttributesToProps } from '@/lib/blocks';
+import defaultBlockMap from '@/components/Blocks/index';
 
 type Props = {
 	blocks: ContentBlock[],
 	blockMapOverrides?: Record<string, ReactNode>,
 };
+
+type BlocksToComponentsProps = Record<string, ReactNode>;
 
 export default function PostContent( { blocks, blockMapOverrides = {  } } : Props ) {
 	// This is a functional component used to render the related component for each block on PostContent
@@ -13,18 +16,22 @@ export default function PostContent( { blocks, blockMapOverrides = {  } } : Prop
 	// If you want to customize some component or create new ones, you can provide the blockMapOverrides prop to this component
 	// with a mapping when you're rendering some page on next.js structure.
 	//
+	const blockMap : BlocksToComponentsProps = {
+		...defaultBlockMap,
+		...blockMapOverrides,
+	};
+
 	return (
 		<>
 			{
 				blocks.map( ( block, i ) => {
 					const attributesProps = mapAttributesToProps( block.attributes || [] );
 					const defaultProps = { key: `block-${i}`, block };
+					const Component = blockMap[ block.name ];
 
-					const components = mapBlockNamesToComponents( blockMapOverrides );
-
-					if ( Object.keys( components ).includes( block.name ) ) {
+					if ( Component ) {
 						return createElement(
-							components[block.name] as string,
+							Component as string,
 							{ ...defaultProps, ...attributesProps },
 						);
 
@@ -32,7 +39,7 @@ export default function PostContent( { blocks, blockMapOverrides = {  } } : Prop
 					// visibility with developers.
 					} else if ( 'development' === process.env.NODE_ENV ) {
 						return createElement(
-							components['unsupported'] as string,
+							blockMap[ 'unsupported' ] as string,
 							defaultProps,
 						);
 					}

@@ -7,6 +7,6 @@ type Props = {
 	alt: string,
 };
 
-export default function BlockImage ( props : Props ) {
+export default function ImageBlock ( props : Props ) {
 	return <Image {...props} alt={props.alt} />
 }

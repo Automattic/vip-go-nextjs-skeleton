@@ -1,4 +1,5 @@
-import { ReactNode } from 'react';
+import { ComponentType } from 'react';
+import { ContentBlock } from '@/graphql/generated';
 import ClassicEditorBlock from './ClassicEditorBlock/ClassicEditorBlock';
 import Heading from './Heading/Heading';
 import ImageBlock from './ImageBlock/ImageBlock';
@@ -6,11 +7,16 @@ import List from './List/List';
 import Paragraph from './Paragraph/Paragraph';
 import Quote from './Quote/Quote';
 import Table from './Table/Table';
-import UnsupportedBlock from './UnsupportedBlock/UnsupportedBlock';
 
-type BlocksToComponentsProps = Record<string, ReactNode>;
+export interface BlockProps {
+	block: ContentBlock,
+}
 
-const defaultBlockMap : BlocksToComponentsProps = {
+export type PostContentBlockMap = {
+	[ key: string ]: ComponentType<BlockProps>;
+};
+
+const defaultBlockMap: PostContentBlockMap = {
 	'core/classic-editor': ClassicEditorBlock,
 	'core/heading': Heading,
 	'core/image': ImageBlock,
@@ -18,7 +24,6 @@ const defaultBlockMap : BlocksToComponentsProps = {
 	'core/paragraph': Paragraph,
 	'core/quote': Quote,
 	'core/table': Table,
-	'unsupported': UnsupportedBlock,
-}
+};
 
 export default defaultBlockMap;

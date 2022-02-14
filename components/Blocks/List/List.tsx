@@ -1,7 +1,6 @@
-import { ContentBlock } from '@/graphql/generated';
+import { BlockProps } from '../index';
 
-type Props = {
-	block: ContentBlock,
+type Props = BlockProps & {
 	ordered?: boolean,
 	reversed?: boolean,
 	start?: number,

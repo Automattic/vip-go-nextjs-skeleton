@@ -1,11 +1,7 @@
-import { ContentBlock } from '@/graphql/generated';
+import { BlockProps } from '../index';
 import styles from './UnsupportedBlock.module.css';
 
-type Props = {
-	block: ContentBlock,
-};
-
-export default function UnsupportedBlock ( { block: { name, tagName, attributes, innerBlocks, outerHTML } } : Props ) {
+export default function UnsupportedBlock ( { block: { name, tagName, attributes, innerBlocks, outerHTML } }: BlockProps ) {
 	const html = outerHTML;
 
 	return (

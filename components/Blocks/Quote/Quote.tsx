@@ -1,5 +1,4 @@
-import { ContentBlock } from '@/graphql/generated';
-
+import { BlockProps } from '../index';
 import styles from './Quote.module.css';
 
 /**
@@ -31,8 +30,7 @@ import styles from './Quote.module.css';
  * from the WP admin UI, then declare the related styles in the CSS file and add a case statement for that style.
  */
 
-type Props = {
-	block: ContentBlock,
+type Props = BlockProps & {
 	className?: string,
 };
 

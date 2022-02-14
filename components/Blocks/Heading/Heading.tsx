@@ -1,9 +1,5 @@
-import { ContentBlock } from '@/graphql/generated';
+import { BlockProps } from '../index';
 
-type Props = {
-	block: ContentBlock,
-};
-
-export default function Heading ( { block: { innerHTML } }: Props ) {
+export default function Heading ( { block: { innerHTML } }: BlockProps ) {
 	return <h3 dangerouslySetInnerHTML={ { __html: innerHTML } } />;
 }

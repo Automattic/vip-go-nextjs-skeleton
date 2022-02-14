@@ -1,8 +1,7 @@
+import { BlockProps } from '../index';
 import Image from '@/components/Image/Image';
-import { ContentBlock } from '@/graphql/generated';
 
-type Props = {
-	block: ContentBlock,
+type Props = BlockProps & {
 	src: string,
 	alt: string,
 };

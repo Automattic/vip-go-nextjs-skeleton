@@ -1,9 +1,13 @@
 import { ContentBlockAttribute } from '@/graphql/generated';
 
+export type PostContentBlockAttributes = {
+	[ key: string ]: string;
+};
+
 /**
  * Map an array of ContentBlock attributes to an object that can used like props.
  */
-function mapAttributesToProps ( attributes: ContentBlockAttribute[] ): { [ key: string ]: string; } {
+export function mapAttributesToProps ( attributes: ContentBlockAttribute[] ): PostContentBlockAttributes {
 	return attributes.reduce( ( acc, { name, value } ) => {
 		// Drop attributes without a name or value.
 		if ( ! name || ! value ) {
@@ -20,7 +24,3 @@ function mapAttributesToProps ( attributes: ContentBlockAttribute[] ): { [ key: 
 		return Object.assign( acc, { [ name ]: value } );
 	}, {} );
 }
-
-export {
-	mapAttributesToProps
-};

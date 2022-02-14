@@ -1,22 +1,20 @@
-import { createElement } from 'react';
 import { ContentBlock } from '@/graphql/generated';
 import { mapAttributesToProps } from '@/lib/blocks';
-import defaultBlockMap from '@/components/Blocks/index';
-
-type BlocksToComponentsProps = typeof defaultBlockMap;
+import defaultBlockMap, { PostContentBlockMap } from '@/components/Blocks';
+import UnsupportedBlock from '@/components/Blocks/UnsupportedBlock/UnsupportedBlock';
 
 type Props = {
 	blocks: ContentBlock[],
-	blockMapOverrides?: BlocksToComponentsProps,
+	blockMapOverrides?: PostContentBlockMap,
 };
 
-export default function PostContent( { blocks, blockMapOverrides = {  } } : Props ) {
+export default function PostContent( { blocks, blockMapOverrides = {} } : Props ) {
 	// This is a functional component used to render the related component for each block on PostContent
 	//
 	// If you want to customize some component or create new ones, you can provide the blockMapOverrides prop to this component
 	// with a mapping when you're rendering some page on next.js structure.
 	//
-	const blockMap : BlocksToComponentsProps = {
+	const blockMap: PostContentBlockMap = {
 		...defaultBlockMap,
 		...blockMapOverrides,
 	};
@@ -27,21 +25,16 @@ export default function PostContent( { blocks, blockMapOverrides = {  } } : Prop
 				blocks.map( ( block, i ) => {
 					const attributesProps = mapAttributesToProps( block.attributes || [] );
 					const defaultProps = { key: `block-${i}`, block };
-					const Component = blockMap[ block.name ];
+					const Block = blockMap[ block.name ];
 
-					if ( Component ) {
-						return createElement(
-							Component as string,
-							{ ...defaultProps, ...attributesProps },
-						);
+					if ( Block ) {
+						return <Block {...defaultProps} {...attributesProps } />;
+					}
 
 					// In development, highlight unsupported blocks so that they get
 					// visibility with developers.
-					} else if ( 'development' === process.env.NODE_ENV ) {
-						return createElement(
-							blockMap[ 'unsupported' ] as string,
-							defaultProps,
-						);
+					if ( 'development' === process.env.NODE_ENV ) {
+						return <UnsupportedBlock {...defaultProps} />;
 					}
 
 					// In production, ignore unsupported blocks.

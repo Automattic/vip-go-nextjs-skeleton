@@ -17,26 +17,18 @@ type Props = {
 	originalHeight?: number,
 } & ComponentProps<typeof NextImage>;
 
-const loader: ImageLoader = ( { quality, src, width } ) => {
-	if ( src.includes( '/wp-content/uploads' ) ) {
-		return `${src}?w=${width}&q=${quality || 75 }`;
-	}
-
-	return src;
+function wpImageLoader ( { quality, src, width } ): string {
+	return `${src}?w=${width}&q=${quality || 75 }`;
 }
 
-export default function Image ( {
-		originalWidth,
-		originalHeight,
-		srcset,
-		...props
-	}: Props ) {
+export default function Image ( props: Props ) {
 	const imageProps = {
-		srcSet: srcset || undefined,
+		...props,
+		srcSet: props.srcset || undefined,
 		src: props.src,
 		alt: props.alt,
-		width: props.width || originalWidth,
-		height: props.height || originalHeight,
+		width: props.width || props.originalWidth,
+		height: props.height || props.originalHeight,
 		layout: props.width ? 'fixed' as const : 'responsive' as const,
 	};
 
@@ -45,6 +37,13 @@ export default function Image ( {
 			// eslint-disable-next-line @next/next/no-img-element
 			<img alt={imageProps.alt} {...imageProps} />
 		);
+	}
+
+	// Only set a loader if it is actually needed. This avoids a Next.js warning:
+	// https://nextjs.org/docs/messages/next-image-missing-loader-width
+	let loader: ImageLoader;
+	if ( props.src.includes( '/wp-content/uploads/' ) ) {
+		loader = wpImageLoader;
 	}
 
 	return (

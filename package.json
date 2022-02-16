@@ -16,6 +16,7 @@
     "start:server": "node server/index.js",
     "start:server:debug": "NODE_OPTIONS='--inspect' node server/index.js",
     "test": "jest",
+    "test:watch": "jest --watch",
     "vip:preflight": "npx @automattic/vip-go-preflight-checks"
   },
   "dependencies": {
@@ -39,6 +40,8 @@
     "typescript": "4.5.5"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "5.16.2",
+    "@testing-library/react": "12.1.3",
     "@types/jest": "27.4.0",
     "eslint": "8.9.0",
     "eslint-config-next": "12.0.10",

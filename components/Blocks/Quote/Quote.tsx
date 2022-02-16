@@ -16,11 +16,10 @@ import styles from './Quote.module.css';
  *          <p>Before software can be reusable, it first has to be usable.</p><cite>Ralph Johnson</cite>
  *      </blockquote>
  *
- * The className varies, but should start with is-style-, so we just grab the rest and use a switch statement
- * to assign the appropriate override style that is imported from Quote.module.css. The .container style is
+ * Use a switch statement to assign the appropriate override style. The .container style is
  * our default styling and catch-all that should work even if there's no className.
  *
- * Quote.module.css contains two different styling options - base/default (the .container class) and large (the .large class).
+ * Quote.module.css contains two different styling options - default (the .container class) and large (the .large class).
  *
  * The large option results in a defined separation vertically between quote and citation, while the default
  * is much more compact.
@@ -35,16 +34,13 @@ type Props = BlockProps & {
 };
 
 export default function Quote ( { block: { innerHTML }, ...props } : Props ) {
-	// assign 'large', 'default', or something else to classVersion (the Quote style)
-	const classVersion = props.className ? props.className.substring(9) : 'default';
 	let style = styles.container;
 
-	switch ( classVersion ) {
-		case 'large':
+	switch ( props.className ) {
+		case 'is-style-large':
 			style +=  ' ' + styles.large;
 			break;
 		// Add additional styles here
-		case 'default':
 		default:
 			// no additional class
 	}

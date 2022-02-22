@@ -17,12 +17,12 @@ workflows:
           matrix:
             parameters:
               version:
-                - "16"
-                - "14"
+                - "16.14"
+                - "14.19"
       - node/test:
           name: "unit tests"
           matrix:
             parameters:
               version:
-                - "16"
-                - "14"
+                - "16.14"
+                - "14.19"

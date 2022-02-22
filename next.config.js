@@ -49,6 +49,9 @@ module.exports = {
 		// avoids generating lots of noisy errors in the logs. ISR artifacts are
 		// still cached in-memory.
 		isrFlushToDisk: false,
+		// Allocate more or less memory to the ISR in-memory cache. The default is
+		// 50 * 1024 * 1024 (50MB).
+		isrMemoryCacheSize: 50 * 1024 * 1024,
 	},
 
 	// Response headers

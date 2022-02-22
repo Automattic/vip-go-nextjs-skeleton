@@ -29,7 +29,7 @@ export default function Image ( props: Props ) {
 		alt: props.alt,
 		width: props.width || props.originalWidth,
 		height: props.height || props.originalHeight,
-		layout: props.width ? 'fixed' as const : 'responsive' as const,
+		layout: props.layout || (props.width && props.height ? 'fixed' as const : 'intrinsic' as const),
 	};
 
 	if ( VipConfig.images.useHtmlTag && imageProps.srcSet ) {

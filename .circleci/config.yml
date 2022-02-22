@@ -1,0 +1,42 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.0.0
+
+workflows:
+  matrix-tests:
+    jobs:
+      - test:
+          matrix:
+            parameters:
+              version:
+                - "16"
+                - "14"
+
+jobs:
+  build:
+    executor:
+      name: node/run
+      tag: << parameters.version >>
+    parameters:
+      version:
+        description: "version tag"
+        type: string
+    steps:
+      - npm-run: build
+  lint:
+    executor:
+      name: node/run
+      tag: "16"
+    steps:
+      - npm-run: lint
+  test:
+    executor:
+      name: node/run
+      tag: << parameters.version >>
+    parameters:
+      version:
+        description: "version tag"
+        type: string
+    steps:
+      - npm-run: test

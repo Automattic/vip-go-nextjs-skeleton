@@ -20,7 +20,7 @@
     "vip:preflight": "npx @automattic/vip-go-preflight-checks"
   },
   "dependencies": {
-    "@apollo/client": "3.5.9",
+    "@apollo/client": "3.5.10",
     "@graphql-codegen/cli": "2.6.2",
     "@graphql-codegen/fragment-matcher": "3.2.1",
     "@graphql-codegen/typescript": "2.4.5",

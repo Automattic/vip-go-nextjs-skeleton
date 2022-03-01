@@ -1,5 +1,5 @@
 import { ComponentProps } from 'react';
-import NextImage, { ImageLoader } from 'next/image';
+import NextImage, { ImageLoader, ImageLoaderProps } from 'next/image';
 import VipConfig from '../../vip.config';
 
 /**
@@ -17,7 +17,7 @@ type Props = {
 	originalHeight?: number,
 } & ComponentProps<typeof NextImage>;
 
-function wpImageLoader ( { quality, src, width } ): string {
+function wpImageLoader ( { quality, src, width }: ImageLoaderProps ): string {
 	return `${src}?w=${width}&q=${quality || 75 }`;
 }
 

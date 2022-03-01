@@ -55,11 +55,21 @@ export default function Page( props: Props ) {
 							type="application/rss+xml"
 						/>
 				}
+				{
+					props.schemaOrgMeta && <script
+						dangerouslySetInnerHTML={{ __html: props.schemaOrgMeta }}
+						type="application/ld+json"
+					/>
+				}
 			</Head>
 			<SiteHeader headerLink={props.headerLink} />
 			<main>
 				<h1>{props.title}</h1>
 				{props.children}
+				{
+					process.env.NEXT_PUBLIC_PARSELY_TRACKING_KEY &&
+						<script id="parsely-cfg" src={ `//cdn.parsely.com/keys/${ process.env.NEXT_PUBLIC_PARSELY_TRACKING_KEY }/p.js` } />
+				}
 			</main>
 			<SiteFooter />
 		</>

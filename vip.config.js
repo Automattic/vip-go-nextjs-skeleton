@@ -3,7 +3,14 @@
 // IMPORTANT: vip.config.js is not parsed by Webpack, Babel, or Typescript.
 // Avoid language features that are not available in your target Node.js version.
 // Do not change the file extenstion to .ts.
-//
+
+// If the environment variable NEXT_PUBLIC_WORDPRESS_ENDPOINT is not defined,
+// assume WPGraphQL is using its default endpoint and just peel off /graphql.
+let wordPressEndpoint = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT.replace( /\/graphql(\?.*)?$/, '' );
+if ( process.env.NEXT_PUBLIC_WORDPRESS_ENDPOINT ) {
+	wordPressEndpoint = process.env.NEXT_PUBLIC_WORDPRESS_ENDPOINT;
+}
+
 module.exports = {
 	// Images
 	// ======
@@ -23,4 +30,8 @@ module.exports = {
 		// element, you should set useHtmlTag option to true.
 		useHtmlTag: false,
 	},
+
+	// The WordPress endpoint used for previewing, sitemaps, and other
+	// functionality that we don't want to replicate in Next.js.
+	wordPressEndpoint,
 };

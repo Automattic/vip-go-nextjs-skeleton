@@ -70,18 +70,6 @@ export function getInternalLinkPathname ( url: string ): string {
  * If the environment variable NEXT_PUBLIC_WORDPRESS_ENDPOINT is not defined,
  * assume WPGraphQL is using its default endpoint and just peel off /graphql.
  */
-export function getWordPressEndpoint() {
-	if ( process.env.NEXT_PUBLIC_WORDPRESS_ENDPOINT ) {
-		return process.env.NEXT_PUBLIC_WORDPRESS_ENDPOINT;
-	}
-
-	return process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT.replace( /\/graphql(\?.*)?$/, '/' );
-}
-
-/**
- * If the environment variable NEXT_PUBLIC_WORDPRESS_ENDPOINT is not defined,
- * assume WPGraphQL is using its default endpoint and just peel off /graphql.
- */
 export function getPublicEndpoint() {
 	const uri = process.env.NEXT_PUBLIC_SERVER_URL;
 

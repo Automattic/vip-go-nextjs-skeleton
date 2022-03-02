@@ -7,9 +7,6 @@ import { getCacheObjectByKey } from '@/lib/redis';
  * Find out if the Internet Archive has a book.
  */
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
-	// @ts-expect-error: Express locals are not defined on Next.js request.
-	const { requestContext } = res.locals;
-
 	// Don Quixote (Penguin Classics, English)
 	// By MIGUEL DE CERVANTES SAAVEDRA
 	// Introduction by Roberto Gonzalez Echevarria
@@ -24,7 +21,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 
 	// Fallback function to fetch the book when cache object is not available.
 	async function fallback () {
-		log( 'Fetching book by ISBN', { isbn }, requestContext );
+		log( 'Fetching book by ISBN', { isbn } );
 
 		const baseUrl = 'https://archive.org/services/book/v1/do_we_have_it/';
 		const url = `${ baseUrl }?isbn=${ isbn }&include_unscanned_books=true`;
@@ -37,7 +34,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 		const book = await getCacheObjectByKey( cacheKey, ttl, fallback );
 		return res.status( 200 ).send( book );
 	} catch ( err ) {
-		logError( err, {}, requestContext );
+		logError( err, {} );
 
 		return res.status( 500 ).send( err );
 	}

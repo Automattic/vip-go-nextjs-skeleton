@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { publicEndpoint } from '@/lib/config';
+import { wordPressEndpoint } from '../../vip.config';
 
 const robotsTxt = `
 User-agent: *
@@ -7,7 +7,7 @@ User-agent: *
 Allow: *
 Disallow: /api/*
 
-Sitemap: ${publicEndpoint}/wp-sitemap.xml
+Sitemap: ${wordPressEndpoint}/wp-sitemap.xml
 `.trim();
 
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {

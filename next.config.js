@@ -8,6 +8,8 @@
 //
 // Have fun! 🚀
 
+const { wordPressEndpoint } = require( './vip.config' );
+
 // Next.js currently doesn't have a good way to match all paths including the
 // root, so we need to use a special regex path.
 const allPathsIncludingRoot = '/:path*{/}?';
@@ -17,11 +19,8 @@ module.exports = {
 	// =========
 	// https://nextjs.org/docs/api-reference/next.config.js/basepath
 	//
-	// In rare cases, you may want to set the base path. For example, when using a
-	// subdirectory-based multisite WordPress, you may want to set `basePath` to
-	// match the subdirectory of the subsite, e.g., '/path'.
-	//
-	// Otherwise, leave it set to '' (empty string).
+	// Setting a base path is not recommend because it prevents us from serving
+	// files at the root, such as 'robots.txt'.
 	basePath: '',
 
 	// ESLint
@@ -88,26 +87,46 @@ module.exports = {
 	// =========
 	// https://nextjs.org/docs/api-reference/next.config.js/redirects
 	async redirects() {
-		return [];
+		return [
+			{
+				source: allPathsIncludingRoot,
+				destination: `${ wordPressEndpoint }/:path*`,
+				has: [
+					{
+						type: 'query',
+						key: 'preview',
+						value: 'true',
+					},
+				],
+				permanent: false,
+			},
+			{
+				source: allPathsIncludingRoot,
+				destination: `${ wordPressEndpoint }/:path*`,
+				has: [
+					{
+						type: 'query',
+						key: 'p',
+					},
+				],
+				permanent: false,
+			},
+		];
 	},
 
 	// Rewrites
 	// ========
 	// https://nextjs.org/docs/api-reference/next.config.js/rewrites
 	async rewrites() {
-		// Dynamically serve robots.txt.
-		const robotRewrites = [
-			{
-				source: '/robots.txt',
-				destination: '/api/robots',
-			},
-		];
-
 		return {
 			// Since we have a fallback route defined at the root (`[[...slug]].tsx`),
 			// we must apply rewrites before any Next.js routing.
 			beforeFiles: [
-				...robotRewrites,
+				// Dynamically serve robots.txt.
+				{
+					source: '/robots.txt',
+					destination: '/api/robots',
+				},
 			],
 		};
 	},

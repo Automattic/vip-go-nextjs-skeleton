@@ -21,16 +21,16 @@ This is WordPress VIP's [Next.js][nextjs] boilerplate for decoupled WordPress. I
 npm install
 ```
 
-### Environment variables
+### Configuration
 
 Update the following environment variables defined in the `.env` file:
 
 + `NEXT_PUBLIC_GRAPHQL_ENDPOINT`: The full URL, including protocol, of your WPGraphQL endpoint. You can find it in the WordPress Admin Dashboard > Settings > VIP Decoupled.
 + `NEXT_PUBLIC_SERVER_URL`: The full URL, including protocol, of this Next.js site. This allows things like sitemaps and link routing to be configured correctly.
 
-If your WPGraphQL endpoint is at a non-default location, you will need to provide the `NEXT_PUBLIC_WORDPRESS_ENDPOINT` environment variable. This should be the root URL of your WordPress installation.
-
 If you have additional environment variables, you can add them here.
+
+You should also review `vip.config.js` for additional configuration options.
 
 ### Development server
 

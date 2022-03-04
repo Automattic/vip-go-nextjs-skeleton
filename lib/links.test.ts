@@ -2,80 +2,89 @@ import {
 	extractLastTokenFromRoute,
 	getInternalLinkPathname,
 } from './links';
+import { links } from '../vip.config';
 
-jest.mock( '@/lib/config', function () {
+jest.mock( '../vip.config', function () {
 	return {
-		get internalLinkHostnames () {
-			return [
-				'localhost',
-				'mysite.example.com',
-			];
-		}
+		links: {
+			isInternalLink: jest.fn( () => true ),
+		},
 	};
 } );
 
-test( 'extractLastTokenFromRoute: extracts the last token from an array of tokens', function () {
-	const input = [ 'one', 'two', 'three', 'four', 'five' ];
-	expect( extractLastTokenFromRoute( input ) ).toBe( 'five' );
-} );
+describe( 'extractLastTokenFromRoute', () => {
+	it( 'extracts the last token from an array of tokens', function () {
+		const input = [ 'one', 'two', 'three', 'four', 'five' ];
+		expect( extractLastTokenFromRoute( input ) ).toBe( 'five' );
+	} );
 
-test( 'extractLastTokenFromRoute: returns a string', function () {
-	expect( extractLastTokenFromRoute( 'bare string' ) ).toBe( 'bare string' );
-} );
-
-test( 'getInternalLinkPathname: returns the path from various local URLs', function () {
-	const internalLinks = [
-		'http://localhost/howdy.html',
-		'http://localhost/howdy.html',
-		'https://localhost/howdy.html',
-		'http://localhost:8888/howdy.html',
-		'http://user:password@localhost/howdy.html',
-		// Jest mocks are not currently working with new compiler:
-		// https://github.com/vercel/next.js/pull/33731
-		// 'http://mysite.example.com/howdy.html',
-	];
-
-	internalLinks.forEach( function ( link ) {
-		expect( getInternalLinkPathname( link ) ).toBe( '/howdy.html' );
+	it( 'returns a string', function () {
+		expect( extractLastTokenFromRoute( 'bare string' ) ).toBe( 'bare string' );
 	} );
 } );
 
-test( 'getInternalLinkPathname: preserves the query string', function () {
-	const internalLinksWithQuery = [
-		'http://localhost/howdy.html?wave=true',
-		'http://localhost/howdy.html?wave=true',
-	];
+describe( 'isInternalLink default implementation', () => {
+	const unmockedVipConfig = jest.requireActual( '../vip.config' );
 
-	internalLinksWithQuery.forEach( function ( link ) {
-		expect( getInternalLinkPathname( link ) ).toBe( '/howdy.html?wave=true' );
+	it( 'returns true for local hostnames', function () {
+		const internalHostnames = [
+			'127.0.0.1',
+			'localhost',
+		];
+
+		internalHostnames.forEach( function ( hostname ) {
+			expect( unmockedVipConfig.links.isInternalLink( hostname ) ).toBe( true );
+		} );
+	} );
+
+	it( 'returns false for non-local hostnames', function () {
+		const externalHostnames = [
+			'localhost.internal',
+			'local.host',
+			'localhost.com',
+			'mysite.example.com',
+			'mysite2.example.com',
+		];
+
+		externalHostnames.forEach( function ( hostname ) {
+			expect( unmockedVipConfig.links.isInternalLink( hostname ) ).toBe( false );
+		} );
 	} );
 } );
 
-test( 'getInternalLinkPathname: returns the full URL for non-local URLs', function () {
-	const notInternalLinks = [
-		'http://localhost.internal/howdy.html',
-		'http://local.host/howdy.html',
-		'https://localhost.com/howdy.html',
-		'http://mysite2.example.com/howdy.html',
-		'http://mysite.example/howdy.html',
-	];
+describe( 'getInternalLinkPathname', () => {
+	const isInternalLink = ( links.isInternalLink as jest.MockedFunction<typeof links.isInternalLink> );
 
-	notInternalLinks.forEach( function ( link ) {
-		expect( getInternalLinkPathname( link ) ).toBe( link );
+	beforeEach( () => {
+		isInternalLink.mockClear();
 	} );
-} );
 
-test( 'getInternalLinkPathname: returns the input for malformed or non-HTTP URLs', function () {
-	const malformedLinks = [
-		'localhost',
-		'localhost/howdy.html',
-		'http://localhost:port/howdy.html',
-		'ftp://localhost/howdy.html',
-		'mailto:localhost',
-		'suzy@localhost',
-	];
+	it( 'preserves the query string', function () {
+		const internalLinkWithQuery = 'http://localhost/howdy.html?wave=true';
 
-	malformedLinks.forEach( function ( link ) {
-		expect( getInternalLinkPathname( link ) ).toBe( link );
+		expect( getInternalLinkPathname( internalLinkWithQuery ) ).toEqual( '/howdy.html?wave=true' );
+	} );
+
+	it( 'returns the full URL for non-local URLs', function () {
+		const externalLink = 'http://localhost/howdy.html';
+
+		isInternalLink.mockImplementation( () => false );
+
+		expect( getInternalLinkPathname( externalLink ) ).toEqual( externalLink );
+	} );
+
+	it( 'does nothing to malformed or non-HTTP URLs', function () {
+		const malformedLinks = [
+			'localhost',
+			'localhost/howdy.html',
+			'http://localhost:port/howdy.html',
+			'ftp://localhost/howdy.html',
+			'mailto:localhost',
+			'suzy@localhost',
+		];
+
+		malformedLinks.forEach( function ( link ) {
+			expect( getInternalLinkPathname( link ) ).toBe( link );
+		} );
 	} );
 } );

@@ -1,5 +1,5 @@
-import { internalLinkHostnames } from '@/lib/config';
 import config from '../next.config';
+import { links } from '../vip.config';
 
 const basePathRemover = new RegExp( `^${config.basePath}/*` );
 
@@ -57,26 +57,12 @@ export function getInternalLinkPathname ( url: string ): string {
 	try {
 		const { hostname, pathname, protocol, search } = new URL( url );
 
-		// Determine if the link destination should be considered internal.
-		if ( [ 'http:', 'https:' ].includes( protocol ) && internalLinkHostnames.includes( hostname ) ) {
+		// Determine if the link destination should be considered internal. If so,
+		// return the relative path to this Next.js site.
+		if ( [ 'http:', 'https:' ].includes( protocol ) && links.isInternalLink( hostname, pathname ) ) {
 			return `${getCorrectPathname( pathname )}${search}`;
 		}
 	} catch ( err ) { /* continue */ }
 
 	return url;
-}
-
-/**
- * If the environment variable NEXT_PUBLIC_WORDPRESS_ENDPOINT is not defined,
- * assume WPGraphQL is using its default endpoint and just peel off /graphql.
- */
-export function getPublicEndpoint() {
-	const uri = process.env.NEXT_PUBLIC_SERVER_URL;
-
-	// If endpoint is undefined, throw for visibility.
-	if ( 'undefined' === typeof uri ) {
-		throw new Error( 'Public server endpoint is undefined' );
-	}
-
-	return uri;
 }

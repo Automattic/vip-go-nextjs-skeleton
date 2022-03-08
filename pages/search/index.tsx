@@ -1,12 +1,13 @@
 import { GetServerSideProps } from 'next';
 import Page from '@/components/Page/Page';
 import PostList from '@/components/PostList/PostList';
+import SearchForm from '@/components/SearchForm/SearchForm';
 import getApolloClient from '@/graphql/apollo';
 import {
 	ContentNodeFieldsFragment,
-	ContentTypeByNameDocument,
-	ContentTypeByNameQuery,
-	ContentTypeByNameQueryVariables,
+	ContentNodesBySearchTermDocument,
+	ContentNodesBySearchTermQuery,
+	ContentNodesBySearchTermQueryVariables,
 } from '@/graphql/generated';
 
 type Props = {
@@ -14,15 +15,19 @@ type Props = {
 	nextPageLink?: string,
 	posts: ContentNodeFieldsFragment[],
 	previousPageLink?: string,
-	title: string,
+	search: string,
 };
 
-export default function ContentNodes( props: Props ) {
+export default function Search( props: Props ) {
 	return (
 		<Page
 			loading={props.loading}
-			title={props.title}
+			title={`Search results for ${ props.search }`}
 		>
+			<SearchForm
+				path="/search"
+				search={props.search}
+			/>
 			<PostList
 				nextPageLink={props.nextPageLink}
 				posts={props.posts}
@@ -32,18 +37,29 @@ export default function ContentNodes( props: Props ) {
 	);
 }
 
-type ContextParams = {
-	content_type: string,
-}
+type ContextParams = Record<never, string>;
 
 export const getServerSideProps: GetServerSideProps<Props, ContextParams> = async ( context ) => {
 	const queryParams = { ...context.query };
-	const variables: ContentTypeByNameQueryVariables = {
-		name: context.params.content_type,
+
+	if ( ! queryParams.s ) {
+		// The user has not searched yet.
+		return {
+			props: {
+				loading: false,
+				posts: [],
+				search: '',
+			},
+		};
+	}
+
+	const search = `${ queryParams.s }`.trim();
+	const variables: ContentNodesBySearchTermQueryVariables = {
+		search,
 	};
 
 	// Process pagination requests
-	if ( context.query.before ) {
+	if ( queryParams.before ) {
 		variables.before = `${ queryParams.before }`;
 		variables.last = 10;
 	} else {
@@ -52,14 +68,17 @@ export const getServerSideProps: GetServerSideProps<Props, ContextParams> = asyn
 	}
 
 	const queryOptions = {
-		query: ContentTypeByNameDocument,
+		query: ContentNodesBySearchTermDocument,
 		variables,
 	};
 
-	const { data, error, loading } = await getApolloClient( context ).query<ContentTypeByNameQuery>( queryOptions );
+	const { data, error, loading } = await getApolloClient( context ).query<ContentNodesBySearchTermQuery>( queryOptions );
 
-	const posts = data.contentType?.contentNodes?.nodes || [];
-	const title = data.contentType?.description;
+	if ( error ) {
+		throw error;
+	}
+
+	const posts = data.contentNodes?.nodes || [];
 
 	// Extract pagination information and build pagination links.
 	const {
@@ -67,7 +86,7 @@ export const getServerSideProps: GetServerSideProps<Props, ContextParams> = asyn
 		hasNextPage,
 		hasPreviousPage,
 		startCursor,
-	} = data.contentType?.contentNodes?.pageInfo || {};
+	} = data.contentNodes?.pageInfo || {};
 
 	let nextPageLink = null;
 	if ( hasNextPage ) {
@@ -83,20 +102,13 @@ export const getServerSideProps: GetServerSideProps<Props, ContextParams> = asyn
 		previousPageLink = `?${ newQueryParams.toString() }`;
 	}
 
-	// SEO: Resource not found pages must send a 404 response code.
-	if ( error || ! loading && ! posts.length ) {
-		return {
-			notFound: true,
-		};
-	}
-
 	return {
 		props: {
 			loading,
 			nextPageLink,
 			posts,
 			previousPageLink,
-			title,
+			search,
 		},
 	};
 }

@@ -1,0 +1,27 @@
+#import "../fragments/ContentNode.graphql"
+#import "../fragments/PageInfo.graphql"
+
+query ContentNodesBySearchTerm(
+	$after: String
+	$before: String
+	$first: Int
+	$last: Int
+	$search: String!
+) {
+	contentNodes(
+		after: $after
+		before: $before
+		first: $first
+		last: $last
+		where: {
+			search: $search
+		}
+	) {
+		nodes {
+			...ContentNodeFields
+		}
+		pageInfo {
+			...PageInfo
+		}
+	}
+}

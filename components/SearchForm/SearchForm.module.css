@@ -1,0 +1,9 @@
+.container {
+	column-gap: 1em;
+	display: grid;
+	grid-template-columns: auto 100px;
+}
+
+.input {
+	height: 100%;
+}

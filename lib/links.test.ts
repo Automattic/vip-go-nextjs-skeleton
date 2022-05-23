@@ -62,7 +62,7 @@ describe( 'getInternalLinkPathname', () => {
 	it( 'preserves the query string', function () {
 		const internalLinkWithQuery = 'http://localhost/howdy.html?wave=true';
 
-		expect( getInternalLinkPathname( internalLinkWithQuery ) ).toEqual( '/howdy.html?wave=true' );
+		expect( getInternalLinkPathname( internalLinkWithQuery ) ).toEqual( '/howdy.html/?wave=true' );
 	} );
 
 	it( 'returns the full URL for non-local URLs', function () {

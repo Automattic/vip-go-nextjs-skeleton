@@ -144,9 +144,11 @@ module.exports = {
 	//
 	// If your application requires trailing slashes, you will need to implement a
 	// custom server so that the cache healthcheck endpoint is handled before
-	// sending the request to Next.js. See:
+	// sending the request to Next.js. For an example, see this branch and the
+	// Next.js documentation.
 	//
-	// https://github.com/vercel/next.js/tree/canary/examples/custom-server-express
+	// https://github.com/Automattic/vip-go-nextjs-skeleton/tree/example/custom-server-trailing-slash
+	// https://nextjs.org/docs/advanced-features/custom-server
 	trailingSlash: false,
 
 	// Image Optimization

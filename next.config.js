@@ -135,9 +135,20 @@ module.exports = {
 	// ==============
 	// https://nextjs.org/docs/api-reference/next.config.js/trailing-slash
 	//
-	// By default, WordPress appends trailing slashes to permalinks. Next.js has
-	// support for trailing slashes, but its implementation is buggy, causes
-	// problems, and is not recommend at this time.
+	// Setting this value to `true` is not recommended at this time.
+	//
+	// Next.js has support for trailing slashes, but its implementation is buggy
+	// and makes it difficult to satisfy VIP's required health check endpoint --
+	// which cannot support a trailing slash. Simply changing this value to `true`
+	// will result in failed health checks and deploys on VIP.
+	//
+	// If your application requires trailing slashes, you will need to implement a
+	// custom server so that the cache healthcheck endpoint is handled before
+	// sending the request to Next.js. For an example, see this branch and the
+	// Next.js documentation.
+	//
+	// https://github.com/Automattic/vip-go-nextjs-skeleton/tree/example/custom-server-trailing-slash
+	// https://nextjs.org/docs/advanced-features/custom-server
 	trailingSlash: false,
 
 	// Image Optimization

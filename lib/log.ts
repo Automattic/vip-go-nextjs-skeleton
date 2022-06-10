@@ -15,13 +15,7 @@ export function log(
 	requestContext: LogContext = {},
 	level: LogLevel = LogLevel.INFO
 ) {
-	console.log( {
-		context,
-		level,
-		message,
-		requestContext,
-		timestamp: Math.round( Date.now() / 1000 ),
-	} );
+	console.log(JSON.stringify({context, level, message, requestContext, timestamp: Math.round( Date.now() / 1000 ) }));
 }
 
 export function logError(

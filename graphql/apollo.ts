@@ -28,7 +28,26 @@ export default function getApolloClient ( serverSideContext?: GetServerSideProps
 	// Server-side / static: Return a new instance every time.
 	if ( isServerSide ) {
 		// @ts-expect-error: Express locals are not defined on Next.js request.
-		const { requestContext } = serverSideContext?.res?.locals || {};
+		let { requestContext } = serverSideContext?.res?.locals || {};
+
+		// @ts-expect-error: res may not be defined
+		const sourceId = serverSideContext?.res?.getHeader('x-source-id');
+		// @ts-expect-error: res may not be defined
+		const pathName = serverSideContext?.res?.getHeader('x-request-path');
+
+		if (sourceId) {
+			requestContext = {
+				...requestContext,
+				sourceId
+			};
+		}
+
+		if (pathName) {
+			requestContext = {
+				...requestContext,
+				pathName
+			};
+		}
 
 		return new ApolloClient( {
 			cache: new InMemoryCache( { possibleTypes } ),

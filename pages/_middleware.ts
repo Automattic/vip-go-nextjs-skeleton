@@ -19,6 +19,8 @@ export const middleware: NextMiddleware = ( req: NextRequest ) => {
 	if (req.headers.has( 'x-request-id' ) ) {
 		const sourceId = req.headers.get( 'x-request-id' );
 
+		// Calling it sourceID allows to be differenciated from the requestID
+		// and potentially be sent to the WP backend alongside each WP query
 		response.headers.set( 'x-source-id', sourceId );
 		response.headers.set( 'x-request-path', pathName );
 

@@ -52,18 +52,11 @@ export default function getApolloLink ( requestContext: LogContext = {} ) {
 
 			return forward( operation )
 				.map( data => {
-					let cacheStatus = operation.getContext().response?.headers?.get('x-cache');
-
-					if (cacheStatus === 'pass') {
-						cacheStatus = 'bypassed';
-					} else if (cacheStatus === 'grace') {
-						cacheStatus = 'refreshing';
-					}
 
 					const context = {
 						...debug,
-						cacheStatus,
-						cacheAge: operation.getContext().response?.headers?.get('age'),
+						cacheStatus: operation.getContext().response?.headers?.get( 'x-cache' ),
+						cacheAge: operation.getContext().response?.headers?.get( 'age' ),
 						payloadSize: operation.getContext().response?.body?.bytesWritten,
 						requestDurationInMs: Date.now() - startTime,
 					};

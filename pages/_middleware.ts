@@ -13,6 +13,7 @@ export const middleware: NextMiddleware = ( req: NextRequest ) => {
 		return new NextResponse( 'Ok' );
 	}
 
+	// Ensures that when this response is returned, the Next.js chain will continue
 	const response = NextResponse.next();
 
 	if (req.headers.has( 'x-request-id' ) ) {

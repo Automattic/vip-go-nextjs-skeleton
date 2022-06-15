@@ -35,6 +35,7 @@ export default function getApolloClient ( serverSideContext?: GetServerSideProps
 		// @ts-expect-error: res may not be defined
 		const pathName = serverSideContext?.res?.getHeader('x-request-path');
 
+		// Add the requestID for the original API/Page request to each request's underlying context
 		if (sourceId) {
 			requestContext = {
 				...requestContext,
@@ -42,6 +43,7 @@ export default function getApolloClient ( serverSideContext?: GetServerSideProps
 			};
 		}
 
+		// Add the path name for the original API/Page request to each request's underlying context
 		if (pathName) {
 			requestContext = {
 				...requestContext,

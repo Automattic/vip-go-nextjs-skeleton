@@ -52,7 +52,6 @@ export default function getApolloLink ( requestContext: LogContext = {} ) {
 
 			return forward( operation )
 				.map( data => {
-
 					const context = {
 						...debug,
 						cacheStatus: operation.getContext().response?.headers?.get( 'x-cache' ),

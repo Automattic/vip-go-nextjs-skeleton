@@ -43,7 +43,7 @@ export default function getApolloLink ( requestContext: LogContext = {} ) {
 
 			setContext( ( { headers = {} } ) => ( {
 				headers: {
-					...headers,q
+					...headers,
 					// Here is where you can set custom request headers for your GraphQL
 					// requests. If the request is client-side, it must be allowed by the
 					// CORS policy in WPGraphQL.

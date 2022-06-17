@@ -15,16 +15,18 @@ export const middleware: NextMiddleware = ( req: NextRequest ) => {
 
 	// Ensures that when this response is returned, the Next.js chain will continue
 	const response = NextResponse.next();
+	const reqHeaderName = 'x-request-id';
 
-	if (req.headers.has( 'x-request-id' ) ) {
-		const sourceId = req.headers.get( 'x-request-id' );
+
+	if ( req.headers.has( reqHeaderName ) ) {
+		const sourceId = req.headers.get( reqHeaderName );
 
 		// Calling it sourceID allows to be differenciated from the requestID
 		// and potentially be sent to the WP backend alongside each WP query
 		response.headers.set( 'x-source-id', sourceId );
 		response.headers.set( 'x-request-path', pathName );
 
-		log( 'Middleware has been executed', {}, { sourceId, pathName } );
+		log( 'Middleware has been executed', { }, { sourceId, pathName } );
 	}
 
 	return response;

@@ -27,29 +27,20 @@ const { possibleTypes } = fragmentMatcher;
 export default function getApolloClient ( serverSideContext?: GetServerSidePropsContext | GetStaticPropsContext ) {
 	// Server-side / static: Return a new instance every time.
 	if ( isServerSide ) {
-		// @ts-expect-error: Express locals are not defined on Next.js request.
+
+		// @ts-expect-error: Express res may not be defined on Next.js request.
+		const sourceId = serverSideContext?.res?.getHeader('x-source-id') || null;
+		// @ts-expect-error: Express res  may not be defined on Next.js request.
+		const pathName = serverSideContext?.res?.getHeader('x-request-path') || null;
+
+		// @ts-expect-error: Express locals and res may not be defined on Next.js request.
 		let { requestContext } = serverSideContext?.res?.locals || {};
 
-		// @ts-expect-error: res may not be defined
-		const sourceId = serverSideContext?.res?.getHeader('x-source-id');
-		// @ts-expect-error: res may not be defined
-		const pathName = serverSideContext?.res?.getHeader('x-request-path');
-
-		// Add the requestID for the original API/Page request to each WP query's context
-		if (sourceId) {
-			requestContext = {
-				...requestContext,
-				sourceId
-			};
-		}
-
-		// Add the path name for the original API/Page request to each WP query's context
-		if (pathName) {
-			requestContext = {
-				...requestContext,
-				pathName
-			};
-		}
+		requestContext = {
+			...requestContext,
+			sourceId,
+			pathName,
+		};
 
 		return new ApolloClient( {
 			cache: new InMemoryCache( { possibleTypes } ),

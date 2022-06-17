@@ -2,12 +2,17 @@ import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { GetServerSidePropsContext, GetStaticPropsContext } from 'next';
 import fragmentMatcher from '@/graphql/generated/fragmentMatcher';
 import getApolloLink from './apollo-link';
+import { LogContext } from '@/lib/log';
 
 let clientSideApolloClient: ApolloClient<unknown>;
 
 const isServerSide = 'undefined' === typeof window;
 
 const { possibleTypes } = fragmentMatcher;
+
+function isServerSideContext( context: GetServerSidePropsContext | GetStaticPropsContext ): context is GetServerSidePropsContext {
+	return ( context as GetServerSidePropsContext ).req !== undefined;
+}
 
 /**
  * Server-side / static, Apollo client should be recreated for each request so
@@ -27,20 +32,20 @@ const { possibleTypes } = fragmentMatcher;
 export default function getApolloClient ( serverSideContext?: GetServerSidePropsContext | GetStaticPropsContext ) {
 	// Server-side / static: Return a new instance every time.
 	if ( isServerSide ) {
+		let requestContext: LogContext;
 
-		// @ts-expect-error: Express res may not be defined on Next.js request.
-		const sourceId = serverSideContext?.res?.getHeader('x-source-id') || null;
-		// @ts-expect-error: Express res  may not be defined on Next.js request.
-		const pathName = serverSideContext?.res?.getHeader('x-request-path') || null;
+		if ( isServerSideContext( serverSideContext ) ) {
+			const { req } = serverSideContext;
 
-		// @ts-expect-error: Express locals and res may not be defined on Next.js request.
-		let { requestContext } = serverSideContext?.res?.locals || {};
+			const pathName = req.url;
+			const reqHeaderName = 'x-request-id';
+			const sourceId = req.headers[ reqHeaderName ] || `local-${ Math.round( Math.random() * 10000 ) }`;
 
-		requestContext = {
-			...requestContext,
-			sourceId,
-			pathName,
-		};
+			requestContext = {
+				pathName,
+				sourceId: `${ sourceId }`,
+			};
+		}
 
 		return new ApolloClient( {
 			cache: new InMemoryCache( { possibleTypes } ),
@@ -51,7 +56,7 @@ export default function getApolloClient ( serverSideContext?: GetServerSideProps
 
 	// Client-side: Create and store a single instance if it doesn't yet exist.
 	if ( 'undefined' === typeof clientSideApolloClient ) {
-		clientSideApolloClient =  new ApolloClient( {
+		clientSideApolloClient = new ApolloClient( {
 			cache: new InMemoryCache( { possibleTypes } ),
 			link: getApolloLink(),
 		} );

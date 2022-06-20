@@ -2,6 +2,7 @@ import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { GetServerSidePropsContext, GetStaticPropsContext } from 'next';
 import fragmentMatcher from '@/graphql/generated/fragmentMatcher';
 import getApolloLink from './apollo-link';
+import { generateRequestContext } from '@/lib/log';
 
 let clientSideApolloClient: ApolloClient<unknown>;
 
@@ -28,19 +29,7 @@ export default function getApolloClient ( serverSideContext?: GetServerSideProps
 	// Server-side / static: Return a new instance every time.
 	if ( isServerSide ) {
 
-		// @ts-expect-error: Express res may not be defined on Next.js request.
-		const sourceId = serverSideContext?.res?.getHeader('x-source-id') || null;
-		// @ts-expect-error: Express res  may not be defined on Next.js request.
-		const pathName = serverSideContext?.res?.getHeader('x-request-path') || null;
-
-		// @ts-expect-error: Express locals and res may not be defined on Next.js request.
-		let { requestContext } = serverSideContext?.res?.locals || {};
-
-		requestContext = {
-			...requestContext,
-			sourceId,
-			pathName,
-		};
+		const requestContext = generateRequestContext(serverSideContext);
 
 		return new ApolloClient( {
 			cache: new InMemoryCache( { possibleTypes } ),

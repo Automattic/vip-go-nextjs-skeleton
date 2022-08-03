@@ -53,22 +53,20 @@ export function getHostname ( url: string ): string {
 	return url;
 }
 
-export function getInternalLinkPathname ( url: string ): string {
+export function getInternalLinkPathname ( url: string, slug: string ): string {
 	try {
 		const { hostname, pathname, protocol, search, searchParams } = new URL( url );
 
 		// Determine if the link destination should be considered internal. If so,
 		// return the relative path to this Next.js site.
 		if ( [ 'http:', 'https:' ].includes( protocol ) && links.isInternalLink( hostname, pathname ) ) {
-			// URL formatted in query string with ID parameter (e.g. ?p=1 or ?page_id=2)
-			if ( searchParams ) {
-				// @TODO Handle ID parameters. Some options:
-				// 1. Make a fully dynamic route like /p/1 or /page_id/2
-				// 2. Keep the ID parameter in the URL, and direct to a page used for handling query vars, e.g. /query?p=1
-				// 3. Detect if the parameter looks like an ID, and load /id/<parameter value>, e.g. /id/1
-				return `${getCorrectPathname( pathname )}${search}`;
+			const correctPathname = getCorrectPathname( pathname );
+
+			// If the URL is built from a search query (e.g. ?p=1 or ?page=2), use the slug instead
+			if( searchParams && Array.from(searchParams).length > 0 ) {
+				return correctPathname.endsWith( '/' ) ? `${correctPathname}${slug}` : `${correctPathname}/${slug}`;
 			} else {
-				return `${getCorrectPathname( pathname )}${search}`;
+				return `${correctPathname}${search}`;
 			}
 		}
 	} catch ( err ) { /* continue */ }

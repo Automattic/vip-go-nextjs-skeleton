@@ -25,6 +25,7 @@ fragment ContentNodeFields on ContentNode {
 	isPreview
 	link
 	modifiedGmt
+	slug
 	... on NodeWithTitle {
 		title
 	}

@@ -41,7 +41,9 @@ The application is preconfigured to run with a local install of WordPress:
 You should now be able to access:
 
 + Next.js front-end via [http://localhost:3000][local-nextjs]
-+ WordPress backend via [http://localhost:8888/wp-admin][local-wordpress]
++ WordPress backend via [http://localhost:8888/wp-admin][local-wordpress] with the [default credentials][wpenv-credentials]:
+  + username: `admin`
+  + password: `password`
 
 ### Remote configuration
 
@@ -251,5 +253,6 @@ For the API images, the `srcSet` property is automatically defined by the `devic
 [typescript]: https://www.typescriptlang.org
 [webpack5]: https://nextjs.org/docs/messages/webpack5
 [wpenv]: https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env/
+[wpenv-credentials]: https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env/#starting-the-environment
 [wpgraphql]: https://www.wpgraphql.com
 [wpvip]: https://wpvip.com

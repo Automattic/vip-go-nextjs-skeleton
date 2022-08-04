@@ -3,6 +3,6 @@
 		"WP_HOME": "http://localhost:3000"
 	},
 	"plugins": [
-		"Automattic/vip-decoupled-bundle#fix/admin-warning-different-ports"
+		"Automattic/vip-decoupled-bundle"
 	]
 }

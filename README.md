@@ -21,7 +21,29 @@ This is WordPress VIP's [Next.js][nextjs] boilerplate for decoupled WordPress. I
 npm install
 ```
 
-### Configuration
+### Local configuration
+
+The application is preconfigured to run with a local install of WordPress:
+
+1. Install `wp-env` [via these instructions][wpenv].
+2. In the root directory of this repository, start WordPress via:
+
+    ```sh
+    wp-env start
+    ```
+
+3. Next, run the Next.js development server with:
+
+    ```sh
+    npm run dev
+    ```
+
+You should now be able to access:
+
++ Next.js front-end via [http://localhost:3000][local-nextjs]
++ WordPress backend via [http://localhost:8888/wp-admin][local-wordpress]
+
+### Remote configuration
 
 Update the following environment variables defined in the `.env` file:
 
@@ -34,7 +56,7 @@ You should also review `vip.config.js` for additional configuration options.
 
 ### Development server
 
-Start a development server, with hot-reloading, at [http://localhost:3000][local].
+Start a development server, with hot-reloading, at [http://localhost:3000][local-nextjs].
 
 ```sh
 npm run dev
@@ -208,14 +230,15 @@ For the API images, the `srcSet` property is automatically defined by the `devic
 [latest-content]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/pages/latest/%5Bcontent_type%5D.tsx
 [lib-config]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/lib/config.ts
 [link-listener]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/lib/hooks/useInternalLinkRouting.ts
-[local]: http://localhost:3000
+[local-nextjs]: http://localhost:3000
+[local-wordpress]: http://localhost:8888/wp-admin
 [middleware]: https://nextjs.org/docs/middleware
 [nextjs]: https://nextjs.org
 [nextjs-custom-server]: https://nextjs.org/docs/advanced-features/custom-server
 [nextjs-eslint]: https://nextjs.org/docs/basic-features/eslint
-[nextjs-image]: https://nextjs.org/docs/api-reference/next/image
-[nextjs-gssp]: https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
 [nextjs-gsp]: https://nextjs.org/docs/basic-features/data-fetching#getstaticprops-static-generation
+[nextjs-gssp]: https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
+[nextjs-image]: https://nextjs.org/docs/api-reference/next/image
 [nextjs-link]: https://nextjs.org/docs/api-reference/next/link
 [nextjs-ts]: https://nextjs.org/docs/basic-features/typescript
 [output-file-tracing]: https://nextjs.org/docs/advanced-features/output-file-tracing
@@ -227,5 +250,6 @@ For the API images, the `srcSet` property is automatically defined by the `devic
 [ts-config]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/tsconfig.json
 [typescript]: https://www.typescriptlang.org
 [webpack5]: https://nextjs.org/docs/messages/webpack5
+[wpenv]: https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env/
 [wpgraphql]: https://www.wpgraphql.com
 [wpvip]: https://wpvip.com

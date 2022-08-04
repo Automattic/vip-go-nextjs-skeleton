@@ -42,8 +42,9 @@ You should now be able to access:
 
 + Next.js front-end via [http://localhost:3000][local-nextjs]
 + WordPress backend via [http://localhost:8888/wp-admin][local-wordpress] with the [default credentials][wpenv-credentials]:
-  + username: `admin`
-  + password: `password`
+
+  + Username: `admin`
+  + Password: `password`
 
 ### Remote configuration
 

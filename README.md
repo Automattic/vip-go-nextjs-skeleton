@@ -33,7 +33,7 @@ The application is preconfigured to run with a local install of WordPress:
     wp-env run cli "wp rewrite structure '/%year%/%monthnum%/%postname%/'"
     ```
 
-    Note that [plain permalinks][permalinks-plain] are not supported by the boilerplate project.
+    Note that plain permalinks [are not supported](#permalink-setup) by the boilerplate project.
 
 3. Next, run the Next.js development server with:
 
@@ -60,7 +60,7 @@ If you have additional environment variables, you can add them here.
 
 Working remote environment settings are available in `.env.production` to test against a live VIP WordPress backend.
 
-Note that [plain permalinks][permalinks-plain] are not supported by the boilerplate project, and pretty permalinks (e.g. `/%year%/%monthnum%/%postname%/`) [should be enabled via the WordPress backend][permalinks-setup].
+Note that plain permalinks are not by the boilerplate project. Read the [**Permalink Setup** section below](#permalink-setup) for supported permalink configurations.
 
 You should also review `vip.config.js` for additional configuration options.
 
@@ -86,6 +86,16 @@ Note that the `build` directory has been added to the `.gitignore` file. This av
 ## Previewing
 
 Previewing unpublished posts or updates to published posts works out of the box. Simply click the “Preview” button in WordPress and you’ll be redirected to a one-time-use preview link on the Next.js site. You can share your preview link with others; as long as they are logged in to WordPress in the same browser and have permissions to access that content, they will be able to preview it as well.
+
+## Permalink setup
+
+[Plain permalinks][permalinks-plain] are not recommended or supported by the boilerplate project. Any other pretty permalink structure that includes the `%postname%` slug in the URL are supported, like:
+
+- **Day and name**: `/%year%/%monthnum%/%day%/%postname%/`
+- **Month and name**: `/%year%/%monthnum%/%postname%/`
+- **Post name**: `/%postname%/`
+
+Pretty permalinks [can be enabled via the WordPress backend][permalinks-setup].
 
 ## Gutenberg / block support
 

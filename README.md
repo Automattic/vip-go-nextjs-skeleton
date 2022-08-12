@@ -26,11 +26,14 @@ npm install
 The application is preconfigured to run with a local install of WordPress:
 
 1. Install `wp-env` [via these instructions][wpenv].
-2. In the root directory of this repository, start WordPress via:
+2. In the root directory of this repository, start and configure WordPress via:
 
     ```sh
     wp-env start
+    wp-env run cli "wp rewrite structure '/%year%/%monthnum%/%postname%/'"
     ```
+
+    Note that [plain permalinks][permalinks-plain] are not supported by the boilerplate project.
 
 3. Next, run the Next.js development server with:
 
@@ -54,6 +57,10 @@ Update the following environment variables defined in the `.env` file:
 + `NEXT_PUBLIC_SERVER_URL`: The full URL, including protocol, of this Next.js site. This allows things like sitemaps and link routing to be configured correctly.
 
 If you have additional environment variables, you can add them here.
+
+Working remote environment settings are available in `.env.production` to test against a live VIP WordPress backend.
+
+Note that [plain permalinks][permalinks-plain] are not supported by the boilerplate project, and pretty permalinks (e.g. `/%year%/%monthnum%/%postname%/`) [should be enabled via the WordPress backend][permalinks-setup].
 
 You should also review `vip.config.js` for additional configuration options.
 
@@ -257,3 +264,5 @@ For the API images, the `srcSet` property is automatically defined by the `devic
 [wpenv-credentials]: https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env/#starting-the-environment
 [wpgraphql]: https://www.wpgraphql.com
 [wpvip]: https://wpvip.com
+[permalinks-plain]: https://wordpress.org/support/article/using-permalinks/#plain-permalinks
+[permalinks-setup]: https://wordpress.org/support/article/using-permalinks/#choosing-your-permalink-structure-1

@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps<PostProps> = async ( context
 	}
 
 	// SEO: Redirect to canonical URL.
-	const internalLinkPathname = getInternalLinkPathname( post.link, post.slug );
+	const internalLinkPathname = getInternalLinkPathname( post.link );
 	const resolvedUrlWithoutQueryString = context.resolvedUrl.split( '?' )[0];
 	if ( ! loading && internalLinkPathname !== resolvedUrlWithoutQueryString ) {
 		return {

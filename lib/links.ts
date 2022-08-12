@@ -53,21 +53,14 @@ export function getHostname ( url: string ): string {
 	return url;
 }
 
-export function getInternalLinkPathname ( url: string, slug: string ): string {
+export function getInternalLinkPathname ( url: string ): string {
 	try {
-		const { hostname, pathname, protocol, search, searchParams } = new URL( url );
+		const { hostname, pathname, protocol, search } = new URL( url );
 
 		// Determine if the link destination should be considered internal. If so,
 		// return the relative path to this Next.js site.
 		if ( [ 'http:', 'https:' ].includes( protocol ) && links.isInternalLink( hostname, pathname ) ) {
-			const correctPathname = getCorrectPathname( pathname );
-
-			// If the URL is built from a search query (e.g. ?p=1 or ?page=2), use the slug instead
-			if( searchParams && Array.from(searchParams).length > 0 ) {
-				return correctPathname.endsWith( '/' ) ? `${correctPathname}${slug}` : `${correctPathname}/${slug}`;
-			} else {
-				return `${correctPathname}${search}`;
-			}
+			return `${getCorrectPathname( pathname )}${search}`;
 		}
 	} catch ( err ) { /* continue */ }
 

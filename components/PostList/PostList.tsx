@@ -15,7 +15,7 @@ export default function PostList( props: Props ) {
 				{
 					props.posts.map( post => (
 						<li key={post.databaseId}>
-							<Link href={getInternalLinkPathname( post.link, post.slug )}>{post.title}</Link>
+							<Link href={getInternalLinkPathname( post.link )}>{post.title}</Link>
 						</li>
 					) )
 				}

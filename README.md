@@ -21,7 +21,35 @@ This is WordPress VIP's [Next.js][nextjs] boilerplate for decoupled WordPress. I
 npm install
 ```
 
-### Configuration
+### Local configuration
+
+The application is preconfigured to run with a local install of WordPress:
+
+1. Install `wp-env` [via these instructions][wpenv].
+2. In the root directory of this repository, start and configure WordPress via:
+
+    ```sh
+    wp-env start
+    wp-env run cli "wp rewrite structure '/%year%/%monthnum%/%postname%/'"
+    ```
+
+    Note that plain permalinks [are not supported](#permalink-setup) by the boilerplate project.
+
+3. Next, run the Next.js development server with:
+
+    ```sh
+    npm run dev
+    ```
+
+You should now be able to access:
+
++ Next.js front-end via [http://localhost:3000][local-nextjs]
++ WordPress backend via [http://localhost:8888/wp-admin][local-wordpress] with the [default credentials][wpenv-credentials]:
+
+  + Username: `admin`
+  + Password: `password`
+
+### Remote configuration
 
 Update the following environment variables defined in the `.env` file:
 
@@ -30,11 +58,15 @@ Update the following environment variables defined in the `.env` file:
 
 If you have additional environment variables, you can add them here.
 
+Working remote environment settings are available in `.env.production` to test against a live VIP WordPress backend.
+
+Note that plain permalinks are not by the boilerplate project. Read the [**Permalink Setup** section below](#permalink-setup) for supported permalink configurations.
+
 You should also review `vip.config.js` for additional configuration options.
 
 ### Development server
 
-Start a development server, with hot-reloading, at [http://localhost:3000][local].
+Start a development server, with hot-reloading, at [http://localhost:3000][local-nextjs].
 
 ```sh
 npm run dev
@@ -54,6 +86,16 @@ Note that the `build` directory has been added to the `.gitignore` file. This av
 ## Previewing
 
 Previewing unpublished posts or updates to published posts works out of the box. Simply click the “Preview” button in WordPress and you’ll be redirected to a one-time-use preview link on the Next.js site. You can share your preview link with others; as long as they are logged in to WordPress in the same browser and have permissions to access that content, they will be able to preview it as well.
+
+## Permalink setup
+
+[Plain permalinks][permalinks-plain] are not recommended or supported by the boilerplate project. Any other pretty permalink structure that includes the `%postname%` slug in the URL are supported, like:
+
+- **Day and name**: `/%year%/%monthnum%/%day%/%postname%/`
+- **Month and name**: `/%year%/%monthnum%/%postname%/`
+- **Post name**: `/%postname%/`
+
+Pretty permalinks [can be enabled via the WordPress backend][permalinks-setup].
 
 ## Gutenberg / block support
 
@@ -208,14 +250,15 @@ For the API images, the `srcSet` property is automatically defined by the `devic
 [latest-content]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/pages/latest/%5Bcontent_type%5D.tsx
 [lib-config]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/lib/config.ts
 [link-listener]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/lib/hooks/useInternalLinkRouting.ts
-[local]: http://localhost:3000
+[local-nextjs]: http://localhost:3000
+[local-wordpress]: http://localhost:8888/wp-admin
 [middleware]: https://nextjs.org/docs/middleware
 [nextjs]: https://nextjs.org
 [nextjs-custom-server]: https://nextjs.org/docs/advanced-features/custom-server
 [nextjs-eslint]: https://nextjs.org/docs/basic-features/eslint
-[nextjs-image]: https://nextjs.org/docs/api-reference/next/image
-[nextjs-gssp]: https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
 [nextjs-gsp]: https://nextjs.org/docs/basic-features/data-fetching#getstaticprops-static-generation
+[nextjs-gssp]: https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
+[nextjs-image]: https://nextjs.org/docs/api-reference/next/image
 [nextjs-link]: https://nextjs.org/docs/api-reference/next/link
 [nextjs-ts]: https://nextjs.org/docs/basic-features/typescript
 [output-file-tracing]: https://nextjs.org/docs/advanced-features/output-file-tracing
@@ -227,5 +270,9 @@ For the API images, the `srcSet` property is automatically defined by the `devic
 [ts-config]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/tsconfig.json
 [typescript]: https://www.typescriptlang.org
 [webpack5]: https://nextjs.org/docs/messages/webpack5
+[wpenv]: https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env/
+[wpenv-credentials]: https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env/#starting-the-environment
 [wpgraphql]: https://www.wpgraphql.com
 [wpvip]: https://wpvip.com
+[permalinks-plain]: https://wordpress.org/support/article/using-permalinks/#plain-permalinks
+[permalinks-setup]: https://wordpress.org/support/article/using-permalinks/#choosing-your-permalink-structure-1

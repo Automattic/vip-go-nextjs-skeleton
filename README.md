@@ -132,7 +132,7 @@ When running the development server, in order to help you identify blocks that h
 
 ## Internal link routing
 
-When writing code that links to another page in your Next.js application, you should use Next.js's [`Link` component][next-link] so that the request is routed client-side without a full-round trip to the server.
+When writing code that links to another page in your Next.js application, you should use Next.js's [`Link` component][nextjs-link] so that the request is routed client-side without a full-round trip to the server.
 
 However, when user-authored blocks contain links, the `innerHTML` is handled by React and you don't have an opportunity to use the `Link` component. To address this, our boilerplate [listens for link clicks][link-listener] and will route them client-side if the link destination is determined to be internal. You can configure which hostnames are considered internal in [`lib/config`][lib-config].
 

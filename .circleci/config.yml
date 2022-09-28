@@ -1,3 +1,5 @@
+---
+
 version: 2.1
 
 orbs:
@@ -11,18 +13,11 @@ workflows:
           npm-run: lint
   matrix-tests:
     jobs:
-      - node/run:
-          name: "build"
-          npm-run: build
-          matrix:
-            parameters:
-              version:
-                - "16.14"
-                - "14.19"
       - node/test:
           name: "unit tests"
           matrix:
             parameters:
               version:
-                - "16.14"
-                - "14.19"
+                - "18.9"
+                - "16.17"
+                - "14.20"

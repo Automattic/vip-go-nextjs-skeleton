@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import { render, screen } from '@testing-library/react'
 import Image from './Image';
 import nextConfig from '../../next.config';

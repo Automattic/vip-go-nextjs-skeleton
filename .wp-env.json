@@ -4,5 +4,8 @@
 	},
 	"plugins": [
 		"Automattic/vip-decoupled-bundle"
-	]
+	],
+	"mappings": {
+		".htaccess": ".wp-env/.htaccess"
+	}
 }

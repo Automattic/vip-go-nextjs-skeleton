@@ -35,7 +35,7 @@ export async function getCacheObjectByKey<T>( key: string, ttl: number, fallback
 		await redisClient.set(
 			key,
 			JSON.stringify( fallbackObject ),
-			'ex',
+			'EX',
 			ttl
 		);
 	}

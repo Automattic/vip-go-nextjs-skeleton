@@ -4,6 +4,7 @@
 fragment ContentNodeFields on ContentNode {
 	id
 	... on NodeWithContentEditor {
+		content
 		contentBlocks {
 			isGutenberg
 			blocks {

@@ -1,6 +1,7 @@
 import { GetServerSideProps } from 'next';
 import Page from '@/components/Page/Page';
 import PostContent from '@/components/PostContent/PostContent';
+import PostContentShadow from '@/components/PostContentShadow/PostContentShadow';
 import getApolloClient from '@/graphql/apollo';
 import {
 	ContentNodeBySlugDocument,
@@ -24,7 +25,7 @@ export default function Post( props: PostProps ) {
 			loading={props.loading}
 			title={props.post.title}
 		>
-			<PostContent blocks={props.post.contentBlocks.blocks} />
+			<PostContentShadow content={props.post.content} />
 		</Page>
 	);
 }

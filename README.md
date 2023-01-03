@@ -6,7 +6,7 @@ This is WordPress VIP's [Next.js][nextjs] boilerplate for decoupled WordPress. I
 
 ## Features
 
-+ [Next.js][nextjs] 12
++ [Next.js][nextjs] 13
 + Fetch data with [Apollo][apollo] and [WPGraphQL][wpgraphql]
 + Seamless previewing
 + Easily map Gutenberg blocks to React components and incorporate your design system

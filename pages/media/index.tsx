@@ -26,43 +26,25 @@ export default function Media( props: Props ) {
 						const {
 							altText = '',
 							id,
-							mediaDetails: {
-								height,
-								width,
-							},
 							sourceUrl,
 						} = mediaItem;
 
 						// Each image is displayed in a fixed-height box of 100px. If the
 						// actual height of the image is less than 100px, then use
-						// layout=fill and objectFit to fill the box.
 						return (
 							<a
-								className={styles.image}
+								className={styles['image-link']}
 								href={sourceUrl}
 								key={id}
 								rel="noreferrer"
 								target="_blank"
 							>
-								{
-									height < 100
-										?
-										<Image
-											alt={altText}
-											layout="fill"
-											objectFit="cover"
-											objectPosition="0"
-											src={sourceUrl}
-										/>
-										:
-										<Image
-											alt={altText}
-											layout="intrinsic"
-											height={100}
-											src={sourceUrl}
-											width={width / height * 100}
-										/>
-								}
+								<Image
+									alt={altText}
+									className={styles.image}
+									fill={true}
+									src={sourceUrl}
+								/>
 							</a>
 						);
 					} )

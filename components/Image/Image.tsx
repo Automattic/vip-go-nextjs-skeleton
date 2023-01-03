@@ -22,20 +22,18 @@ function wpImageLoader ( { quality, src, width }: ImageLoaderProps ): string {
 }
 
 export default function Image ( props: Props ) {
-	const imageProps = {
-		...props,
-		srcSet: props.srcset || undefined,
-		src: props.src,
-		alt: props.alt,
-		width: props.width || props.originalWidth,
-		height: props.height || props.originalHeight,
-		layout: props.layout || (props.width && props.height ? 'fixed' as const : 'intrinsic' as const),
-	};
+	const { originalHeight, originalWidth, ...imageProps } = props;
+	const height = props.height || originalHeight;
+	const width = props.width || originalWidth;
 
-	if ( VipConfig.images.useHtmlTag && imageProps.srcSet ) {
+	if ( VipConfig.images.useHtmlTag && props.srcset ) {
 		return (
 			// eslint-disable-next-line @next/next/no-img-element
-			<img alt={imageProps.alt} {...imageProps} />
+			<img
+				{...imageProps}
+				alt={props.alt}
+				srcSet={props.srcset}
+			/>
 		);
 	}
 
@@ -47,6 +45,11 @@ export default function Image ( props: Props ) {
 	}
 
 	return (
-		<NextImage loader={loader} {...imageProps} />
+		<NextImage
+			{...imageProps}
+			height={height}
+			loader={loader}
+			width={width}
+		/>
 	);
 }

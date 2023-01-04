@@ -11,7 +11,7 @@ describe( 'Image', () => {
 	describe( 'with a WordPress image URL', () => {
 		const src = '/wp-content/uploads/you-otter-see-this.jpg';
 
-		it( 'renders an img with a placeholder `src`', () => {
+		it( 'uses native lazy-loading', () => {
 			render(
 				<Image
 					alt={altText}
@@ -24,7 +24,7 @@ describe( 'Image', () => {
 			const image = screen.getByRole( 'img' );
 
 			expect( image ).toBeInTheDocument();
-			expect( image.getAttribute( 'src' ).startsWith( 'data:image/' ) ).toBe( true );
+			expect( image.getAttribute( 'loading' ) ).toEqual( 'lazy' );
 		} );
 
 		it( 'has its `src` transformed by the image loader when loaded', () => {
@@ -63,7 +63,7 @@ describe( 'Image', () => {
 	describe( 'with a non-WordPress image URL', () => {
 		const src = '/you-otter-see-this.jpg';
 
-		it( 'renders an img with a placeholder `src`', () => {
+		it( 'uses native lazy-loading', () => {
 			render(
 				<Image
 					alt={altText}
@@ -76,7 +76,7 @@ describe( 'Image', () => {
 			const image = screen.getByRole( 'img' );
 
 			expect( image ).toBeInTheDocument();
-			expect( image.getAttribute( 'src' ).startsWith( 'data:image/' ) ).toBe( true );
+			expect( image.getAttribute( 'loading' ) ).toEqual( 'lazy' );
 		} );
 
 		it( 'has its `src` transformed by the default Next.js image loader when loaded', () => {

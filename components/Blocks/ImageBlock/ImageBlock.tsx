@@ -2,10 +2,12 @@ import { BlockProps } from '../index';
 import Image from '@/components/Image/Image';
 
 type Props = BlockProps & {
-	src: string,
 	alt: string,
+	src: string,
 };
 
 export default function ImageBlock ( props : Props ) {
-	return <Image {...props} alt={props.alt} />
+	const { block: _omit, ...imageProps } = props;
+
+	return <Image {...imageProps} alt={props.alt} />
 }

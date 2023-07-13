@@ -88,6 +88,12 @@ module.exports = {
 	// https://nextjs.org/docs/api-reference/next.config.js/redirects
 	async redirects() {
 		return [
+			// Redirect /wp-admin requests to the WordPress admin.
+			{
+				source: '/wp-admin/:path*',
+				destination: `${ wordPressEndpoint }/wp-admin/:path*`,
+				permanent: false, // False, since the WP endpoint could change.
+			},
 			{
 				source: allPathsIncludingRoot,
 				destination: `${ wordPressEndpoint }/:path*`,

@@ -47,7 +47,8 @@ export default function Image ( props: Props ) {
 	return (
 		<NextImage
 			loader={loader}
-			{...imageProps}
+			alt={props.alt}
+			src={props.src}
 			height={height}
 			width={width}
 		/>

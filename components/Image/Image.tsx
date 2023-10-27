@@ -22,7 +22,7 @@ function wpImageLoader ( { quality, src, width }: ImageLoaderProps ): string {
 }
 
 export default function Image ( props: Props ) {
-	const { originalHeight, originalWidth, ...imageProps } = props;
+	const { originalHeight, originalWidth } = props;
 	const height = props.height || originalHeight;
 	const width = props.width || originalWidth;
 
@@ -30,7 +30,6 @@ export default function Image ( props: Props ) {
 		return (
 			// eslint-disable-next-line @next/next/no-img-element
 			<img
-				{...imageProps}
 				alt={props.alt}
 				srcSet={props.srcset}
 			/>
@@ -47,7 +46,8 @@ export default function Image ( props: Props ) {
 	return (
 		<NextImage
 			loader={loader}
-			{...imageProps}
+			alt={props.alt}
+			src={props.src}
 			height={height}
 			width={width}
 		/>

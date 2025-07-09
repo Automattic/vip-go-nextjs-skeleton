@@ -1,0 +1,91 @@
+name: Validate
+
+env:
+  DEFAULT_NODE_VERSION: '22'
+
+on:
+  push:
+    branches: [ trunk ]
+  pull_request:
+    branches: [ trunk ]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.DEFAULT_NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: node-${{ env.DEFAULT_NODE_VERSION }}-${{ hashFiles('**/package.json', '**/package-lock.json') }}
+          restore-keys: |
+            node-${{ env.DEFAULT_NODE_VERSION }}-
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: cache_node_modules
+        with:
+          path: node_modules
+          key: node_modules-${{ env.DEFAULT_NODE_VERSION }}-${{ hashFiles('**/package.json', '**/package-lock.json') }}
+          restore-keys: |
+            node_modules-${{ env.DEFAULT_NODE_VERSION }}-
+
+      - name: Install dependencies
+        run: npm ci
+        if: steps.cache_node_modules.outputs.cache-hit != 'true'
+
+      - name: Run lint
+        run: npm run lint
+
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [ '20', '22' ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        id: cache_node_modules
+        with:
+          path: ~/.npm
+          key: node-${{ matrix.node-version }}-${{ hashFiles('**/package.json', '**/package-lock.json') }}
+          restore-keys: |
+            node-${{ matrix.node-version }}-
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node_modules-${{ matrix.node-version }}-${{ hashFiles('**/package.json', '**/package-lock.json') }}
+          restore-keys: |
+            node_modules-${{ matrix.node-version }}-
+
+      - name: Install dependencies
+        run: npm ci
+        if: steps.cache_node_modules.outputs.cache-hit != 'true'
+
+      - name: Run tests
+        run: npm test

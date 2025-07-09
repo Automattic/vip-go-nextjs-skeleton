@@ -33,7 +33,7 @@ jobs:
             node-
 
       - name: Cache node_modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: node_modules-${{ env.DEFAULT_NODE_VERSION }}-${{ hashFiles('**/package.json', '**/package-lock.json') }}
@@ -65,7 +65,7 @@ jobs:
           cache: 'npm'
 
       - name: Cache node modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: node-${{ matrix.node-version }}-${{ hashFiles('**/package.json', '**/package-lock.json') }}
@@ -73,7 +73,7 @@ jobs:
             node-${{ matrix.node-version }}-
 
       - name: Cache node_modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: node_modules-${{ matrix.node-version }}-${{ hashFiles('**/package.json', '**/package-lock.json') }}

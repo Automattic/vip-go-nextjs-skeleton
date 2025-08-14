@@ -62,7 +62,7 @@ module.exports = {
 			//
 			// Please do not lower this max-age without talking to VIP. :)
 			//
-			// This header is overwritten when using static-while-revalidate, so please
+			// This header is overwritten when using stale-while-revalidate, so please
 			// do not set revalidate lower than 300 without talking to VIP. :) :)
 			{
 				source: allPathsIncludingRoot,

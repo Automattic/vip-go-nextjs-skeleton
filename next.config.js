@@ -167,6 +167,12 @@ module.exports = {
 		// for images which provide a sizes prop, which indicates that the image
 		// is less than the full width of the screen. Therefore, the sizes in
 		// imageSizes should all be smaller than the smallest size in deviceSizes.
+		// Note: Next.js 16 removed 16 from default imageSizes, but we keep it for compatibility.
 		imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+		// Next.js 16 default changed from 60 seconds to 4 hours (14400 seconds).
+		// Keeping explicit value for clarity.
+		minimumCacheTTL: 60,
+		// Next.js 16 default changed from unlimited to 3 redirects.
+		maximumRedirects: 3,
 	},
 };

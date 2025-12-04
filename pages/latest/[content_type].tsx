@@ -56,7 +56,7 @@ export const getServerSideProps: GetServerSideProps<Props, ContextParams> = asyn
 		variables,
 	};
 
-	const { data, error, loading } = await getApolloClient( context ).query<ContentTypeByNameQuery>( queryOptions );
+	const { data, error } = await getApolloClient( context ).query<ContentTypeByNameQuery>( queryOptions );
 
 	const posts = data.contentType?.contentNodes?.nodes || [];
 	const title = data.contentType?.description;
@@ -84,7 +84,7 @@ export const getServerSideProps: GetServerSideProps<Props, ContextParams> = asyn
 	}
 
 	// SEO: Resource not found pages must send a 404 response code.
-	if ( error || ! loading && ! posts.length ) {
+	if ( error || ! posts.length ) {
 		return {
 			notFound: true,
 		};
@@ -92,7 +92,7 @@ export const getServerSideProps: GetServerSideProps<Props, ContextParams> = asyn
 
 	return {
 		props: {
-			loading,
+			loading: false,
 			nextPageLink,
 			posts,
 			previousPageLink,

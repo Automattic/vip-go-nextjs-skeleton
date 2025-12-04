@@ -1,11 +1,11 @@
-import { NextMiddleware, NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 // Next.js proxy (formerly middleware)
 // ===================================
 // https://nextjs.org/docs/middleware
 // Note: In Next.js 16, middleware.ts has been renamed to proxy.ts
 
-export const middleware: NextMiddleware = ( req: NextRequest ) => {
+export const proxy = ( req: NextRequest ) => {
 	// Remove x-middleware-prefetch header to prevent VIP's infrastructure
 	// from caching empty JSON responses on prefetched data for SSR pages. See the following URLs for more info:
 	// https://github.com/vercel/next.js/discussions/45997

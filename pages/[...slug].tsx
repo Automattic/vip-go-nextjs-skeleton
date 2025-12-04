@@ -37,13 +37,13 @@ export const getServerSideProps: GetServerSideProps<PostProps> = async ( context
 		},
 	};
 
-	const { data, loading } = await getApolloClient( context ).query<ContentNodeBySlugQuery>( queryOptions );
+	const { data } = await getApolloClient( context ).query<ContentNodeBySlugQuery>( queryOptions );
 
 	// @TODO Disambiguate multiple slug matches.
 	const post = data.contentNodes?.nodes?.[0];
 
 	// SEO: Resource not found pages must send a 404 response code.
-	if ( ! loading && ! post ) {
+	if ( ! post ) {
 		return {
 			notFound: true,
 		};
@@ -52,7 +52,7 @@ export const getServerSideProps: GetServerSideProps<PostProps> = async ( context
 	// SEO: Redirect to canonical URL.
 	const internalLinkPathname = getInternalLinkPathname( post.link );
 	const resolvedUrlWithoutQueryString = context.resolvedUrl.split( '?' )[0];
-	if ( ! loading && internalLinkPathname !== resolvedUrlWithoutQueryString ) {
+	if ( internalLinkPathname !== resolvedUrlWithoutQueryString ) {
 		return {
 			redirect: {
 				destination: internalLinkPathname || post.link,
@@ -63,7 +63,7 @@ export const getServerSideProps: GetServerSideProps<PostProps> = async ( context
 
 	return {
 		props: {
-			loading,
+			loading: false,
 			post,
 		},
 	};

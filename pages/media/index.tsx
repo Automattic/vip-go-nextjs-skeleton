@@ -59,13 +59,13 @@ export const getServerSideProps: GetServerSideProps<Props> = async ( context ) =
 		query: AllMediaItemsDocument,
 	};
 
-	const { data, loading } = await getApolloClient( context ).query<AllMediaItemsQuery>( queryOptions );
+	const { data } = await getApolloClient( context ).query<AllMediaItemsQuery>( queryOptions );
 
 	const mediaItems = data.mediaItems?.nodes;
 
 	return {
 		props: {
-			loading,
+			loading: false,
 			mediaItems,
 		},
 	};

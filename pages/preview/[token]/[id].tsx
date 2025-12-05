@@ -34,12 +34,12 @@ export const getServerSideProps: GetServerSideProps<PreviewProps> = async ( cont
 		},
 	};
 
-	const { data, loading } = await getApolloClient( context ).query<ContentNodePreviewByIdQuery>( queryOptions );
+	const { data } = await getApolloClient( context ).query<ContentNodePreviewByIdQuery>( queryOptions );
 
 	const post = data.contentNode;
 
 	// SEO: Resource not found pages must send a 404 response code.
-	if ( ! loading && ! post ) {
+	if ( ! post ) {
 		return {
 			notFound: true,
 		};
@@ -47,7 +47,7 @@ export const getServerSideProps: GetServerSideProps<PreviewProps> = async ( cont
 
 	return {
 		props: {
-			loading,
+			loading: false,
 			post,
 		},
 	};

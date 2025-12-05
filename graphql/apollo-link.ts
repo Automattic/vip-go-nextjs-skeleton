@@ -1,7 +1,11 @@
-import { ApolloLink, HttpLink, from } from '@apollo/client';
-import { onError } from '@apollo/client/link/error';
+import { ApolloLink, HttpLink } from '@apollo/client';
+import { ErrorLink } from '@apollo/client/link/error';
+import {
+	CombinedGraphQLErrors,
+	CombinedProtocolErrors,
+} from "@apollo/client/errors";
 import { log, logError, LogContext } from '@/lib/log';
-
+import { map } from 'rxjs';
 const uri = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT;
 
 export default function getApolloLink ( requestContext: LogContext = {} ) {
@@ -10,11 +14,11 @@ export default function getApolloLink ( requestContext: LogContext = {} ) {
 		throw new Error( 'GraphQL endpoint is undefined' );
 	}
 
-	return from( [
+	return ApolloLink.from( [
 		// Error link to log GraphQL errors.
-		onError( ( { graphQLErrors, networkError } ) => {
-			if ( graphQLErrors ) {
-				graphQLErrors.forEach( err => {
+		new ErrorLink( ( { error } ) => {
+			if ( CombinedGraphQLErrors.is(error)) {
+				error.errors.forEach( err => {
 					const { locations, path } = err;
 					const context = {
 						locations: JSON.stringify( locations ),
@@ -22,11 +26,9 @@ export default function getApolloLink ( requestContext: LogContext = {} ) {
 					};
 
 					logError( err, context, requestContext );
-				} );
-			}
-
-			if ( networkError ) {
-				logError( networkError, {}, requestContext );
+				} )
+			} else if ( CombinedProtocolErrors.is(error)) {
+				logError( error, {}, requestContext );
 			}
 		} ),
 
@@ -51,20 +53,21 @@ export default function getApolloLink ( requestContext: LogContext = {} ) {
 			} ) );
 
 			return forward( operation )
-				.map( data => {
-					const response = operation.getContext().response;
-					const context = {
-						...debug,
-						cacheStatus: response?.headers?.get( 'x-cache' ),
-						cacheAge: response?.headers?.get( 'age' ),
-						payloadSize: response?.body?.bytesWritten,
-						requestDurationInMs: Date.now() - startTime,
-					};
+				.pipe(
+					map( data => {
+						const response = operation.getContext().response;
+						const context = {
+							...debug,
+							cacheStatus: response?.headers?.get( 'x-cache' ),
+							cacheAge: response?.headers?.get( 'age' ),
+							payloadSize: response?.body?.bytesWritten,
+							requestDurationInMs: Date.now() - startTime,
+						};
 
-					log( 'GraphQL request', context, requestContext );
+						log( 'GraphQL request', context, requestContext );
 
-					return data;
-				} );
+						return data;
+					} ) );
 		} ),
 
 		// Standard HttpLink to connect to GraphQL.

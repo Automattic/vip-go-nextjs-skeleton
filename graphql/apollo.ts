@@ -4,7 +4,7 @@ import fragmentMatcher from '@/graphql/generated/fragmentMatcher';
 import getApolloLink from './apollo-link';
 import { generateRequestContext } from '@/lib/log';
 
-let clientSideApolloClient: ApolloClient<unknown>;
+let clientSideApolloClient: ApolloClient;
 
 const isServerSide = 'undefined' === typeof window;
 

@@ -72,7 +72,7 @@ export const getServerSideProps: GetServerSideProps<Props, ContextParams> = asyn
 		variables,
 	};
 
-	const { data, error, loading } = await getApolloClient( context ).query<ContentNodesBySearchTermQuery>( queryOptions );
+	const { data, error } = await getApolloClient( context ).query<ContentNodesBySearchTermQuery>( queryOptions );
 
 	if ( error ) {
 		throw error;
@@ -104,7 +104,7 @@ export const getServerSideProps: GetServerSideProps<Props, ContextParams> = asyn
 
 	return {
 		props: {
-			loading,
+			loading: false,
 			nextPageLink,
 			posts,
 			previousPageLink,

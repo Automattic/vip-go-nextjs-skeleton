@@ -2,16 +2,21 @@
 
 This is WordPress VIP's [Next.js][nextjs] boilerplate for decoupled WordPress. It is not required for Node.js applications on VIP, but it helps solve many common use cases for decoupled / headless WordPress applications. If you choose to use it, VIP's [decoupled plugin bundle][bundle] must be installed and activated on the WordPress backend. The notes below describe its behavior when run on [WordPress VIP's platform][wpvip].
 
-> ⚠️ This project is under active development. If you are a VIP customer, please let us know if you'd like to use this boilerplate and we can provide additional guidance. Issues and PRs are welcome. 💖
+> ⚠️ **Warning**: This repository is purely an example, is not maintained, and could harbor future vulnerabilities.
 
 ## Features
 
-+ [Next.js][nextjs] 13
-+ Fetch data with [Apollo][apollo] and [WPGraphQL][wpgraphql]
-+ Seamless previewing
-+ Easily map Gutenberg blocks to React components and incorporate your design system
-+ Automatic [code generation][code-generation] from GraphQL queries
-+ Optional TypeScript support
+- [Next.js][nextjs] 16
+- Fetch data with [Apollo][apollo] and [WPGraphQL][wpgraphql]
+- Seamless previewing
+- Easily map Gutenberg blocks to React components and incorporate your design system
+- Automatic [code generation][code-generation] from GraphQL queries
+- Optional TypeScript support
+
+## Requirements
+
+- **Node.js v24** or higher
+- **Next.js v16**
 
 ## Getting started
 
@@ -28,33 +33,33 @@ The application is preconfigured to run with a local install of WordPress:
 1. Install `wp-env` [via these instructions][wpenv].
 2. In the root directory of this repository, start and configure WordPress via:
 
-    ```sh
-    wp-env start
-    wp-env run cli "wp rewrite structure '/%year%/%monthnum%/%postname%/'"
-    ```
+   ```sh
+   wp-env start
+   wp-env run cli "wp rewrite structure '/%year%/%monthnum%/%postname%/'"
+   ```
 
-    Note that plain permalinks [are not supported](#permalink-setup) by the boilerplate project.
+   Note that plain permalinks [are not supported](#permalink-setup) by the boilerplate project.
 
 3. Next, run the Next.js development server with:
 
-    ```sh
-    npm run dev
-    ```
+   ```sh
+   npm run dev
+   ```
 
 You should now be able to access:
 
-+ Next.js front-end via [http://localhost:3000][local-nextjs]
-+ WordPress backend via [http://localhost:8888/wp-admin][local-wordpress] with the [default credentials][wpenv-credentials]:
+- Next.js front-end via [http://localhost:3000][local-nextjs]
+- WordPress backend via [http://localhost:8888/wp-admin][local-wordpress] with the [default credentials][wpenv-credentials]:
 
-  + Username: `admin`
-  + Password: `password`
+  - Username: `admin`
+  - Password: `password`
 
 ### Remote configuration
 
 Update the following environment variables defined in the `.env` file:
 
-+ `NEXT_PUBLIC_GRAPHQL_ENDPOINT`: The full URL, including protocol, of your WPGraphQL endpoint. You can find it in the WordPress Admin Dashboard > Settings > VIP Decoupled.
-+ `NEXT_PUBLIC_SERVER_URL`: The full URL, including protocol, of this Next.js site. This allows things like sitemaps and link routing to be configured correctly.
+- `NEXT_PUBLIC_GRAPHQL_ENDPOINT`: The full URL, including protocol, of your WPGraphQL endpoint. You can find it in the WordPress Admin Dashboard > Settings > VIP Decoupled.
+- `NEXT_PUBLIC_SERVER_URL`: The full URL, including protocol, of this Next.js site. This allows things like sitemaps and link routing to be configured correctly.
 
 If you have additional environment variables, you can add them here.
 
@@ -106,21 +111,21 @@ Receiving the content as blocks allow you to easily create customizations defini
 Here is a simple example of how to override the default block mapping to support all of the default and custom blocks that you use in your WordPress instance:
 
 ```js
-import PostContent from '@/lib/components';
-import MyCustomHeader from 'my-design-system';
+import PostContent from "@/lib/components";
+import MyCustomHeader from "my-design-system";
 
-export default function Post( props: Props ) {
-  return (
-    <main>
-      <h1>{props.title}</h1>
-      <PostContent
-        blockMapOverrides={ {
-          'core/heading': MyCustomHeader,
-        } }
-        blocks={props.blocks}
-      />
-    </main>
-  );
+export default function Post(props: Props) {
+	return (
+		<main>
+			<h1>{props.title}</h1>
+			<PostContent
+				blockMapOverrides={{
+					"core/heading": MyCustomHeader,
+				}}
+				blocks={props.blocks}
+			/>
+		</main>
+	);
 }
 ```
 
@@ -229,8 +234,7 @@ For the API images, the `srcSet` property is automatically defined by the `devic
 - Webpack 4 support has been removed. See the [Webpack 5 upgrade documentation][webpack5] for more information.
 - The `target` option has been deprecated. If you are currently using the `target` option set to `serverless`, please read the [documentation on how to leverage the new output][output-file-tracing].
 - Next.js `Image` component changed its wrapping element. See the [documentation][image-optimization] for more information.
-- The minimum Node.js version has been bumped from `12.0.0` to `12.22.0` which is the first version of Node.js with native ES Modules support.
-
+- The minimum Node.js version requirement is **Node.js v24** or higher.
 
 [apollo]: https://www.apollographql.com
 [apollo-provider]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/graphql/apollo-provider.tsx

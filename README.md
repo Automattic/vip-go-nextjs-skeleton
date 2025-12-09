@@ -13,6 +13,11 @@ This is WordPress VIP's [Next.js][nextjs] boilerplate for decoupled WordPress. I
 - Automatic [code generation][code-generation] from GraphQL queries
 - Optional TypeScript support
 
+## Requirements
+
+- **Node.js v24** or higher
+- **Next.js v16**
+
 ## Getting started
 
 ### Install dependencies
@@ -229,7 +234,7 @@ For the API images, the `srcSet` property is automatically defined by the `devic
 - Webpack 4 support has been removed. See the [Webpack 5 upgrade documentation][webpack5] for more information.
 - The `target` option has been deprecated. If you are currently using the `target` option set to `serverless`, please read the [documentation on how to leverage the new output][output-file-tracing].
 - Next.js `Image` component changed its wrapping element. See the [documentation][image-optimization] for more information.
-- The minimum Node.js version has been bumped from `12.0.0` to `12.22.0` which is the first version of Node.js with native ES Modules support.
+- The minimum Node.js version requirement is **Node.js v24** or higher.
 
 [apollo]: https://www.apollographql.com
 [apollo-provider]: https://github.com/Automattic/vip-go-nextjs-skeleton/blob/725c0695ad603d2ecc8b56ff1c9f1cad95f5fe98/graphql/apollo-provider.tsx

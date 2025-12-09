@@ -1,5 +1,7 @@
 import { GetServerSidePropsContext, GetStaticPropsContext } from 'next';
 import { randomUUID } from 'crypto'
+import { ErrorLike } from '@apollo/client';
+import { GraphQLFormattedError } from 'graphql';
 
 enum LogLevel {
 	DEBUG = 'DEBUG',
@@ -60,7 +62,7 @@ export function log(
 }
 
 export function logError(
-	err: Error,
+	err: Error | GraphQLFormattedError | ErrorLike,
 	context: LogContext,
 	requestContext: LogContext = {},
 ) {
